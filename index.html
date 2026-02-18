@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이무종 매출 관리</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Oswald:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #161923;
+    --surface2: #1e2333;
+    --border: #2a3045;
+    --accent: #f5a623;
+    --accent2: #e8445a;
+    --green: #2ecc71;
+    --text: #e8eaf0;
+    --text-dim: #7a8099;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  header .logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  header .sub {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 6px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  .tab-btn:hover:not(.active) {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* Form */
+  .form-group { margin-bottom: 16px; }
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  input[type="date"], input[type="number"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .btn-primary:hover { background: #f0b840; transform: translateY(-1px); }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    padding: 6px 12px;
+    width: auto;
+    font-size: 0.78rem;
+    border-radius: 6px;
+    margin-top: 0;
+  }
+
+  .btn-danger:hover { background: var(--accent2); color: #fff; }
+
+  /* Log list */
+  .log-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 3px solid transparent;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .log-item.revenue { border-left-color: var(--accent); }
+  .log-item.fuel { border-left-color: var(--accent2); }
+
+  .log-date { font-size: 0.82rem; color: var(--text-dim); }
+  .log-amount { font-weight: 700; font-size: 1rem; }
+  .log-amount.revenue-val { color: var(--accent); }
+  .log-amount.fuel-val { color: var(--accent2); }
+
+  .log-right { display: flex; align-items: center; gap: 12px; }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .stat-box {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .stat-label { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 6px; }
+  .stat-value { font-family: 'Oswald', sans-serif; font-size: 1.4rem; font-weight: 700; }
+  .stat-value.gold { color: var(--accent); }
+  .stat-value.red { color: var(--accent2); }
+  .stat-value.green { color: var(--green); }
+
+  /* Chart */
+  .chart-wrap { position: relative; margin-top: 8px; }
+
+  canvas { width: 100% !important; }
+
+  /* Month selector */
+  .month-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .month-selector select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    flex: 1;
+  }
+
+  /* Remaining days */
+  .remaining-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  .day-cell {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .day-cell.past { background: var(--border); color: var(--text-dim); }
+  .day-cell.today { background: var(--accent); color: #000; font-weight: 700; }
+  .day-cell.future { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .day-cell.has-data { background: rgba(245,166,35,0.2); border: 1px solid var(--accent); color: var(--accent); }
+  .day-cell.empty-header { background: transparent; color: var(--text-dim); font-size: 0.7rem; }
+
+  .remaining-info {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .remaining-badge {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .badge-num { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: var(--accent); }
+  .badge-label { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+
+  /* Week selector */
+  .week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .week-nav button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+
+  .week-nav button:hover { border-color: var(--accent); color: var(--accent); }
+  .week-nav span { font-weight: 700; font-size: 0.9rem; }
+
+  .empty-state {
+    text-align: center;
+    padding: 32px;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--green);
+    color: #000;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    transition: transform 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  select option { background: var(--surface2); }
+
+  /* Goal tracker */
+  .goal-banner {
+    background: linear-gradient(135deg, #1a1f2e 0%, #1e2333 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .goal-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), #ff6b35);
+  }
+
+  .goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .goal-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .goal-target {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+
+  .goal-target span {
+    color: var(--accent);
+    font-size: 1.1rem;
+  }
+
+  .goal-progress-bar {
+    width: 100%;
+    height: 10px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  .goal-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+  }
+
+  .goal-progress-fill.on-track {
+    background: linear-gradient(90deg, var(--green), #27ae60);
+  }
+
+  .goal-progress-fill.warning {
+    background: linear-gradient(90deg, var(--accent), #ff6b35);
+  }
+
+  .goal-progress-fill.danger {
+    background: linear-gradient(90deg, var(--accent2), #c0392b);
+  }
+
+  .goal-progress-fill.complete {
+    background: linear-gradient(90deg, #a78bfa, #7c3aed);
+  }
+
+  .goal-stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (min-width: 500px) {
+    .goal-stats-row { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .goal-stat {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .goal-stat-val {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .goal-stat-lbl {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    line-height: 1.3;
+  }
+
+  .goal-pct {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .status-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .chip-green { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+  .chip-orange { background: rgba(245,166,35,0.15); color: var(--accent); border: 1px solid rgba(245,166,35,0.3); }
+  .chip-red { background: rgba(232,68,90,0.15); color: var(--accent2); border: 1px solid rgba(232,68,90,0.3); }
+  .chip-purple { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+
+  .needed-avg-box {
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .needed-avg-box .big {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .needed-avg-box .desc {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ─── 순이익 탭 ─── */
+  .profit-rule-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+  }
+
+  .profit-rule-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .profit-rule-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+  }
+
+  .profit-rule-row:last-of-type { border-bottom: none; }
+
+  .rule-label { color: var(--text-dim); }
+  .rule-val { font-weight: 700; color: var(--text); }
+  .rule-val.gold { color: var(--accent); }
+  .rule-val.green { color: var(--green); }
+
+  .profit-rule-desc {
+    margin-top: 10px;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+
+  /* 결과 박스 */
+  .profit-result-main {
+    background: linear-gradient(135deg, #1a1f2e, #1e2333);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profit-result-main::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+  }
+
+  .profit-result-main.over-goal::before {
+    background: linear-gradient(90deg, #a78bfa, #7c3aed);
+  }
+
+  .profit-result-main.under-goal::before {
+    background: linear-gradient(90deg, var(--accent2), #c0392b);
+  }
+
+  .profit-big-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 8px 0;
+  }
+
+  .profit-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  @media (min-width: 500px) {
+    .profit-breakdown { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .profit-breakdown-item {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+
+  .pbi-val { font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 700; }
+  .pbi-lbl { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
+
+  .over-bonus-banner {
+    background: rgba(167,139,250,0.1);
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 0.84rem;
+    color: #a78bfa;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* 시뮬레이터 */
+  .sim-result-box {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .sim-profit-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+  }
+
+  .profit-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    border-left: 3px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .profit-table-row.highlight {
+    border-left-color: var(--accent);
+    background: rgba(245,166,35,0.06);
+  }
+
+  .profit-table-row.over {
+    border-left-color: #a78bfa;
+    background: rgba(167,139,250,0.06);
+  }
+
+  .ptr-revenue { color: var(--text-dim); }
+  .ptr-profit { font-weight: 700; font-family: 'Oswald', sans-serif; font-size: 1rem; }
+
+  /* ─── 로딩 오버레이 ─── */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,15,20,0.85);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .lo-spinner {
+    width: 44px; height: 44px;
+    border: 4px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .lo-msg {
+    color: var(--text);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+  /* ─── 온라인/오프라인 상태 표시 ─── */
+  .sync-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .sync-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .sync-dot.offline { background: var(--accent2); animation: none; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+
+
+
+
+
+  /* ─── 비밀번호 잠금 ─── */
+  #lockOverlay {
+    position:fixed; inset:0; background:#0d0f14; z-index:99999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;
+  }
+  .lk-icon { font-size:3.8rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
+  @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-9px)rotate(4deg);} }
+  .lk-title { font-size:1.45rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
+  .lk-sub { font-size:0.78rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
+  .lk-card { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+  .lk-label { font-size:0.8rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
+  .lk-wrap { position:relative; margin-bottom:14px; }
+  #lkInput {
+    width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px;
+    padding:14px 48px 14px 16px; font-size:1.1rem; color:#e8eaf0;
+    font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; letter-spacing:4px;
+  }
+  #lkInput:focus { border-color:#f5a623; }
+  #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
+  @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);} }
+  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size:1.1rem; cursor:pointer; padding:4px; }
+  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
+  #lkBtn:hover { background:#f7b84b; transform:translateY(-1px); }
+  #lkErr { text-align:center; color:#e8445a; font-size:0.85rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
+  .lk-footer { text-align:center; color:#7a8099; font-size:0.72rem; margin-top:22px; line-height:1.7; }
+
+  /* ─── 비밀번호 잠금 ─── */
+  #lockOverlay { position:fixed; inset:0; background:#0d0f14; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
+  .lk-icon { font-size:3.8rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
+  @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-9px)rotate(4deg);} }
+  .lk-title { font-size:1.45rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
+  .lk-sub { font-size:0.78rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
+  .lk-card { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+  .lk-label { font-size:0.8rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
+  .lk-wrap { position:relative; margin-bottom:14px; }
+  #lkInput { width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px; padding:14px 48px 14px 16px; font-size:1.1rem; color:#e8eaf0; font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; letter-spacing:4px; }
+  #lkInput:focus { border-color:#f5a623; }
+  #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
+  @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);} }
+  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size:1.1rem; cursor:pointer; padding:4px; }
+  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
+  #lkBtn:hover { background:#f7b84b; transform:translateY(-1px); }
+  #lkErr { text-align:center; color:#e8445a; font-size:0.85rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
+  .lk-footer { text-align:center; color:#7a8099; font-size:0.72rem; margin-top:22px; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ 비밀번호 잠금 ═══ -->
+<div id="lockOverlay">
+  <div class="lk-icon">🔐</div>
+  <div class="lk-title">이무종 매출 관리</div>
+  <div class="lk-sub">LEE MOO JONG · TAXI REVENUE TRACKER</div>
+  <div class="lk-card">
+    <div class="lk-label">🔑 비밀번호를 입력하세요</div>
+    <div class="lk-wrap">
+      <input id="lkInput" type="password" placeholder="비밀번호 입력">
+      <button id="lkEye">👁️</button>
+    </div>
+    <button id="lkBtn">입장하기 →</button>
+    <div id="lkErr">❌ 비밀번호가 틀렸습니다. 다시 입력해주세요.</div>
+  </div>
+  <div class="lk-footer">이무종님만 접근 가능한 앱입니다 🚕</div>
+</div>
+<script>
+(function() {
+  var PW = '590806';
+  function unlock() {
+    var inp = document.getElementById('lkInput');
+    var err = document.getElementById('lkErr');
+    var ov  = document.getElementById('lockOverlay');
+    if (inp.value === PW) {
+      ov.style.display = 'none';
+      inp.value = '';
+      err.style.display = 'none';
+      if (typeof window.__initApp === 'function') window.__initApp();
+    } else {
+      err.style.display = 'block';
+      inp.classList.remove('lk-shake');
+      void inp.offsetWidth;
+      inp.classList.add('lk-shake');
+      inp.value = '';
+      inp.focus();
+      setTimeout(function() {
+        inp.classList.remove('lk-shake');
+        err.style.display = 'none';
+      }, 2500);
+    }
+  }
+  function toggleEye() {
+    var inp = document.getElementById('lkInput');
+    var btn = document.getElementById('lkEye');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+    inp.focus();
+  }
+  document.getElementById('lkBtn').addEventListener('click', unlock);
+  document.getElementById('lkEye').addEventListener('click', toggleEye);
+  document.getElementById('lkInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') unlock();
+  });
+  document.getElementById('lkInput').focus();
+})();
+</script>
+
+<div id="toast" class="toast"></div>
+<div class="container">
+  <header>
+    <div class="logo">🚕 이무종 매출 관리</div>
+    <div class="sub">LEE MOO JONG · TAXI REVENUE TRACKER</div>
+    <div class="sync-status" id="syncStatus">
+      <div class="sync-dot" id="syncDot"></div>
+      <span id="syncText">Firebase 연결 중...</span>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('input',this)">📅 입력</button>
+    <button class="tab-btn" onclick="switchTab('weekly',this)">📊 주간</button>
+    <button class="tab-btn" onclick="switchTab('monthly',this)">📈 월간</button>
+    <button class="tab-btn" onclick="switchTab('calendar',this)">🗓️ 달력</button>
+    <button class="tab-btn" onclick="switchTab('profit',this)">💵 예상소득</button>
+  </div>
+
+  <!-- 데이터 입력 탭 -->
+  <div id="tab-input" class="tab-panel active">
+    <div class="card">
+      <div class="card-title">📅 날짜 선택</div>
+      <div class="form-group">
+        <label>운행 날짜</label>
+        <input type="date" id="inputDate">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💰 당일 매출 입력</div>
+      <div class="form-group">
+        <label>매출 금액 (원)</label>
+        <input type="number" id="inputRevenue" placeholder="예: 150000" min="0" step="1000">
+      </div>
+      <button class="btn btn-primary" onclick="saveRevenue()">매출 저장</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⛽ 주유 금액 입력</div>
+      <div class="form-group">
+        <label>주유 금액 (원)</label>
+        <input type="number" id="inputFuel" placeholder="예: 80000" min="0" step="1000">
+      </div>
+      <button class="btn btn-primary" onclick="saveFuel()">주유 저장</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 최근 입력 내역</div>
+      <div id="recentLog"><div class="empty-state">입력된 데이터가 없습니다</div></div>
+    </div>
+  </div>
+
+  <!-- 주간 통계 탭 -->
+  <div id="tab-weekly" class="tab-panel">
+    <div class="card">
+      <div class="card-title">📊 주간 통계</div>
+      <div class="week-nav">
+        <button onclick="changeWeek(-1)">◀</button>
+        <span id="weekLabel"></span>
+        <button onclick="changeWeek(1)">▶</button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">주간 총 매출</div>
+          <div class="stat-value gold" id="weekTotalRevenue">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">주간 총 주유</div>
+          <div class="stat-value red" id="weekTotalFuel">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">평균 일 매출</div>
+          <div class="stat-value green" id="weekAvgRevenue">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">예상 소득</div>
+          <div class="stat-value" id="weekNet" style="color:#a78bfa">-</div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="weekChart" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 월간 통계 탭 -->
+  <div id="tab-monthly" class="tab-panel">
+
+    <!-- 목표 달성 배너 -->
+    <div id="goalBanner" class="goal-banner">
+      <div class="goal-header">
+        <div class="goal-title">🎯 이달 목표 달성 현황</div>
+        <div class="goal-target">목표: <span>550만원</span></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-size:0.8rem;color:var(--text-dim)">달성률</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="goal-pct" id="goalPct">0%</div>
+          <span class="status-chip chip-orange" id="goalChip">계산중</span>
+        </div>
+      </div>
+      <div class="goal-progress-bar">
+        <div class="goal-progress-fill warning" id="goalBar" style="width:0%"></div>
+      </div>
+      <div class="goal-stats-row" id="goalStatsRow">
+        <div class="goal-stat">
+          <div class="goal-stat-val gold" id="goalCurrent">-</div>
+          <div class="goal-stat-lbl">현재 누적 매출</div>
+        </div>
+        <div class="goal-stat">
+          <div class="goal-stat-val red" id="goalRemain">-</div>
+          <div class="goal-stat-lbl">목표까지 잔여금액</div>
+        </div>
+        <div class="goal-stat">
+          <div class="goal-stat-val" id="goalNeededAvg" style="color:#a78bfa">-</div>
+          <div class="goal-stat-lbl" id="goalNeededLabel">남은 일수 기준<br>필요 일 평균 매출</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📈 월간 통계</div>
+      <div class="month-selector">
+        <select id="monthSelect" onchange="renderMonthly()"></select>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">월 총 매출</div>
+          <div class="stat-value gold" id="monthTotalRevenue">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">월 총 주유</div>
+          <div class="stat-value red" id="monthTotalFuel">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">일 평균 매출</div>
+          <div class="stat-value green" id="monthAvgRevenue">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">예상 소득</div>
+          <div class="stat-value" id="monthNet" style="color:#a78bfa">-</div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="monthChart" height="240"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 달력 탭 -->
+  <div id="tab-calendar" class="tab-panel">
+    <div class="card">
+      <div class="card-title">🗓️ 이달의 현황</div>
+      <div class="month-selector">
+        <select id="calMonthSelect" onchange="renderCalendar()"></select>
+      </div>
+      <div class="section-title">운행 달력</div>
+      <div class="remaining-grid" id="calGrid"></div>
+      <div class="remaining-info" id="remainingInfo"></div>
+      <div id="calGoalSummary" style="margin-top:16px"></div>
+    </div>
+  </div>
+  <!-- 순이익 계산 탭 -->
+  <div id="tab-profit" class="tab-panel">
+
+    <!-- 이달 자동 계산 카드 -->
+    <div class="card">
+      <div class="card-title">💵 이달 예상 소득 자동 계산</div>
+      <div class="month-selector">
+        <select id="profitMonthSelect" onchange="renderProfit()"></select>
+      </div>
+
+      <!-- 구조 설명 -->
+      <div class="profit-rule-box">
+        <div class="profit-rule-title">📌 예상 소득 계산 구조</div>
+        <div class="profit-rule-row">
+          <span class="rule-label">기본 목표 매출</span>
+          <span class="rule-val">550만원</span>
+        </div>
+        <div class="profit-rule-row">
+          <span class="rule-label">목표 달성 시 예상 소득</span>
+          <span class="rule-val gold">160만원 고정</span>
+        </div>
+        <div class="profit-rule-row">
+          <span class="rule-label">550만원 초과분 처리</span>
+          <span class="rule-val green">초과금액 × 90%</span>
+        </div>
+        <div class="profit-rule-desc">
+          매출이 550만원을 넘으면, 초과된 금액의 90%가 추가 예상 소득으로 발생합니다.
+        </div>
+      </div>
+
+      <!-- 현재 계산 결과 -->
+      <div id="profitResultBox">
+        <!-- JS로 렌더링 -->
+      </div>
+    </div>
+
+    <!-- 시뮬레이터 카드 -->
+    <div class="card">
+      <div class="card-title">🧮 매출 시뮬레이터</div>
+      <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:16px">
+        매출 금액을 입력하면 예상 소득을 즉시 계산해드립니다
+      </div>
+      <div class="form-group">
+        <label>매출 금액 (원)</label>
+        <input type="number" id="simRevenue" placeholder="예: 6000000" min="0" step="100000"
+          oninput="calcSimulator()">
+      </div>
+      <div id="simResult" class="sim-result-box" style="display:none">
+        <!-- JS로 렌더링 -->
+      </div>
+
+      <!-- 슬라이더 -->
+      <div style="margin-top:20px">
+        <label style="margin-bottom:10px">슬라이더로 조절 <span id="sliderLabel" style="color:var(--accent);font-weight:700"></span></label>
+        <input type="range" id="simSlider" min="0" max="10000000" step="100000" value="5500000"
+          oninput="syncSlider()" style="width:100%;accent-color:var(--accent);cursor:pointer;margin-top:8px">
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-dim);margin-top:4px">
+          <span>0원</span><span>550만</span><span>1,000만</span>
+        </div>
+      </div>
+
+      <!-- 구간별 예시 -->
+      <div style="margin-top:24px">
+        <div class="section-title" style="margin-bottom:10px">구간별 예상 소득 예시</div>
+        <div id="profitTable"></div>
+      </div>
+
+      <!-- 안내 문구 -->
+      <div style="margin-top:20px;padding:14px 16px;background:rgba(122,128,153,0.08);border:1px dashed rgba(122,128,153,0.3);border-radius:10px;font-size:0.78rem;color:var(--text-dim);line-height:1.8">
+        ⚠️ <strong style="color:var(--text)">참고사항</strong><br>
+        초과 소득에 대한 소득 부분은 계산이 되어 있지 않습니다.<br>
+        실제 소득은 차이가 있을 수 있으니 참고만 하시면 됩니다.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="lo-spinner"></div>
+  <div class="lo-msg">불러오는 중...</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module">
+
+// ═══════════════════════════════════════════════════
+//  Firebase 초기화
+// ═══════════════════════════════════════════════════
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCG5PqWKzsJQADzebyPbDxN2IPsfazGDv0",
+  authDomain: "driver-leemoojong.firebaseapp.com",
+  projectId: "driver-leemoojong",
+  storageBucket: "driver-leemoojong.firebasestorage.app",
+  messagingSenderId: "670178767270",
+  appId: "1:670178767270:web:567f8ad68848deb2a69f67"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const firestore = getFirestore(firebaseApp);
+const COL = 'taxiData'; // Firestore 컬렉션 이름
+
+// ─── 인메모리 DB (Firestore 로드 후 채워짐) ───
+let db = {};
+
+// ─── 로딩 오버레이 ───
+function showLoading(msg) {
+  const el = document.getElementById('loadingOverlay');
+  if (el) { el.querySelector('.lo-msg').textContent = msg || '불러오는 중...'; el.style.display = 'flex'; }
+}
+function hideLoading() {
+  const el = document.getElementById('loadingOverlay');
+  if (el) el.style.display = 'none';
+}
+
+// ─── Firestore 전체 로드 ───
+async function loadFromFirestore() {
+  showLoading('☁️ 데이터 불러오는 중...');
+  try {
+    const snapshot = await getDocs(collection(firestore, COL));
+    db = {};
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      db[docSnap.id] = { revenue: data.revenue || 0, fuel: data.fuel || 0 };
+    });
+    hideLoading();
+    return true;
+  } catch(e) {
+    console.error('Firestore 로드 오류:', e);
+    hideLoading();
+    showToast('❌ 데이터 로드 실패. 인터넷을 확인하세요');
+    return false;
+  }
+}
+
+// ─── Firestore 단건 저장 ───
+async function saveToFirestore(dateStr) {
+  try {
+    await setDoc(doc(firestore, COL, dateStr), {
+      revenue: db[dateStr]?.revenue || 0,
+      fuel: db[dateStr]?.fuel || 0,
+      updatedAt: new Date().toISOString()
+    });
+  } catch(e) {
+    console.error('Firestore 저장 오류:', e);
+    showToast('❌ 저장 실패. 인터넷을 확인하세요');
+    throw e;
+  }
+}
+
+// ─── Firestore 단건 삭제 ───
+async function deleteFromFirestore(dateStr) {
+  try {
+    await deleteDoc(doc(firestore, COL, dateStr));
+  } catch(e) {
+    console.error('Firestore 삭제 오류:', e);
+    showToast('❌ 삭제 실패. 인터넷을 확인하세요');
+    throw e;
+  }
+}
+
+// ─── 기존 localStorage save() 대체 (호환성 유지) ───
+function save() {
+  // Firebase 연동 후 사용 안 함 (saveToFirestore 직접 호출)
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function fmt(n) {
+  const num = Number(n);
+  if (!num || isNaN(num)) return '0원';
+  return num.toLocaleString('ko-KR') + '원';
+}
+
+function fmtShort(n) {
+  const num = Number(n);
+  if (isNaN(num)) return '0';
+  if (num >= 10000) return (num / 10000).toFixed(1) + '만';
+  return num.toLocaleString();
+}
+
+function todayStr() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+let _activeTab = 'input';
+
+function switchTab(id, btnEl) {
+  _activeTab = id;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btnEl) btnEl.classList.add('active');
+  if (id === 'weekly') renderWeekly();
+  if (id === 'monthly') renderMonthly();
+  if (id === 'calendar') renderCalendar();
+  if (id === 'profit') renderProfit();
+}
+
+function refreshActiveStats() {
+  if (_activeTab === 'weekly') renderWeekly();
+  if (_activeTab === 'monthly') renderMonthly();
+  if (_activeTab === 'calendar') renderCalendar();
+  if (_activeTab === 'profit') renderProfit();
+}
+
+// ─── 초기화 ───
+async function initApp() { 
+  document.getElementById('inputDate').value = todayStr();
+  await loadFromFirestore();
+  populateMonthSelects();
+  renderRecentLog();
+  initWeek();
+};
+
+function populateMonthSelects() {
+  const months = getAvailableMonths();
+  const now = new Date();
+  const thisMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  if (!months.includes(thisMonth)) months.push(thisMonth);
+  months.sort().reverse();
+
+  ['monthSelect','calMonthSelect','profitMonthSelect'].forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (!sel) return;
+    const prev = sel.value;
+    sel.innerHTML = '';
+    months.forEach(m => {
+      const [y, mo] = m.split('-');
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = `${y}년 ${parseInt(mo)}월`;
+      sel.appendChild(opt);
+    });
+    if (prev && months.includes(prev)) sel.value = prev;
+  });
+}
+
+function getAvailableMonths() {
+  const months = new Set();
+  Object.keys(db).forEach(d => {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) months.add(d.substring(0, 7));
+  });
+  return [...months];
+}
+
+function parseAmount(str) {
+  const val = Math.floor(Number(str));
+  return isNaN(val) ? 0 : val;
+}
+
+// ─── 입력 ───
+async function saveRevenue() {
+  const date = document.getElementById('inputDate').value;
+  const raw = document.getElementById('inputRevenue').value.trim();
+  const val = parseAmount(raw);
+  if (!date) return showToast('❌ 날짜를 선택하세요');
+  if (val <= 0) return showToast('❌ 올바른 매출 금액을 입력하세요');
+  if (!db[date]) db[date] = { revenue: 0, fuel: 0 };
+  db[date].revenue = val;
+  showLoading('💾 저장 중...');
+  try {
+    await saveToFirestore(date);
+    hideLoading();
+    document.getElementById('inputRevenue').value = '';
+    populateMonthSelects();
+    renderRecentLog();
+    refreshActiveStats();
+    showToast(`✅ ${date} 매출 ${fmt(val)} 저장!`);
+  } catch(e) { hideLoading(); }
+}
+
+async function saveFuel() {
+  const date = document.getElementById('inputDate').value;
+  const raw = document.getElementById('inputFuel').value.trim();
+  const val = parseAmount(raw);
+  if (!date) return showToast('❌ 날짜를 선택하세요');
+  if (val <= 0) return showToast('❌ 올바른 주유 금액을 입력하세요');
+  if (!db[date]) db[date] = { revenue: 0, fuel: 0 };
+  db[date].fuel = val;
+  showLoading('💾 저장 중...');
+  try {
+    await saveToFirestore(date);
+    hideLoading();
+    document.getElementById('inputFuel').value = '';
+    populateMonthSelects();
+    renderRecentLog();
+    refreshActiveStats();
+    showToast(`✅ ${date} 주유 ${fmt(val)} 저장!`);
+  } catch(e) { hideLoading(); }
+}
+
+async function deleteEntry(date, type) {
+  if (!db[date]) return;
+  db[date][type] = 0;
+  const isEmpty = !db[date].revenue && !db[date].fuel;
+  showLoading('🗑️ 삭제 중...');
+  try {
+    if (isEmpty) {
+      delete db[date];
+      await deleteFromFirestore(date);
+    } else {
+      await saveToFirestore(date);
+    }
+    hideLoading();
+    populateMonthSelects();
+    renderRecentLog();
+    refreshActiveStats();
+    showToast('🗑️ 삭제 완료');
+  } catch(e) { hideLoading(); }
+}
+
+function renderRecentLog() {
+  const container = document.getElementById('recentLog');
+  if (!container) return;
+  const entries = Object.entries(db)
+    .filter(([, d]) => (d.revenue > 0 || d.fuel > 0))
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .slice(0, 20);
+
+  if (!entries.length) {
+    container.innerHTML = '<div class="empty-state">입력된 데이터가 없습니다</div>';
+    return;
+  }
+  let html = '';
+  entries.forEach(([date, d]) => {
+    const [y, mo, day] = date.split('-');
+    const dispDate = `${y}.${parseInt(mo)}.${parseInt(day)}`;
+    if (d.revenue > 0) {
+      html += `<div class="log-item revenue">
+        <div>
+          <div class="log-date">${dispDate}</div>
+          <div style="font-size:0.75rem;color:var(--text-dim)">매출</div>
+        </div>
+        <div class="log-right">
+          <div class="log-amount revenue-val">${fmt(d.revenue)}</div>
+          <button class="btn btn-danger" onclick="deleteEntry('${date}','revenue')">삭제</button>
+        </div>
+      </div>`;
+    }
+    if (d.fuel > 0) {
+      html += `<div class="log-item fuel">
+        <div>
+          <div class="log-date">${dispDate}</div>
+          <div style="font-size:0.75rem;color:var(--text-dim)">주유</div>
+        </div>
+        <div class="log-right">
+          <div class="log-amount fuel-val">${fmt(d.fuel)}</div>
+          <button class="btn btn-danger" onclick="deleteEntry('${date}','fuel')">삭제</button>
+        </div>
+      </div>`;
+    }
+  });
+  container.innerHTML = html;
+}
+
+
+// ─── 네트워크 상태 감지 ───
+function updateNetworkStatus() {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  if (!dot || !txt) return;
+  if (navigator.onLine) {
+    dot.classList.remove('offline');
+    txt.textContent = '☁️ Firebase 연결됨';
+  } else {
+    dot.classList.add('offline');
+    txt.textContent = '⚠️ 오프라인 - 인터넷 확인 필요';
+  }
+}
+window.addEventListener('online', () => { updateNetworkStatus(); showToast('✅ 인터넷 연결됨'); });
+window.addEventListener('offline', () => { updateNetworkStatus(); showToast('⚠️ 인터넷 연결 끊김'); });
+
+// ─── 주간 통계 ───
+let currentWeekOffset = 0;
+let weekChartInst = null;
+
+function initWeek() { currentWeekOffset = 0; }
+
+function getWeekDates(offset) {
+  const now = new Date();
+  const day = now.getDay();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    days.push(d.toISOString().split('T')[0]);
+  }
+  return days;
+}
+
+function changeWeek(dir) {
+  currentWeekOffset += dir;
+  renderWeekly();
+}
+
+function renderWeekly() {
+  const days = getWeekDates(currentWeekOffset);
+  const labels = ['월','화','수','목','금','토','일'];
+  const revData = days.map(d => db[d]?.revenue || 0);
+  const fuelData = days.map(d => db[d]?.fuel || 0);
+
+  const totalRev = revData.reduce((a,b) => a+b, 0);
+  const totalFuel = fuelData.reduce((a,b) => a+b, 0);
+  const workDays = revData.filter(v => v > 0).length;
+  const avgRev = workDays > 0 ? Math.round(totalRev / workDays) : 0;
+
+  document.getElementById('weekLabel').textContent = `${days[0]} ~ ${days[6]}`;
+  document.getElementById('weekTotalRevenue').textContent = fmt(totalRev);
+  document.getElementById('weekTotalFuel').textContent = fmt(totalFuel);
+  document.getElementById('weekAvgRevenue').textContent = fmt(avgRev);
+  document.getElementById('weekNet').textContent = fmt(totalRev - totalFuel);
+
+  const ctx = document.getElementById('weekChart').getContext('2d');
+  if (weekChartInst) weekChartInst.destroy();
+  weekChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels.map((l, i) => `${l}\n${days[i].slice(5)}`),
+      datasets: [
+        {
+          label: '매출',
+          data: revData,
+          backgroundColor: 'rgba(245,166,35,0.8)',
+          borderRadius: 6,
+        },
+        {
+          label: '주유',
+          data: fuelData,
+          backgroundColor: 'rgba(232,68,90,0.8)',
+          borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+        tooltip: {
+          callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}원` }
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#7a8099' }, grid: { color: '#2a3045' } },
+        y: {
+          ticks: {
+            color: '#7a8099',
+            callback: v => fmtShort(v)
+          },
+          grid: { color: '#2a3045' }
+        }
+      }
+    }
+  });
+}
+
+// ─── 월간 통계 ───
+let monthChartInst = null;
+const MONTHLY_GOAL = 5500000;
+
+function renderMonthly() {
+  const month = document.getElementById('monthSelect').value;
+  if (!month) return;
+  const [y, m] = month.split('-').map(Number);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const today = new Date();
+  const isCurrentMonth = today.getFullYear() === y && today.getMonth() + 1 === m;
+  const todayKey = todayStr();
+
+  const revArr = [], fuelArr = [], labels = [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    labels.push(`${d}일`);
+    revArr.push(db[key]?.revenue || 0);
+    fuelArr.push(db[key]?.fuel || 0);
+  }
+
+  const totalRev = revArr.reduce((a,b) => a+b, 0);
+  const totalFuel = fuelArr.reduce((a,b) => a+b, 0);
+  const workDays = revArr.filter(v => v > 0).length;
+  const avgRev = workDays > 0 ? Math.round(totalRev / workDays) : 0;
+
+  document.getElementById('monthTotalRevenue').textContent = fmt(totalRev);
+  document.getElementById('monthTotalFuel').textContent = fmt(totalFuel);
+  document.getElementById('monthAvgRevenue').textContent = fmt(avgRev);
+  document.getElementById('monthNet').textContent = fmt(totalRev - totalFuel);
+
+  // ─── 목표 달성 배너 ───
+  const remaining = Math.max(0, MONTHLY_GOAL - totalRev);
+  const pct = Math.min(100, Math.round(totalRev / MONTHLY_GOAL * 100));
+  const bar = document.getElementById('goalBar');
+  const pctEl = document.getElementById('goalPct');
+  const chip = document.getElementById('goalChip');
+
+  document.getElementById('goalCurrent').textContent = fmt(totalRev);
+  document.getElementById('goalRemain').textContent = remaining > 0 ? fmt(remaining) : '🎉 달성!';
+  pctEl.textContent = pct + '%';
+  bar.style.width = pct + '%';
+
+  // 남은 일수 계산 (이달인지 여부)
+  let remainingDays = 0;
+  if (isCurrentMonth) {
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      if (key > todayKey) remainingDays++;
+    }
+  } else {
+    remainingDays = 0;
+  }
+
+  const neededEl = document.getElementById('goalNeededAvg');
+  const neededLbl = document.getElementById('goalNeededLabel');
+
+  if (totalRev >= MONTHLY_GOAL) {
+    // 목표 달성!
+    bar.className = 'goal-progress-fill complete';
+    chip.textContent = '🎉 목표 달성!';
+    chip.className = 'status-chip chip-purple';
+    neededEl.textContent = '달성 완료!';
+    neededEl.style.color = '#a78bfa';
+    neededLbl.textContent = `목표 초과: +${fmt(totalRev - MONTHLY_GOAL)}`;
+  } else if (!isCurrentMonth) {
+    // 지난달
+    bar.className = 'goal-progress-fill danger';
+    chip.textContent = '미달성';
+    chip.className = 'status-chip chip-red';
+    neededEl.textContent = '-';
+    neededLbl.textContent = '지난달 결과';
+  } else if (remainingDays === 0) {
+    // 오늘이 마지막 날
+    bar.className = 'goal-progress-fill danger';
+    chip.textContent = '오늘이 마지막';
+    chip.className = 'status-chip chip-red';
+    neededEl.textContent = fmt(remaining);
+    neededEl.style.color = '#e8445a';
+    neededLbl.textContent = '오늘 달성 필요 금액';
+  } else {
+    const neededPerDay = Math.ceil(remaining / remainingDays);
+
+    // 현재 일 평균 대비 상태 판단
+    if (avgRev > 0 && neededPerDay <= avgRev * 1.05) {
+      bar.className = 'goal-progress-fill on-track';
+      chip.textContent = '순조로워요 👍';
+      chip.className = 'status-chip chip-green';
+    } else if (avgRev > 0 && neededPerDay <= avgRev * 1.2) {
+      bar.className = 'goal-progress-fill warning';
+      chip.textContent = '조금 분발 필요';
+      chip.className = 'status-chip chip-orange';
+    } else {
+      bar.className = 'goal-progress-fill danger';
+      chip.textContent = '분발이 필요해요!';
+      chip.className = 'status-chip chip-red';
+    }
+
+    neededEl.textContent = fmt(neededPerDay);
+    neededEl.style.color = neededPerDay <= (avgRev || neededPerDay) ? '#2ecc71' : '#e8445a';
+    neededLbl.innerHTML = `남은 ${remainingDays}일 동안<br>하루 평균 필요 매출`;
+  }
+
+  const ctx = document.getElementById('monthChart').getContext('2d');
+  if (monthChartInst) monthChartInst.destroy();
+  monthChartInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '매출',
+          data: revArr,
+          borderColor: '#f5a623',
+          backgroundColor: 'rgba(245,166,35,0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 3,
+          pointBackgroundColor: '#f5a623'
+        },
+        {
+          label: '주유',
+          data: fuelArr,
+          borderColor: '#e8445a',
+          backgroundColor: 'rgba(232,68,90,0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 3,
+          pointBackgroundColor: '#e8445a'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+        tooltip: {
+          callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}원` }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#7a8099', maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+          grid: { color: '#2a3045' }
+        },
+        y: {
+          ticks: { color: '#7a8099', callback: v => fmtShort(v) },
+          grid: { color: '#2a3045' }
+        }
+      }
+    }
+  });
+}
+
+// ─── 달력 ───
+function renderCalendar() {
+  const month = document.getElementById('calMonthSelect').value;
+  if (!month) return;
+  const [y, m] = month.split('-').map(Number);
+  const today = todayStr();
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const firstDay = new Date(y, m - 1, 1).getDay(); // 0=Sun
+  const startOffset = firstDay === 0 ? 6 : firstDay - 1; // Mon start
+
+  const grid = document.getElementById('calGrid');
+  let html = '';
+  ['월','화','수','목','금','토','일'].forEach(d => {
+    html += `<div class="day-cell empty-header">${d}</div>`;
+  });
+
+  for (let i = 0; i < startOffset; i++) html += `<div></div>`;
+
+  let remainingDays = 0;
+  let passedDays = 0;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    let cls = 'day-cell';
+    if (key === today) cls += ' today';
+    else if (key < today) { cls += ' past'; passedDays++; }
+    else { cls += ' future'; remainingDays++; }
+    if (db[key] && (db[key].revenue > 0 || db[key].fuel > 0) && key !== today) cls += ' has-data';
+    html += `<div class="${cls}" title="${key}">${d}</div>`;
+  }
+  grid.innerHTML = html;
+
+  const todayDate = new Date();
+  const isCurrentMonth = todayDate.getFullYear() === y && todayDate.getMonth() + 1 === m;
+
+  // 이달 누적 매출 계산
+  const monthTotalRev = Object.entries(db)
+    .filter(([k]) => k.startsWith(month))
+    .reduce((sum, [,v]) => sum + (v.revenue || 0), 0);
+  const calRemaining = Math.max(0, MONTHLY_GOAL - monthTotalRev);
+  const calNeededPerDay = (isCurrentMonth && remainingDays > 0)
+    ? Math.ceil(calRemaining / remainingDays) : null;
+  const calPct = Math.min(100, Math.round(monthTotalRev / MONTHLY_GOAL * 100));
+  const workDaysCal = Object.keys(db).filter(k => k.startsWith(month) && db[k].revenue > 0).length;
+
+  info.innerHTML = `
+    <div class="remaining-badge">
+      <div class="badge-num">${daysInMonth}</div>
+      <div class="badge-label">이달 총 일수</div>
+    </div>
+    ${isCurrentMonth ? `
+    <div class="remaining-badge">
+      <div class="badge-num">${remainingDays}</div>
+      <div class="badge-label">남은 일수</div>
+    </div>
+    <div class="remaining-badge">
+      <div class="badge-num">${passedDays + 1}</div>
+      <div class="badge-label">경과 일수 (오늘 포함)</div>
+    </div>
+    <div class="remaining-badge">
+      <div class="badge-num" style="color:var(--green)">${workDaysCal}</div>
+      <div class="badge-label">운행 입력일수</div>
+    </div>` : ''}
+  `;
+
+  // 목표 달성 요약 카드 (달력 하단)
+  const goalSummaryEl = document.getElementById('calGoalSummary');
+  if (goalSummaryEl) {
+    const pctColor = calPct >= 100 ? '#a78bfa' : calPct >= 70 ? '#2ecc71' : calPct >= 40 ? '#f5a623' : '#e8445a';
+    goalSummaryEl.innerHTML = `
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:0.75rem;color:var(--text-dim);font-weight:700;letter-spacing:1px">🎯 월 목표 550만원</span>
+          <span style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:${pctColor}">${calPct}%</span>
+        </div>
+        <div class="goal-progress-bar" style="height:8px">
+          <div class="goal-progress-fill ${calPct >= 100 ? 'complete' : calPct >= 70 ? 'on-track' : calPct >= 40 ? 'warning' : 'danger'}" style="width:${calPct}%"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="goal-stat">
+          <div class="goal-stat-val gold">${fmt(monthTotalRev)}</div>
+          <div class="goal-stat-lbl">현재 누적 매출</div>
+        </div>
+        <div class="goal-stat">
+          <div class="goal-stat-val red">${calRemaining > 0 ? fmt(calRemaining) : '🎉 달성!'}</div>
+          <div class="goal-stat-lbl">목표까지 잔여</div>
+        </div>
+        ${calNeededPerDay !== null ? `
+        <div class="goal-stat" style="grid-column:1/-1">
+          <div class="goal-stat-val" style="color:#a78bfa">${fmt(calNeededPerDay)}</div>
+          <div class="goal-stat-lbl">남은 ${remainingDays}일 동안 하루 평균 필요 매출</div>
+        </div>` : ''}
+      </div>
+    `;
+  }
+}
+
+// ─── 순이익 계산 ───
+const BASE_GOAL = 5500000;
+const BASE_PROFIT = 1600000;
+const OVER_RATE = 0.9;
+
+function calcProfit(revenue) {
+  if (revenue < BASE_GOAL) return 0;                         // 550만 미달 → 0원
+  if (revenue === BASE_GOAL) return BASE_PROFIT;             // 550만 정확히 → 160만원
+  const over = revenue - BASE_GOAL;
+  return BASE_PROFIT + Math.round(over * OVER_RATE);         // 초과분 × 90% 추가
+}
+
+function renderProfit() {
+  const sel = document.getElementById('profitMonthSelect');
+  if (!sel) return;
+  const month = sel.value;
+  if (!month) return;
+  const [y, m] = month.split('-').map(Number);
+  const daysInMonth = new Date(y, m, 0).getDate();
+
+  let totalRev = 0;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    totalRev += db[key]?.revenue || 0;
+  }
+
+  const profit = calcProfit(totalRev);
+  const isOver = totalRev > BASE_GOAL;
+  const isAtGoal = totalRev >= BASE_GOAL;
+  const isUnder = totalRev < BASE_GOAL * 0.5;
+  const overAmt = Math.max(0, totalRev - BASE_GOAL);
+  const overProfit = isOver ? Math.round(overAmt * OVER_RATE) : 0;
+  const pct = Math.min(100, Math.round(totalRev / BASE_GOAL * 100));
+  const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
+
+  const box = document.getElementById('profitResultBox');
+  const stateClass = isOver ? 'over-goal' : isUnder ? 'under-goal' : '';
+
+  box.innerHTML = `
+    <div class="profit-result-main ${stateClass}">
+      <div style="font-size:0.75rem;color:var(--text-dim);font-weight:700;letter-spacing:1px;margin-bottom:4px">
+        ${y}년 ${m}월 · 예상 소득
+      </div>
+      <div class="profit-big-num" style="color:${profitColor}">${fmt(profit)}</div>
+      <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:14px">
+        누적 매출 <strong style="color:var(--accent)">${fmt(totalRev)}</strong>
+        &nbsp;·&nbsp; 목표 달성률 <strong style="color:${profitColor}">${pct}%</strong>
+      </div>
+      <div class="goal-progress-bar" style="height:8px;margin-bottom:16px">
+        <div class="goal-progress-fill ${isOver ? 'complete' : pct >= 70 ? 'on-track' : pct >= 40 ? 'warning' : 'danger'}"
+          style="width:${pct}%"></div>
+      </div>
+      <div class="profit-breakdown">
+        <div class="profit-breakdown-item">
+          <div class="pbi-val gold">${fmt(totalRev)}</div>
+          <div class="pbi-lbl">총 매출</div>
+        </div>
+        <div class="profit-breakdown-item">
+          <div class="pbi-val" style="color:${isOver ? '#a78bfa' : 'var(--accent2)'}">
+            ${isOver ? '+' + fmt(overAmt) : fmt(Math.max(0, BASE_GOAL - totalRev))}
+          </div>
+          <div class="pbi-lbl">${isOver ? '목표 초과금액' : '목표 잔여금액'}</div>
+        </div>
+        <div class="profit-breakdown-item" style="${!isOver ? 'opacity:0.35' : ''}">
+          <div class="pbi-val" style="color:#a78bfa">${isOver ? '+' + fmt(overProfit) : '-'}</div>
+          <div class="pbi-lbl">초과 추가소득 (90%)</div>
+        </div>
+      </div>
+      ${isOver ? `
+      <div class="over-bonus-banner">
+        🎉 목표 초과 달성!&nbsp;&nbsp;
+        기본 예상 소득 <strong>${fmt(BASE_PROFIT)}</strong>
+        + 추가 <strong>${fmt(overProfit)}</strong>
+        = 총 <strong>${fmt(profit)}</strong>
+      </div>` : isAtGoal ? `
+      <div style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:0.84rem;color:#2ecc71;text-align:center">
+        ✅ 목표 달성! 예상 소득 <strong>160만원</strong> 확정
+      </div>` : `
+      <div style="background:rgba(245,166,35,0.07);border:1px dashed rgba(245,166,35,0.25);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:0.8rem;color:var(--text-dim);line-height:1.7;text-align:center">
+        550만원 달성 → 예상 소득 <strong style="color:var(--accent)">160만원</strong> 확정<br>
+        초과분 발생 시 초과금액의 <strong style="color:#a78bfa">90%</strong>가 추가 예상 소득으로 발생
+      </div>`}
+    </div>
+  `;
+
+  renderProfitTable(totalRev);
+
+  if (totalRev > 0) {
+    document.getElementById('simRevenue').value = totalRev;
+    document.getElementById('simSlider').value = Math.min(totalRev, 10000000);
+    document.getElementById('sliderLabel').textContent = fmt(totalRev);
+    calcSimulator();
+  }
+}
+
+function renderProfitTable(currentRev) {
+  const samples = [2000000, 3000000, 4000000, 5000000, 5500000, 6000000, 6500000, 7000000, 8000000, 10000000];
+  const el = document.getElementById('profitTable');
+  if (!el) return;
+  let html = '';
+  samples.forEach(rev => {
+    const p = calcProfit(rev);
+    const isGoal = rev === BASE_GOAL;
+    const isOver = rev > BASE_GOAL;
+    let cls = 'profit-table-row';
+    if (isGoal) cls += ' highlight';
+    else if (isOver) cls += ' over';
+    html += `<div class="${cls}">
+      <span class="ptr-revenue" style="${isGoal ? 'color:var(--accent);font-weight:700' : ''}">${(rev / 10000).toFixed(0)}만원${isGoal ? ' ⭐ 목표' : ''}</span>
+      <span class="ptr-profit" style="color:${isOver ? '#a78bfa' : isGoal ? '#2ecc71' : 'var(--text-dim)'}">
+        예상 소득 ${fmt(p)}
+      </span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function calcSimulator() {
+  const input = document.getElementById('simRevenue');
+  const box = document.getElementById('simResult');
+  if (!input || !box) return;
+  const val = parseAmount(input.value);
+  const slider = document.getElementById('simSlider');
+  if (slider) slider.value = val || 0;
+  const lbl = document.getElementById('sliderLabel');
+  if (lbl) lbl.textContent = val ? fmt(val) : '';
+  if (!val || val <= 0) { box.style.display = 'none'; return; }
+
+  const profit = calcProfit(val);
+  const isOver = val > BASE_GOAL;
+  const isAtGoal = val >= BASE_GOAL;
+  const overAmt = Math.max(0, val - BASE_GOAL);
+  const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
+
+  box.style.display = 'block';
+  box.innerHTML = `
+    <div style="margin-bottom:4px;font-size:0.72rem;color:var(--text-dim);font-weight:700;letter-spacing:1px">예상 소득</div>
+    <div class="sim-profit-num" style="color:${profitColor}">${fmt(profit)}</div>
+    ${isOver ? `
+    <div style="margin-top:10px;font-size:0.82rem;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:10px">
+      기본 예상 소득 &nbsp;<strong style="color:#2ecc71">${fmt(BASE_PROFIT)}</strong><br>
+      초과 ${fmt(overAmt)} × 90% = <strong style="color:#a78bfa">+${fmt(Math.round(overAmt * OVER_RATE))}</strong>
+    </div>` : isAtGoal ? `
+    <div style="margin-top:8px;font-size:0.82rem;color:#2ecc71">✅ 목표 달성 — 예상 소득 160만원 확정</div>
+    ` : `
+    <div style="margin-top:8px;font-size:0.82rem;color:var(--text-dim)">
+      목표 550만원의 <strong style="color:var(--accent)">${Math.round(val / BASE_GOAL * 100)}%</strong> 달성
+      &nbsp;·&nbsp; 잔여 <strong style="color:var(--accent2)">${fmt(BASE_GOAL - val)}</strong><br>
+      <span style="color:var(--accent2);margin-top:4px;display:inline-block">550만원 달성 전까지 예상 소득 <strong>0원</strong></span>
+    </div>`}
+  `;
+}
+
+function syncSlider() {
+  const val = parseAmount(document.getElementById('simSlider').value);
+  document.getElementById('simRevenue').value = val;
+  document.getElementById('sliderLabel').textContent = fmt(val);
+  calcSimulator();
+}
+
+
+// 초기 네트워크 상태 표시
+window.__initApp = initApp;
+window.addEventListener('load', updateNetworkStatus);
+
+;
+
+
+
+</script>
+</body>
+</html>
