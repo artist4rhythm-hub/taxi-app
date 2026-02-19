@@ -26,6 +26,7 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.64rem;
     min-height: 100vh;
     padding: 24px 16px;
   }
@@ -37,7 +38,7 @@
 
   header .logo {
     font-family: 'Oswald', sans-serif;
-    font-size: 2.4rem;
+    font-size: font-size: 4.8rem;
     font-weight: 700;
     letter-spacing: 3px;
     color: var(--accent);
@@ -45,7 +46,7 @@
   }
 
   header .sub {
-    font-size: 0.85rem;
+    font-size: 1.28rem;
     color: var(--text-dim);
     margin-top: 4px;
     letter-spacing: 1px;
@@ -72,7 +73,7 @@
     background: transparent;
     color: var(--text-dim);
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 0.85rem;
+    font-size: 1.28rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
@@ -103,7 +104,7 @@
   }
 
   .card-title {
-    font-size: 0.75rem;
+    font-size: 1.12rem;
     font-weight: 700;
     letter-spacing: 2px;
     color: var(--accent);
@@ -116,7 +117,7 @@
 
   label {
     display: block;
-    font-size: 0.8rem;
+    font-size: 1.2rem;
     color: var(--text-dim);
     margin-bottom: 6px;
     font-weight: 500;
@@ -130,7 +131,7 @@
     padding: 12px 14px;
     color: var(--text);
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1rem;
+    font-size: 1.5rem;
     outline: none;
     transition: border-color 0.2s;
   }
@@ -148,7 +149,7 @@
     border: none;
     border-radius: 8px;
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
@@ -168,7 +169,7 @@
     border: 1px solid var(--accent2);
     padding: 6px 12px;
     width: auto;
-    font-size: 0.78rem;
+    font-size: 1.16rem;
     border-radius: 6px;
     margin-top: 0;
   }
@@ -196,8 +197,8 @@
   .log-item.revenue { border-left-color: var(--accent); }
   .log-item.fuel { border-left-color: var(--accent2); }
 
-  .log-date { font-size: 0.82rem; color: var(--text-dim); }
-  .log-amount { font-weight: 700; font-size: 1rem; }
+  .log-date { font-size: 1.22rem; color: var(--text-dim); }
+  .log-amount { font-weight: 700; font-size: 1.5rem; }
   .log-amount.revenue-val { color: var(--accent); }
   .log-amount.fuel-val { color: var(--accent2); }
 
@@ -223,8 +224,8 @@
     border: 1px solid var(--border);
   }
 
-  .stat-label { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 6px; }
-  .stat-value { font-family: 'Oswald', sans-serif; font-size: 1.4rem; font-weight: 700; }
+  .stat-label { font-size: 1.08rem; color: var(--text-dim); margin-bottom: 6px; }
+  .stat-value { font-family: 'Oswald', sans-serif; font-size: 2.1rem; font-weight: 700; }
   .stat-value.gold { color: var(--accent); }
   .stat-value.red { color: var(--accent2); }
   .stat-value.green { color: var(--green); }
@@ -249,34 +250,64 @@
     padding: 10px 14px;
     color: var(--text);
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1.36rem;
     outline: none;
     flex: 1;
   }
 
   /* Remaining days */
+  /* ─── 달력 그리드 ─── */
   .remaining-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
+    gap: 3px;
     margin-top: 12px;
   }
 
-  .day-cell {
-    aspect-ratio: 1;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 500;
+  .cal-header {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    padding: 6px 2px;
   }
 
-  .day-cell.past { background: var(--border); color: var(--text-dim); }
-  .day-cell.today { background: var(--accent); color: #000; font-weight: 700; }
-  .day-cell.future { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .day-cell.has-data { background: rgba(245,166,35,0.2); border: 1px solid var(--accent); color: var(--accent); }
-  .day-cell.empty-header { background: transparent; color: var(--text-dim); font-size: 0.7rem; }
+  .cal-cell {
+    border-radius: 6px;
+    padding: 5px 4px 6px;
+    min-height: 62px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 0.82rem;
+    border: 1px solid transparent;
+    cursor: default;
+    overflow: hidden;
+  }
+
+  .cal-day-num {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2px;
+    align-self: flex-end;
+  }
+
+  .cal-past  { background: rgba(42,48,69,0.5); color: var(--text-dim); }
+  .cal-past .cal-day-num { color: var(--text-dim); }
+
+  .cal-today { background: rgba(245,166,35,0.18); border-color: var(--accent) !important; }
+  .cal-today .cal-day-num { color: var(--accent); }
+
+  .cal-future { background: var(--surface2); color: var(--text); border-color: var(--border); }
+  .cal-future .cal-day-num { color: var(--text); }
+
+  .cal-has-data { border-color: rgba(245,166,35,0.4) !important; }
+
+  /* 셀 안 데이터 라인 */
+  .cal-rev  { color: #f5a623; font-weight: 700; font-size: 0.88rem; line-height: 1.3; width: 100%; }
+  .cal-fuel { color: #e8445a; font-size: 0.82rem; line-height: 1.3; width: 100%; }
+  .cal-gas  { color: #4db8ff; font-size: 0.82rem; line-height: 1.3; width: 100%; }
 
   .remaining-info {
     display: flex;
@@ -294,8 +325,8 @@
     text-align: center;
   }
 
-  .badge-num { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: var(--accent); }
-  .badge-label { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+  .badge-num { font-family: 'Oswald', sans-serif; font-size: 2.7rem; color: var(--accent); }
+  .badge-label { font-size: 1.12rem; color: var(--text-dim); margin-top: 2px; }
 
   /* Week selector */
   .week-nav {
@@ -312,18 +343,18 @@
     border-radius: 8px;
     padding: 8px 14px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.5rem;
     transition: all 0.2s;
   }
 
   .week-nav button:hover { border-color: var(--accent); color: var(--accent); }
-  .week-nav span { font-weight: 700; font-size: 0.9rem; }
+  .week-nav span { font-weight: 700; font-size: 1.36rem; }
 
   .empty-state {
     text-align: center;
     padding: 32px;
     color: var(--text-dim);
-    font-size: 0.9rem;
+    font-size: 1.36rem;
   }
 
   .toast {
@@ -336,7 +367,7 @@
     font-weight: 700;
     padding: 12px 24px;
     border-radius: 999px;
-    font-size: 0.88rem;
+    font-size: 1.32rem;
     transition: transform 0.3s;
     z-index: 999;
     white-space: nowrap;
@@ -345,7 +376,7 @@
   .toast.show { transform: translateX(-50%) translateY(0); }
 
   .section-title {
-    font-size: 0.78rem;
+    font-size: 1.16rem;
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -384,7 +415,7 @@
   }
 
   .goal-title {
-    font-size: 0.72rem;
+    font-size: 1.08rem;
     font-weight: 700;
     letter-spacing: 2px;
     color: var(--accent);
@@ -393,13 +424,13 @@
 
   .goal-target {
     font-family: 'Oswald', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1.36rem;
     color: var(--text-dim);
   }
 
   .goal-target span {
     color: var(--accent);
-    font-size: 1.1rem;
+    font-size: 1.66rem;
   }
 
   .goal-progress-bar {
@@ -454,20 +485,20 @@
 
   .goal-stat-val {
     font-family: 'Oswald', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 3px;
   }
 
   .goal-stat-lbl {
-    font-size: 0.68rem;
+    font-size: 1.02rem;
     color: var(--text-dim);
     line-height: 1.3;
   }
 
   .goal-pct {
     font-family: 'Oswald', sans-serif;
-    font-size: 2rem;
+    font-size: 3.0rem;
     font-weight: 700;
     color: var(--accent);
   }
@@ -476,7 +507,7 @@
     display: inline-block;
     padding: 3px 10px;
     border-radius: 999px;
-    font-size: 0.72rem;
+    font-size: 1.08rem;
     font-weight: 700;
     margin-left: 8px;
     vertical-align: middle;
@@ -498,13 +529,13 @@
 
   .needed-avg-box .big {
     font-family: 'Oswald', sans-serif;
-    font-size: 2rem;
+    font-size: 3.0rem;
     color: var(--accent);
     font-weight: 700;
   }
 
   .needed-avg-box .desc {
-    font-size: 0.78rem;
+    font-size: 1.16rem;
     color: var(--text-dim);
     margin-top: 4px;
     line-height: 1.5;
@@ -520,7 +551,7 @@
   }
 
   .profit-rule-title {
-    font-size: 0.75rem;
+    font-size: 1.12rem;
     font-weight: 700;
     letter-spacing: 1px;
     color: var(--text-dim);
@@ -534,7 +565,7 @@
     align-items: center;
     padding: 8px 0;
     border-bottom: 1px solid var(--border);
-    font-size: 0.88rem;
+    font-size: 1.32rem;
   }
 
   .profit-rule-row:last-of-type { border-bottom: none; }
@@ -546,7 +577,7 @@
 
   .profit-rule-desc {
     margin-top: 10px;
-    font-size: 0.78rem;
+    font-size: 1.16rem;
     color: var(--text-dim);
     line-height: 1.6;
     padding-top: 10px;
@@ -581,7 +612,7 @@
 
   .profit-big-num {
     font-family: 'Oswald', sans-serif;
-    font-size: 3rem;
+    font-size: 4.5rem;
     font-weight: 700;
     line-height: 1;
     margin: 8px 0;
@@ -605,8 +636,8 @@
     border: 1px solid var(--border);
   }
 
-  .pbi-val { font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 700; }
-  .pbi-lbl { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
+  .pbi-val { font-family: 'Oswald', sans-serif; font-size: 1.66rem; font-weight: 700; }
+  .pbi-lbl { font-size: 1.02rem; color: var(--text-dim); margin-top: 2px; }
 
   .over-bonus-banner {
     background: rgba(167,139,250,0.1);
@@ -614,7 +645,7 @@
     border-radius: 8px;
     padding: 12px 16px;
     margin-top: 12px;
-    font-size: 0.84rem;
+    font-size: 1.26rem;
     color: #a78bfa;
     text-align: center;
     line-height: 1.5;
@@ -634,7 +665,7 @@
 
   .sim-profit-num {
     font-family: 'Oswald', sans-serif;
-    font-size: 2.2rem;
+    font-size: 3.3rem;
     font-weight: 700;
   }
 
@@ -646,7 +677,7 @@
     background: var(--surface2);
     border-radius: 8px;
     margin-bottom: 6px;
-    font-size: 0.85rem;
+    font-size: 1.28rem;
     border-left: 3px solid var(--border);
     transition: border-color 0.2s;
   }
@@ -662,7 +693,7 @@
   }
 
   .ptr-revenue { color: var(--text-dim); }
-  .ptr-profit { font-weight: 700; font-family: 'Oswald', sans-serif; font-size: 1rem; }
+  .ptr-profit { font-weight: 700; font-family: 'Oswald', sans-serif; font-size: 1.5rem; }
 
   /* ─── 로딩 오버레이 ─── */
   .loading-overlay {
@@ -686,7 +717,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .lo-msg {
     color: var(--text);
-    font-size: 0.92rem;
+    font-size: 1.38rem;
     font-weight: 700;
   }
   /* ─── 온라인/오프라인 상태 표시 ─── */
@@ -694,7 +725,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.72rem;
+    font-size: 1.08rem;
     color: var(--text-dim);
     margin-top: 4px;
   }
@@ -717,50 +748,299 @@
     position:fixed; inset:0; background:#0d0f14; z-index:99999;
     display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;
   }
-  .lk-icon { font-size:3.8rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
+  .lk-icon { font-size: 5.7rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
   @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-9px)rotate(4deg);} }
-  .lk-title { font-size:1.45rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
-  .lk-sub { font-size:0.78rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
+  .lk-title { font-size: 2.18rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
+  .lk-sub { font-size: 1.16rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
   .lk-card { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
-  .lk-label { font-size:0.8rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
+  .lk-label { font-size: 1.2rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
   .lk-wrap { position:relative; margin-bottom:14px; }
   #lkInput {
     width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px;
-    padding:14px 48px 14px 16px; font-size:1.1rem; color:#e8eaf0;
+    padding:14px 48px 14px 16px; font-size: 1.66rem; color:#e8eaf0;
     font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; letter-spacing:4px;
   }
   #lkInput:focus { border-color:#f5a623; }
   #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
   @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);} }
-  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size:1.1rem; cursor:pointer; padding:4px; }
-  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
+  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size: 1.66rem; cursor:pointer; padding:4px; }
+  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size: 1.5rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
   #lkBtn:hover { background:#f7b84b; transform:translateY(-1px); }
-  #lkErr { text-align:center; color:#e8445a; font-size:0.85rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
-  .lk-footer { text-align:center; color:#7a8099; font-size:0.72rem; margin-top:22px; line-height:1.7; }
+  #lkErr { text-align:center; color:#e8445a; font-size: 1.28rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
+  .lk-footer { text-align:center; color:#7a8099; font-size: 1.08rem; margin-top:22px; line-height:1.7; }
 
   /* ─── 비밀번호 잠금 ─── */
   #lockOverlay { position:fixed; inset:0; background:#0d0f14; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
-  .lk-icon { font-size:3.8rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
+  .lk-icon { font-size: 5.7rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
   @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-9px)rotate(4deg);} }
-  .lk-title { font-size:1.45rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
-  .lk-sub { font-size:0.78rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
+  .lk-title { font-size: 2.18rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
+  .lk-sub { font-size: 1.16rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
   .lk-card { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
-  .lk-label { font-size:0.8rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
+  .lk-label { font-size: 1.2rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
   .lk-wrap { position:relative; margin-bottom:14px; }
-  #lkInput { width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px; padding:14px 48px 14px 16px; font-size:1.1rem; color:#e8eaf0; font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; letter-spacing:4px; }
+  #lkInput { width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px; padding:14px 48px 14px 16px; font-size: 1.66rem; color:#e8eaf0; font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; letter-spacing:4px; }
   #lkInput:focus { border-color:#f5a623; }
   #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
   @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);} }
-  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size:1.1rem; cursor:pointer; padding:4px; }
-  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
+  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size: 1.66rem; cursor:pointer; padding:4px; }
+  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size: 1.5rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
   #lkBtn:hover { background:#f7b84b; transform:translateY(-1px); }
-  #lkErr { text-align:center; color:#e8445a; font-size:0.85rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
-  .lk-footer { text-align:center; color:#7a8099; font-size:0.72rem; margin-top:22px; }
+  #lkErr { text-align:center; color:#e8445a; font-size: 1.28rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
+  .lk-footer { text-align:center; color:#7a8099; font-size: 1.08rem; margin-top:22px; }
+
+
+  /* ─── 날짜 입력 반응형 fix ─── */
+  input[type="date"] {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 0;
+  }
+  .form-group {
+    width: 100%;
+    overflow: hidden;
+  }
+  .card {
+    overflow: hidden;
+  }
+
+
+  input[type="date"] {
+    width: 100%; max-width: 100%;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-group { width: 100%; overflow: hidden; }
+
+
+  /* ─── 비밀번호 잠금 ─── */
+  #lockOverlay {
+    position:fixed; inset:0; background:#0d0f14; z-index:99999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;
+  }
+  .lk-icon { font-size:3rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
+  @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-8px)rotate(4deg);} }
+  .lk-title { font-size:1.6rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
+  .lk-sub { font-size:0.9rem; color:#7a8099; margin-bottom:28px; letter-spacing:1px; }
+  .lk-card {
+    background:#161923; border:1px solid #2a3045; border-radius:16px;
+    padding:24px 20px 20px; width:100%; max-width:320px;
+  }
+  .lk-label { font-size:0.9rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
+  .lk-wrap { position:relative; margin-bottom:12px; }
+  #lkInput {
+    width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px;
+    padding:14px 44px 14px 14px; font-size:1.1rem; color:#e8eaf0;
+    font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s;
+  }
+  #lkInput:focus { border-color:#f5a623; }
+  #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
+  @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-7px);}40%,80%{transform:translateX(7px);} }
+  #lkEye {
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    background:none; border:none; color:#7a8099; font-size:1rem; cursor:pointer;
+  }
+  #lkBtn {
+    width:100%; padding:13px; background:#f5a623; border:none; border-radius:10px;
+    color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1rem;
+    font-weight:900; cursor:pointer; transition:all 0.2s;
+  }
+  #lkBtn:hover { background:#f7b84b; }
+  #lkErr {
+    text-align:center; color:#e8445a; font-size:0.85rem;
+    margin-top:12px; min-height:18px; font-weight:700; display:none;
+  }
+  .lk-footer { text-align:center; color:#7a8099; font-size:0.75rem; margin-top:18px; }
+
+  /* ─── 가스 현황 ─── */
+  .stat-value.blue { color: #4db8ff; }
+  .gas-progress-wrap {
+    display: flex; align-items: center; gap: 10px; margin-top: 8px;
+  }
+  .gas-bar-bg {
+    flex: 1; height: 14px; background: var(--surface2);
+    border-radius: 7px; overflow: hidden; border: 1px solid var(--border);
+  }
+  .gas-bar-fill {
+    height: 100%; width: 0%; border-radius: 7px;
+    background: linear-gradient(90deg, #4db8ff, #a78bfa);
+    transition: width 0.5s ease;
+  }
+  .gas-bar-fill.warn { background: linear-gradient(90deg, #f5a623, #e8445a); }
+  .gas-pct {
+    font-size: 1rem; font-weight: 900; color: #4db8ff; min-width: 48px; text-align: right;
+  }
+  .gas-pct.warn { color: var(--accent2); }
+
+
+  /* ─── 일별 현황 테이블 ─── */
+  .daily-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .daily-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+  .daily-table thead tr {
+    background: var(--surface2);
+    border-bottom: 2px solid var(--border);
+  }
+  .daily-table th {
+    padding: 10px 8px;
+    text-align: right;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .daily-table th:first-child { text-align: left; }
+  .daily-table td {
+    padding: 9px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .daily-table td:first-child {
+    text-align: left;
+    color: var(--text-dim);
+    font-weight: 700;
+  }
+  .daily-table tbody tr:hover { background: var(--surface2); }
+  .daily-table tbody tr.today-row { background: rgba(245,166,35,0.08); }
+  .daily-table .val-rev  { color: var(--accent); font-weight: 700; }
+  .daily-table .val-fuel { color: var(--accent2); }
+  .daily-table .val-gas  { color: #4db8ff; }
+  .daily-table .val-net.positive { color: var(--green); }
+  .daily-table .val-net.negative { color: var(--accent2); }
+  .daily-table .val-empty { color: var(--border); }
+  .daily-table tfoot tr {
+    background: var(--surface2);
+    border-top: 2px solid var(--border);
+    font-weight: 900;
+  }
+  .daily-table tfoot td {
+    padding: 10px 8px;
+    font-size: 0.95rem;
+    border-bottom: none;
+  }
+
+
+  /* ─── 최근 입력 내역 (날짜 그룹) ─── */
+  .log-date-group {
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .log-date-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .log-date-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .log-date-summary {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .lds-rev  { font-size: 1.05rem; color: var(--accent);  font-weight: 700; }
+  .lds-fuel { font-size: 1.05rem; color: var(--accent2); font-weight: 700; }
+  .lds-gas  { font-size: 1.05rem; color: #4db8ff;        font-weight: 700; }
+
+  .log-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-entry:hover { background: rgba(255,255,255,0.03); }
+
+  .log-entry-rev  { border-left: 3px solid var(--accent); }
+  .log-entry-fuel { border-left: 3px solid var(--accent2); }
+  .log-entry-gas  { border-left: 3px solid #4db8ff; }
+
+  .log-entry-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .log-entry-icon { font-size: 1.4rem; }
+
+  .log-entry-label {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .log-entry-time {
+    font-size: 1rem;
+    color: var(--text-dim);
+    margin-top: 1px;
+  }
+
+  .log-entry-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .log-entry-val {
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .log-entry-rev  .log-entry-val { color: var(--accent); }
+  .log-entry-fuel .log-entry-val { color: var(--accent2); }
+  .log-entry-gas  .log-entry-val { color: #4db8ff; }
+
+  .btn-log-del {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-log-del:hover {
+    background: rgba(232,68,90,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
 
 </style>
 </head>
 <body>
-
 <!-- ═══ 비밀번호 잠금 ═══ -->
 <div id="lockOverlay">
   <div class="lk-icon">🔐</div>
@@ -770,53 +1050,50 @@
     <div class="lk-label">🔑 비밀번호를 입력하세요</div>
     <div class="lk-wrap">
       <input id="lkInput" type="password" placeholder="비밀번호 입력">
-      <button id="lkEye">👁️</button>
+      <button id="lkEye" type="button" onclick="
+        var i=document.getElementById('lkInput');
+        i.type=i.type==='password'?'text':'password';
+        this.textContent=i.type==='password'?'👁️':'🙈';
+        i.focus();
+      ">👁️</button>
     </div>
-    <button id="lkBtn">입장하기 →</button>
+    <button id="lkBtn" type="button" onclick="doUnlock()">입장하기 →</button>
     <div id="lkErr">❌ 비밀번호가 틀렸습니다. 다시 입력해주세요.</div>
   </div>
   <div class="lk-footer">이무종님만 접근 가능한 앱입니다 🚕</div>
 </div>
+
 <script>
-(function() {
-  var PW = '590806';
-  function unlock() {
-    var inp = document.getElementById('lkInput');
-    var err = document.getElementById('lkErr');
-    var ov  = document.getElementById('lockOverlay');
-    if (inp.value === PW) {
-      ov.style.display = 'none';
-      inp.value = '';
-      err.style.display = 'none';
-      if (typeof window.__initApp === 'function') window.__initApp();
-    } else {
-      err.style.display = 'block';
-      inp.classList.remove('lk-shake');
-      void inp.offsetWidth;
-      inp.classList.add('lk-shake');
-      inp.value = '';
-      inp.focus();
-      setTimeout(function() {
-        inp.classList.remove('lk-shake');
-        err.style.display = 'none';
-      }, 2500);
-    }
-  }
-  function toggleEye() {
-    var inp = document.getElementById('lkInput');
-    var btn = document.getElementById('lkEye');
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-    btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+var _LK_DONE = false;
+function doUnlock() {
+  if (_LK_DONE) return;
+  var inp = document.getElementById('lkInput');
+  var err = document.getElementById('lkErr');
+  var ov  = document.getElementById('lockOverlay');
+  if (inp.value === '590806') {
+    _LK_DONE = true;
+    ov.style.display = 'none';
+    err.style.display = 'none';
+    inp.value = '';
+  } else {
+    err.style.display = 'block';
+    inp.classList.remove('lk-shake');
+    void inp.offsetWidth;
+    inp.classList.add('lk-shake');
+    inp.value = '';
     inp.focus();
+    setTimeout(function(){
+      inp.classList.remove('lk-shake');
+      err.style.display = 'none';
+    }, 2500);
   }
-  document.getElementById('lkBtn').addEventListener('click', unlock);
-  document.getElementById('lkEye').addEventListener('click', toggleEye);
-  document.getElementById('lkInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') unlock();
-  });
-  document.getElementById('lkInput').focus();
-})();
+}
+document.getElementById('lkInput').onkeydown = function(e){
+  if(e.key==='Enter') doUnlock();
+};
+document.getElementById('lkInput').focus();
 </script>
+
 
 <div id="toast" class="toast"></div>
 <div class="container">
@@ -857,12 +1134,16 @@
     </div>
 
     <div class="card">
-      <div class="card-title">⛽ 주유 금액 입력</div>
+      <div class="card-title">⛽ 주유 입력</div>
       <div class="form-group">
         <label>주유 금액 (원)</label>
         <input type="number" id="inputFuel" placeholder="예: 80000" min="0" step="1000">
       </div>
-      <button class="btn btn-primary" onclick="saveFuel()">주유 저장</button>
+      <div class="form-group" style="margin-top:10px">
+        <label>가스 충전량 (리터)</label>
+        <input type="number" id="inputGas" placeholder="예: 45" min="0" step="0.1">
+      </div>
+      <button class="btn btn-primary" onclick="saveFuel()">주유/가스 저장</button>
     </div>
 
     <div class="card">
@@ -894,6 +1175,14 @@
           <div class="stat-value green" id="weekAvgRevenue">-</div>
         </div>
         <div class="stat-box">
+          <div class="stat-label">주간 총 가스</div>
+          <div class="stat-value blue" id="weekTotalGas">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">일 평균 가스</div>
+          <div class="stat-value blue" id="weekAvgGas">-</div>
+        </div>
+        <div class="stat-box">
           <div class="stat-label">예상 소득</div>
           <div class="stat-value" id="weekNet" style="color:#a78bfa">-</div>
         </div>
@@ -907,6 +1196,35 @@
   <!-- 월간 통계 탭 -->
   <div id="tab-monthly" class="tab-panel">
 
+    <!-- 가스 현황 카드 -->
+    <div class="card" id="gasCard">
+      <div class="card-title">🔵 이달 가스 현황 <span style="font-size:0.85rem;color:var(--text-dim);font-weight:400">(월 한도: 1,000L)</span></div>
+      <div class="gas-progress-wrap">
+        <div class="gas-bar-bg">
+          <div class="gas-bar-fill" id="gasBarFill"></div>
+        </div>
+        <div class="gas-pct" id="gasPct">0%</div>
+      </div>
+      <div class="stats-grid" style="margin-top:12px">
+        <div class="stat-box">
+          <div class="stat-label">이달 사용량</div>
+          <div class="stat-value blue" id="gasUsed">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">남은 한도</div>
+          <div class="stat-value green" id="gasRemain">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">일 평균 사용</div>
+          <div class="stat-value" id="gasAvgDay">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">남은 일수 대비</div>
+          <div class="stat-value" id="gasRemainPerDay">-</div>
+        </div>
+      </div>
+    </div>
+
     <!-- 목표 달성 배너 -->
     <div id="goalBanner" class="goal-banner">
       <div class="goal-header">
@@ -914,7 +1232,7 @@
         <div class="goal-target">목표: <span>550만원</span></div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <div style="font-size:0.8rem;color:var(--text-dim)">달성률</div>
+        <div style="font-size: 1.6rem;color:var(--text-dim)">달성률</div>
         <div style="display:flex;align-items:center;gap:8px">
           <div class="goal-pct" id="goalPct">0%</div>
           <span class="status-chip chip-orange" id="goalChip">계산중</span>
@@ -942,7 +1260,7 @@
     <div class="card">
       <div class="card-title">📈 월간 통계</div>
       <div class="month-selector">
-        <select id="monthSelect" onchange="renderMonthly()"></select>
+        <select id="monthSelect" onchange="renderMonthly()" ></select>
       </div>
       <div class="stats-grid">
         <div class="stat-box">
@@ -966,6 +1284,29 @@
         <canvas id="monthChart" height="240"></canvas>
       </div>
     </div>
+
+    <!-- 일별 매출/가스 테이블 -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="card-title" style="padding:16px 16px 12px">📋 일별 매출 & 가스 현황</div>
+      <div class="daily-table-wrap">
+        <table class="daily-table" id="dailyTable">
+          <thead>
+            <tr>
+              <th>날짜</th>
+              <th>매출</th>
+              <th>주유</th>
+              <th>가스</th>
+              <th>순익</th>
+            </tr>
+          </thead>
+          <tbody id="dailyTableBody">
+            <tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:24px">데이터 없음</td></tr>
+          </tbody>
+          <tfoot id="dailyTableFoot"></tfoot>
+        </table>
+      </div>
+    </div>
+
   </div>
 
   <!-- 달력 탭 -->
@@ -973,7 +1314,7 @@
     <div class="card">
       <div class="card-title">🗓️ 이달의 현황</div>
       <div class="month-selector">
-        <select id="calMonthSelect" onchange="renderCalendar()"></select>
+        <select id="calMonthSelect" onchange="renderCalendar()" ></select>
       </div>
       <div class="section-title">운행 달력</div>
       <div class="remaining-grid" id="calGrid"></div>
@@ -988,7 +1329,7 @@
     <div class="card">
       <div class="card-title">💵 이달 예상 소득 자동 계산</div>
       <div class="month-selector">
-        <select id="profitMonthSelect" onchange="renderProfit()"></select>
+        <select id="profitMonthSelect" onchange="renderProfit()" ></select>
       </div>
 
       <!-- 구조 설명 -->
@@ -1020,7 +1361,7 @@
     <!-- 시뮬레이터 카드 -->
     <div class="card">
       <div class="card-title">🧮 매출 시뮬레이터</div>
-      <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:16px">
+      <div style="font-size: 1.64rem;color:var(--text-dim);margin-bottom:16px">
         매출 금액을 입력하면 예상 소득을 즉시 계산해드립니다
       </div>
       <div class="form-group">
@@ -1037,7 +1378,7 @@
         <label style="margin-bottom:10px">슬라이더로 조절 <span id="sliderLabel" style="color:var(--accent);font-weight:700"></span></label>
         <input type="range" id="simSlider" min="0" max="10000000" step="100000" value="5500000"
           oninput="syncSlider()" style="width:100%;accent-color:var(--accent);cursor:pointer;margin-top:8px">
-        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-dim);margin-top:4px">
+        <div style="display:flex;justify-content:space-between;font-size: 1.4rem;color:var(--text-dim);margin-top:4px">
           <span>0원</span><span>550만</span><span>1,000만</span>
         </div>
       </div>
@@ -1049,7 +1390,7 @@
       </div>
 
       <!-- 안내 문구 -->
-      <div style="margin-top:20px;padding:14px 16px;background:rgba(122,128,153,0.08);border:1px dashed rgba(122,128,153,0.3);border-radius:10px;font-size:0.78rem;color:var(--text-dim);line-height:1.8">
+      <div style="margin-top:20px;padding:14px 16px;background:rgba(122,128,153,0.08);border:1px dashed rgba(122,128,153,0.3);border-radius:10px;font-size: 1.56rem;color:var(--text-dim);line-height:1.8">
         ⚠️ <strong style="color:var(--text)">참고사항</strong><br>
         초과 소득에 대한 소득 부분은 계산이 되어 있지 않습니다.<br>
         실제 소득은 차이가 있을 수 있으니 참고만 하시면 됩니다.
@@ -1066,27 +1407,51 @@
   <div class="lo-msg">불러오는 중...</div>
 </div>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script type="module">
+
+<script>
+
+
+// ─── Firebase 초기화 ───
+var firebaseApp, firestore;
+
+function initFirebase() {
+  if (firestore) return; // 중복 초기화 방지
+  if (typeof firebase === 'undefined') {
+    console.warn('[Firebase] SDK 미로드 - 로컬 전용 모드로 실행');
+    return; // firebase SDK가 없으면 조용히 종료 (localStorage만 사용)
+  }
+  var cfg = {
+    apiKey: "AIzaSyCG5PqWKzsJQADzebyPbDxN2IPsfazGDv0",
+    authDomain: "driver-leemoojong.firebaseapp.com",
+    projectId: "driver-leemoojong",
+    storageBucket: "driver-leemoojong.firebasestorage.app",
+    messagingSenderId: "670178767270",
+    appId: "1:670178767270:web:567f8ad68848deb2a69f67"
+  };
+  try {
+    if (!firebase.apps.length) {
+      firebaseApp = firebase.initializeApp(cfg);
+    } else {
+      firebaseApp = firebase.apps[0];
+    }
+    firestore = firebase.firestore();
+  } catch(e) {
+    console.warn('[Firebase] 초기화 실패 - 로컬 전용 모드:', e.message);
+  }
+}
+
+const COL = 'taxiData';
+
 
 // ═══════════════════════════════════════════════════
 //  Firebase 초기화
 // ═══════════════════════════════════════════════════
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCG5PqWKzsJQADzebyPbDxN2IPsfazGDv0",
-  authDomain: "driver-leemoojong.firebaseapp.com",
-  projectId: "driver-leemoojong",
-  storageBucket: "driver-leemoojong.firebasestorage.app",
-  messagingSenderId: "670178767270",
-  appId: "1:670178767270:web:567f8ad68848deb2a69f67"
-};
-
-const firebaseApp = initializeApp(firebaseConfig);
-const firestore = getFirestore(firebaseApp);
-const COL = 'taxiData'; // Firestore 컬렉션 이름
+ // Firestore 컬렉션 이름
 
 // ─── 인메모리 DB (Firestore 로드 후 채워짐) ───
 let db = {};
@@ -1103,18 +1468,31 @@ function hideLoading() {
 
 // ─── Firestore 전체 로드 ───
 async function loadFromFirestore() {
+  if (!firestore) {
+    // Firebase 없으면 localStorage에서 복원
+    const local = localStorage.getItem('taxiDB');
+    if (local) { try { db = JSON.parse(local); } catch(e) {} }
+    hideLoading();
+    return false;
+  }
   showLoading('☁️ 데이터 불러오는 중...');
   try {
-    const snapshot = await getDocs(collection(firestore, COL));
+    const snapshot = await firestore.collection(COL).get();
     db = {};
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
-      db[docSnap.id] = { revenue: data.revenue || 0, fuel: data.fuel || 0 };
+      db[docSnap.id] = { revenue: data.revenue || 0, fuel: data.fuel || 0, gas: data.gas || 0, logs: data.logs || [] };
     });
+    // Firebase 데이터를 localStorage에도 백업
+    localStorage.setItem('taxiDB', JSON.stringify(db));
+    console.log('[Firestore] 로드 성공, 항목 수:', Object.keys(db).length);
     hideLoading();
     return true;
   } catch(e) {
-    console.error('Firestore 로드 오류:', e);
+    console.error('[Firestore] 로드 오류:', e.code, e.message);
+    // localStorage 폴백
+    const local = localStorage.getItem('taxiDB');
+    if (local) { db = JSON.parse(local); showToast('⚠️ 로컬 데이터 사용 중'); }
     hideLoading();
     showToast('❌ 데이터 로드 실패. 인터넷을 확인하세요');
     return false;
@@ -1123,23 +1501,30 @@ async function loadFromFirestore() {
 
 // ─── Firestore 단건 저장 ───
 async function saveToFirestore(dateStr) {
+  // localStorage 항상 백업
+  localStorage.setItem('taxiDB', JSON.stringify(db));
+  if (!firestore) return; // Firebase 미연결 시 로컬 저장만 (콘솔 오류 방지)
   try {
-    await setDoc(doc(firestore, COL, dateStr), {
+    await firestore.collection(COL).doc(dateStr).set({
       revenue: db[dateStr]?.revenue || 0,
       fuel: db[dateStr]?.fuel || 0,
+      gas: db[dateStr]?.gas || 0,
+      logs: db[dateStr]?.logs || [],
       updatedAt: new Date().toISOString()
     });
+    console.log('[Firestore] 저장 성공:', dateStr);
   } catch(e) {
-    console.error('Firestore 저장 오류:', e);
-    showToast('❌ 저장 실패. 인터넷을 확인하세요');
-    throw e;
+    console.error('[Firestore] 저장 오류:', e.code, e.message);
+    // Firebase 실패해도 localStorage는 저장됨 - 오류 던지지 않음
+    showToast('⚠️ 클라우드 저장 실패 (로컬 저장됨)');
   }
 }
 
 // ─── Firestore 단건 삭제 ───
 async function deleteFromFirestore(dateStr) {
+  if (!firestore) return; // Firebase 미연결 시 무시
   try {
-    await deleteDoc(doc(firestore, COL, dateStr));
+    await firestore.collection(COL).doc(dateStr).delete();
   } catch(e) {
     console.error('Firestore 삭제 오류:', e);
     showToast('❌ 삭제 실패. 인터넷을 확인하세요');
@@ -1203,13 +1588,21 @@ function refreshActiveStats() {
 }
 
 // ─── 초기화 ───
-async function initApp() { 
+// ─── 앱 시작 (잠금 해제 후 호출) ───
+
+window.onload = async function() {
+  initFirebase();
+  await initApp();
+};
+
+async function initApp() {
   document.getElementById('inputDate').value = todayStr();
   await loadFromFirestore();
   populateMonthSelects();
   renderRecentLog();
   initWeek();
-};
+  updateNetworkStatus();
+}
 
 function populateMonthSelects() {
   const months = getAvailableMonths();
@@ -1247,15 +1640,62 @@ function parseAmount(str) {
   return isNaN(val) ? 0 : val;
 }
 
+// ─── 로그 유틸 ───
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function nowStr() {
+  const d = new Date();
+  const mo = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  const h   = String(d.getHours()).padStart(2,'0');
+  const mi  = String(d.getMinutes()).padStart(2,'0');
+  return `${d.getFullYear()}-${mo}-${day} ${h}:${mi}`;
+}
+
+async function deleteLog(date, logId) {
+  if (!db[date] || !db[date].logs) return;
+  const log = db[date].logs.find(l => l.id === logId);
+  if (!log) return;
+  // 합산에서 해당 값 제거
+  if (log.type === 'revenue') db[date].revenue = Math.max(0, (db[date].revenue||0) - log.value);
+  if (log.type === 'fuel')    db[date].fuel    = Math.max(0, (db[date].fuel   ||0) - log.value);
+  if (log.type === 'gas')     db[date].gas     = Math.max(0, (db[date].gas    ||0) - log.value);
+  // 로그에서 제거
+  db[date].logs = db[date].logs.filter(l => l.id !== logId);
+  // 날짜 전체가 비었으면 삭제
+  const isEmpty = !db[date].revenue && !db[date].fuel && !db[date].gas && !db[date].logs.length;
+  showLoading('🗑️ 삭제 중...');
+  try {
+    if (isEmpty) {
+      delete db[date];
+      await deleteFromFirestore(date);
+    } else {
+      await saveToFirestore(date);
+    }
+    hideLoading();
+    populateMonthSelects();
+    renderRecentLog();
+    refreshActiveStats();
+    showToast('🗑️ 삭제 완료');
+  } catch(e) { hideLoading(); }
+}
+window.deleteLog = deleteLog;
+
 // ─── 입력 ───
 async function saveRevenue() {
   const date = document.getElementById('inputDate').value;
-  const raw = document.getElementById('inputRevenue').value.trim();
+  const rawEl = document.getElementById('inputRevenue');
+  const raw = rawEl ? rawEl.value.trim() : '';
   const val = parseAmount(raw);
   if (!date) return showToast('❌ 날짜를 선택하세요');
   if (val <= 0) return showToast('❌ 올바른 매출 금액을 입력하세요');
-  if (!db[date]) db[date] = { revenue: 0, fuel: 0 };
-  db[date].revenue = val;
+  if (!db[date]) db[date] = { revenue: 0, fuel: 0, gas: 0, logs: [] };
+  if (!db[date].logs) db[date].logs = [];
+  const prev = db[date].revenue || 0;
+  db[date].revenue = prev + val;
+  db[date].logs.push({ id: genId(), type: 'revenue', value: val, time: nowStr() });
   showLoading('💾 저장 중...');
   try {
     await saveToFirestore(date);
@@ -1264,34 +1704,51 @@ async function saveRevenue() {
     populateMonthSelects();
     renderRecentLog();
     refreshActiveStats();
-    showToast(`✅ ${date} 매출 ${fmt(val)} 저장!`);
+    const msg = prev > 0
+      ? `✅ 매출 누적: ${fmt(prev)} + ${fmt(val)} = ${fmt(db[date].revenue)}`
+      : `✅ ${date} 매출 ${fmt(val)} 저장!`;
+    showToast(msg);
   } catch(e) { hideLoading(); }
 }
 
 async function saveFuel() {
   const date = document.getElementById('inputDate').value;
-  const raw = document.getElementById('inputFuel').value.trim();
-  const val = parseAmount(raw);
+  const fuelEl = document.getElementById('inputFuel');
+  const gasEl = document.getElementById('inputGas');
+  const fuelVal = fuelEl ? parseAmount(fuelEl.value.trim()) : 0;
+  const gasVal = gasEl ? (parseFloat(gasEl.value) || 0) : 0;
   if (!date) return showToast('❌ 날짜를 선택하세요');
-  if (val <= 0) return showToast('❌ 올바른 주유 금액을 입력하세요');
-  if (!db[date]) db[date] = { revenue: 0, fuel: 0 };
-  db[date].fuel = val;
+  if (fuelVal <= 0 && gasVal <= 0) return showToast('❌ 주유 금액 또는 가스 리터를 입력하세요');
+  if (!db[date]) db[date] = { revenue: 0, fuel: 0, gas: 0, logs: [] };
+  if (!db[date].logs) db[date].logs = [];
+  if (fuelVal > 0) {
+    db[date].fuel = (db[date].fuel || 0) + fuelVal;
+    db[date].logs.push({ id: genId(), type: 'fuel', value: fuelVal, time: nowStr() });
+  }
+  if (gasVal > 0) {
+    db[date].gas = (db[date].gas || 0) + gasVal;
+    db[date].logs.push({ id: genId(), type: 'gas', value: gasVal, time: nowStr() });
+  }
   showLoading('💾 저장 중...');
   try {
     await saveToFirestore(date);
     hideLoading();
-    document.getElementById('inputFuel').value = '';
+    if (fuelEl) fuelEl.value = '';
+    if (gasEl)  gasEl.value  = '';
     populateMonthSelects();
     renderRecentLog();
     refreshActiveStats();
-    showToast(`✅ ${date} 주유 ${fmt(val)} 저장!`);
+    const msgs = [];
+    if (fuelVal > 0) msgs.push(`주유 ${fmt(fuelVal)}`);
+    if (gasVal  > 0) msgs.push(`가스 ${gasVal}L`);
+    showToast('✅ ' + date + ' ' + msgs.join(', ') + ' 저장!');
   } catch(e) { hideLoading(); }
 }
 
 async function deleteEntry(date, type) {
   if (!db[date]) return;
   db[date][type] = 0;
-  const isEmpty = !db[date].revenue && !db[date].fuel;
+  const isEmpty = !db[date].revenue && !db[date].fuel && !db[date].gas;
   showLoading('🗑️ 삭제 중...');
   try {
     if (isEmpty) {
@@ -1311,47 +1768,107 @@ async function deleteEntry(date, type) {
 function renderRecentLog() {
   const container = document.getElementById('recentLog');
   if (!container) return;
-  const entries = Object.entries(db)
-    .filter(([, d]) => (d.revenue > 0 || d.fuel > 0))
-    .sort((a, b) => b[0].localeCompare(a[0]))
-    .slice(0, 20);
 
-  if (!entries.length) {
+  // 데이터 있는 날짜 최신순 정렬
+  const dates = Object.keys(db)
+    .filter(d => {
+      const r = db[d];
+      return r && (r.revenue > 0 || r.fuel > 0 || r.gas > 0 || (r.logs && r.logs.length > 0));
+    })
+    .sort((a, b) => b.localeCompare(a))
+    .slice(0, 14); // 최근 14일치
+
+  if (!dates.length) {
     container.innerHTML = '<div class="empty-state">입력된 데이터가 없습니다</div>';
     return;
   }
-  let html = '';
-  entries.forEach(([date, d]) => {
-    const [y, mo, day] = date.split('-');
-    const dispDate = `${y}.${parseInt(mo)}.${parseInt(day)}`;
-    if (d.revenue > 0) {
-      html += `<div class="log-item revenue">
-        <div>
-          <div class="log-date">${dispDate}</div>
-          <div style="font-size:0.75rem;color:var(--text-dim)">매출</div>
-        </div>
-        <div class="log-right">
-          <div class="log-amount revenue-val">${fmt(d.revenue)}</div>
-          <button class="btn btn-danger" onclick="deleteEntry('${date}','revenue')">삭제</button>
-        </div>
-      </div>`;
-    }
-    if (d.fuel > 0) {
-      html += `<div class="log-item fuel">
-        <div>
-          <div class="log-date">${dispDate}</div>
-          <div style="font-size:0.75rem;color:var(--text-dim)">주유</div>
-        </div>
-        <div class="log-right">
-          <div class="log-amount fuel-val">${fmt(d.fuel)}</div>
-          <button class="btn btn-danger" onclick="deleteEntry('${date}','fuel')">삭제</button>
-        </div>
-      </div>`;
-    }
-  });
-  container.innerHTML = html;
-}
 
+  let h = '';
+  dates.forEach(date => {
+    const rec = db[date];
+    const logs = (rec.logs || []).slice().sort((a,b) => b.time.localeCompare(a.time));
+    const [y, mo, day] = date.split('-');
+    const dispDate = `${parseInt(mo)}월 ${parseInt(day)}일`;
+
+    // 날짜 헤더 + 합산 요약
+    h += `<div class="log-date-group">
+      <div class="log-date-header">
+        <span class="log-date-label">📅 ${dispDate}</span>
+        <div class="log-date-summary">
+          ${rec.revenue > 0 ? `<span class="lds-rev">매출 ${fmt(rec.revenue)}</span>` : ''}
+          ${rec.fuel    > 0 ? `<span class="lds-fuel">주유 ${fmt(rec.fuel)}</span>` : ''}
+          ${rec.gas     > 0 ? `<span class="lds-gas">가스 ${rec.gas.toFixed(1)}L</span>` : ''}
+        </div>
+      </div>`;
+
+    if (logs.length > 0) {
+      // 개별 로그 항목
+      logs.forEach(log => {
+        const isRev  = log.type === 'revenue';
+        const isFuel = log.type === 'fuel';
+        const isGas  = log.type === 'gas';
+        const icon   = isRev ? '💰' : isFuel ? '⛽' : '🔵';
+        const label  = isRev ? '매출' : isFuel ? '주유' : '가스';
+        const valStr = isGas ? `${Number(log.value).toFixed(1)}L` : fmt(log.value);
+        const cls    = isRev ? 'log-entry-rev' : isFuel ? 'log-entry-fuel' : 'log-entry-gas';
+        const dateStr = log.time ? log.time.slice(5, 10).replace('-', '/') : ''; // MM/DD
+        const timeStr = log.time ? log.time.slice(11, 16) : '';                 // HH:MM
+
+        h += `<div class="log-entry ${cls}">
+          <div class="log-entry-left">
+            <span class="log-entry-icon">${icon}</span>
+            <div>
+              <div class="log-entry-label">${label}</div>
+              <div class="log-entry-time">${dateStr ? dateStr + ' ' + timeStr + ' 입력' : ''}</div>
+            </div>
+          </div>
+          <div class="log-entry-right">
+            <span class="log-entry-val">${valStr}</span>
+            <button class="btn-log-del" onclick="deleteLog('${date}','${log.id}')">✕</button>
+          </div>
+        </div>`;
+      });
+    } else {
+      // logs 배열 없는 구 데이터 - 합산값만 표시
+      if (rec.revenue > 0) {
+        h += `<div class="log-entry log-entry-rev">
+          <div class="log-entry-left"><span class="log-entry-icon">💰</span>
+            <div><div class="log-entry-label">매출</div><div class="log-entry-time">이전 데이터</div></div>
+          </div>
+          <div class="log-entry-right">
+            <span class="log-entry-val">${fmt(rec.revenue)}</span>
+            <button class="btn-log-del" onclick="deleteEntry('${date}','revenue')">✕</button>
+          </div>
+        </div>`;
+      }
+      if (rec.fuel > 0) {
+        h += `<div class="log-entry log-entry-fuel">
+          <div class="log-entry-left"><span class="log-entry-icon">⛽</span>
+            <div><div class="log-entry-label">주유</div><div class="log-entry-time">이전 데이터</div></div>
+          </div>
+          <div class="log-entry-right">
+            <span class="log-entry-val">${fmt(rec.fuel)}</span>
+            <button class="btn-log-del" onclick="deleteEntry('${date}','fuel')">✕</button>
+          </div>
+        </div>`;
+      }
+      if (rec.gas > 0) {
+        h += `<div class="log-entry log-entry-gas">
+          <div class="log-entry-left"><span class="log-entry-icon">🔵</span>
+            <div><div class="log-entry-label">가스</div><div class="log-entry-time">이전 데이터</div></div>
+          </div>
+          <div class="log-entry-right">
+            <span class="log-entry-val">${rec.gas.toFixed(1)}L</span>
+            <button class="btn-log-del" onclick="deleteEntry('${date}','gas')">✕</button>
+          </div>
+        </div>`;
+      }
+    }
+    h += '</div>'; // log-date-group 닫기
+  });
+
+  container.innerHTML = h;
+}
 
 // ─── 네트워크 상태 감지 ───
 function updateNetworkStatus() {
@@ -1397,19 +1914,28 @@ function changeWeek(dir) {
 function renderWeekly() {
   const days = getWeekDates(currentWeekOffset);
   const labels = ['월','화','수','목','금','토','일'];
-  const revData = days.map(d => db[d]?.revenue || 0);
-  const fuelData = days.map(d => db[d]?.fuel || 0);
+  const revData  = days.map(d => db[d]?.revenue || 0);
+  const fuelData = days.map(d => db[d]?.fuel    || 0);
+  const gasData  = days.map(d => db[d]?.gas     || 0);
 
-  const totalRev = revData.reduce((a,b) => a+b, 0);
+  const totalRev  = revData.reduce((a,b) => a+b, 0);
   const totalFuel = fuelData.reduce((a,b) => a+b, 0);
-  const workDays = revData.filter(v => v > 0).length;
-  const avgRev = workDays > 0 ? Math.round(totalRev / workDays) : 0;
+  const totalGas  = gasData.reduce((a,b) => a+b, 0);
+  const workDays  = revData.filter(v => v > 0).length;
+  const gasDays   = gasData.filter(v => v > 0).length;
+  const avgRev    = workDays > 0 ? Math.round(totalRev / workDays) : 0;
+  const avgGas    = gasDays  > 0 ? (totalGas / gasDays).toFixed(1) : 0;
 
   document.getElementById('weekLabel').textContent = `${days[0]} ~ ${days[6]}`;
   document.getElementById('weekTotalRevenue').textContent = fmt(totalRev);
   document.getElementById('weekTotalFuel').textContent = fmt(totalFuel);
   document.getElementById('weekAvgRevenue').textContent = fmt(avgRev);
   document.getElementById('weekNet').textContent = fmt(totalRev - totalFuel);
+
+  const wTG = document.getElementById('weekTotalGas');
+  const wAG = document.getElementById('weekAvgGas');
+  if (wTG) wTG.textContent = totalGas > 0 ? totalGas.toFixed(1) + 'L' : '-';
+  if (wAG) wAG.textContent = avgGas  > 0 ? avgGas + 'L' : '-';
 
   const ctx = document.getElementById('weekChart').getContext('2d');
   if (weekChartInst) weekChartInst.destroy();
@@ -1606,85 +2132,212 @@ function renderMonthly() {
       }
     }
   });
-}
 
-// ─── 달력 ───
+
+
+  // ─── 가스 현황 업데이트 ───
+  const GAS_LIMIT = 1000; // 월 한도 1000L
+  const gasArr = [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${String(y).padStart(2,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    gasArr.push(db[key]?.gas || 0);
+  }
+  const totalGas   = gasArr.reduce((a,b) => a+b, 0);
+  const gasRemain  = Math.max(0, GAS_LIMIT - totalGas);
+  const gasPct     = Math.min(100, Math.round(totalGas / GAS_LIMIT * 100));
+
+  // 이번 달이면 남은 일수 계산, 아니면 0
+  let daysLeft = 0;
+  if (isCurrentMonth) {
+    daysLeft = daysInMonth - today.getDate();
+  }
+  const gasPerDayLeft = daysLeft > 0 ? (gasRemain / daysLeft).toFixed(1) : '-';
+
+  // 오늘까지 가스 입력한 날 수
+  const gasDays = gasArr.filter(v => v > 0).length;
+  const gasAvgDay = gasDays > 0 ? (totalGas / gasDays).toFixed(1) : '-';
+
+  // UI 업데이트
+  const gUsed = document.getElementById('gasUsed');
+  const gRemain = document.getElementById('gasRemain');
+  const gAvg = document.getElementById('gasAvgDay');
+  const gRpd = document.getElementById('gasRemainPerDay');
+  const gBarFill = document.getElementById('gasBarFill');
+  const gPct = document.getElementById('gasPct');
+
+  if (gUsed) gUsed.textContent = totalGas.toFixed(1) + 'L';
+  if (gRemain) gRemain.textContent = gasRemain.toFixed(1) + 'L';
+  if (gAvg) gAvg.textContent = gasAvgDay !== '-' ? gasAvgDay + 'L/일' : '-';
+  if (gRpd) {
+    if (daysLeft > 0) {
+      gRpd.textContent = gasPerDayLeft + 'L/일 (' + daysLeft + '일 남음)';
+      gRpd.style.color = parseFloat(gasPerDayLeft) > 33.3 ? '#e8445a' : '#4db8ff';
+    } else {
+      gRpd.textContent = isCurrentMonth ? '오늘이 마지막날' : '-';
+    }
+  }
+  if (gBarFill) {
+    gBarFill.style.width = gasPct + '%';
+    if (gasPct >= 80) gBarFill.classList.add('warn');
+    else gBarFill.classList.remove('warn');
+  }
+  if (gPct) {
+    gPct.textContent = gasPct + '%';
+    if (gasPct >= 80) gPct.classList.add('warn');
+    else gPct.classList.remove('warn');
+  }
+
+  // ─── 일별 매출/가스 테이블 ───
+  const tbody = document.getElementById('dailyTableBody');
+  const tfoot = document.getElementById('dailyTableFoot');
+  if (!tbody) return;
+
+  const dailyTodayKey = todayStr();
+  let rows = '';
+  let sumRev = 0, sumFuel = 0, sumGas = 0;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${String(y).padStart(2,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const rec = db[key];
+    const rev  = rec?.revenue || 0;
+    const fuel = rec?.fuel    || 0;
+    const gas  = rec?.gas     || 0;
+    const net  = rev - fuel;
+
+    // 미래 날짜이고 데이터 없으면 스킵
+    if (!rec && key > dailyTodayKey) continue;
+
+    sumRev  += rev;
+    sumFuel += fuel;
+    sumGas  += gas;
+
+    const isToday = key === dailyTodayKey;
+    const dateLabel = `${parseInt(m)}/${d}`;
+
+    const revStr  = rev  > 0 ? `<span class="val-rev">${fmt(rev)}</span>`   : `<span class="val-empty">-</span>`;
+    const fuelStr = fuel > 0 ? `<span class="val-fuel">${fmt(fuel)}</span>` : `<span class="val-empty">-</span>`;
+    const gasStr  = gas  > 0 ? `<span class="val-gas">${gas.toFixed(1)}L</span>` : `<span class="val-empty">-</span>`;
+    const netCls  = net > 0 ? 'positive' : net < 0 ? 'negative' : '';
+    const netStr  = rev > 0 || fuel > 0
+      ? `<span class="val-net ${netCls}">${net >= 0 ? '+' : ''}${fmt(net)}</span>`
+      : `<span class="val-empty">-</span>`;
+
+    rows += `<tr${isToday ? ' class="today-row"' : ''}>
+      <td>${dateLabel}${isToday ? ' 📍' : ''}</td>
+      <td>${revStr}</td>
+      <td>${fuelStr}</td>
+      <td>${gasStr}</td>
+      <td>${netStr}</td>
+    </tr>`;
+  }
+
+  tbody.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:24px">데이터 없음</td></tr>';
+
+  const sumNet = sumRev - sumFuel;
+  const netCls = sumNet >= 0 ? 'positive' : 'negative';
+  tfoot.innerHTML = `<tr>
+    <td>합계</td>
+    <td><span class="val-rev">${fmt(sumRev)}</span></td>
+    <td><span class="val-fuel">${fmt(sumFuel)}</span></td>
+    <td><span class="val-gas">${sumGas > 0 ? sumGas.toFixed(1)+'L' : '-'}</span></td>
+    <td><span class="val-net ${netCls}">${sumNet >= 0 ? '+' : ''}${fmt(sumNet)}</span></td>
+  </tr>`;
+
+}
 function renderCalendar() {
   const month = document.getElementById('calMonthSelect').value;
   if (!month) return;
   const [y, m] = month.split('-').map(Number);
   const today = todayStr();
   const daysInMonth = new Date(y, m, 0).getDate();
-  const firstDay = new Date(y, m - 1, 1).getDay(); // 0=Sun
-  const startOffset = firstDay === 0 ? 6 : firstDay - 1; // Mon start
+  const firstDay = new Date(y, m - 1, 1).getDay();
+  const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
   const grid = document.getElementById('calGrid');
-  let html = '';
+  const info = document.getElementById('remainingInfo');
+  if (!grid) return;
+
+  // ─ 요일 헤더 ─
+  let h = '';
   ['월','화','수','목','금','토','일'].forEach(d => {
-    html += `<div class="day-cell empty-header">${d}</div>`;
+    h += `<div class="cal-header">${d}</div>`;
   });
+  for (let i = 0; i < startOffset; i++) h += `<div></div>`;
 
-  for (let i = 0; i < startOffset; i++) html += `<div></div>`;
-
-  let remainingDays = 0;
-  let passedDays = 0;
+  let remainingDays = 0, passedDays = 0;
 
   for (let d = 1; d <= daysInMonth; d++) {
     const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    let cls = 'day-cell';
-    if (key === today) cls += ' today';
-    else if (key < today) { cls += ' past'; passedDays++; }
-    else { cls += ' future'; remainingDays++; }
-    if (db[key] && (db[key].revenue > 0 || db[key].fuel > 0) && key !== today) cls += ' has-data';
-    html += `<div class="${cls}" title="${key}">${d}</div>`;
-  }
-  grid.innerHTML = html;
+    const rec = db[key];
+    const rev  = rec?.revenue || 0;
+    const fuel = rec?.fuel    || 0;
+    const gas  = rec?.gas     || 0;
 
+    let cls = 'cal-cell';
+    if (key === today)      { cls += ' cal-today'; }
+    else if (key < today)   { cls += ' cal-past';  passedDays++; }
+    else                    { cls += ' cal-future'; remainingDays++; }
+    if (rev > 0 || fuel > 0 || gas > 0) cls += ' cal-has-data';
+
+    const revLine  = rev  > 0 ? `<div class="cal-rev">${fmtShort(rev)}</div>`  : '';
+    const fuelLine = fuel > 0 ? `<div class="cal-fuel">⛽${fmtShort(fuel)}</div>` : '';
+    const gasLine  = gas  > 0 ? `<div class="cal-gas">🔵${gas.toFixed(1)}L</div>`  : '';
+
+    h += `<div class="${cls}">
+      <div class="cal-day-num">${d}</div>
+      ${revLine}${fuelLine}${gasLine}
+    </div>`;
+  }
+  grid.innerHTML = h;
+
+  // ─ 하단 배지 ─
   const todayDate = new Date();
   const isCurrentMonth = todayDate.getFullYear() === y && todayDate.getMonth() + 1 === m;
+  const workDaysCal = Object.keys(db).filter(k => k.startsWith(month) && db[k].revenue > 0).length;
 
-  // 이달 누적 매출 계산
+  if (info) {
+    info.innerHTML = `
+      <div class="remaining-badge">
+        <div class="badge-num">${daysInMonth}</div>
+        <div class="badge-label">이달 총 일수</div>
+      </div>
+      ${isCurrentMonth ? `
+      <div class="remaining-badge">
+        <div class="badge-num">${remainingDays}</div>
+        <div class="badge-label">남은 일수</div>
+      </div>
+      <div class="remaining-badge">
+        <div class="badge-num">${passedDays + 1}</div>
+        <div class="badge-label">경과 일수</div>
+      </div>
+      <div class="remaining-badge">
+        <div class="badge-num" style="color:var(--green)">${workDaysCal}</div>
+        <div class="badge-label">운행 입력일수</div>
+      </div>` : ''}
+    `;
+  }
+
+  // ─ 목표 달성 요약 ─
   const monthTotalRev = Object.entries(db)
     .filter(([k]) => k.startsWith(month))
     .reduce((sum, [,v]) => sum + (v.revenue || 0), 0);
-  const calRemaining = Math.max(0, MONTHLY_GOAL - monthTotalRev);
+  const calRemaining    = Math.max(0, MONTHLY_GOAL - monthTotalRev);
   const calNeededPerDay = (isCurrentMonth && remainingDays > 0)
     ? Math.ceil(calRemaining / remainingDays) : null;
   const calPct = Math.min(100, Math.round(monthTotalRev / MONTHLY_GOAL * 100));
-  const workDaysCal = Object.keys(db).filter(k => k.startsWith(month) && db[k].revenue > 0).length;
 
-  info.innerHTML = `
-    <div class="remaining-badge">
-      <div class="badge-num">${daysInMonth}</div>
-      <div class="badge-label">이달 총 일수</div>
-    </div>
-    ${isCurrentMonth ? `
-    <div class="remaining-badge">
-      <div class="badge-num">${remainingDays}</div>
-      <div class="badge-label">남은 일수</div>
-    </div>
-    <div class="remaining-badge">
-      <div class="badge-num">${passedDays + 1}</div>
-      <div class="badge-label">경과 일수 (오늘 포함)</div>
-    </div>
-    <div class="remaining-badge">
-      <div class="badge-num" style="color:var(--green)">${workDaysCal}</div>
-      <div class="badge-label">운행 입력일수</div>
-    </div>` : ''}
-  `;
-
-  // 목표 달성 요약 카드 (달력 하단)
   const goalSummaryEl = document.getElementById('calGoalSummary');
   if (goalSummaryEl) {
     const pctColor = calPct >= 100 ? '#a78bfa' : calPct >= 70 ? '#2ecc71' : calPct >= 40 ? '#f5a623' : '#e8445a';
     goalSummaryEl.innerHTML = `
       <div style="margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:0.75rem;color:var(--text-dim);font-weight:700;letter-spacing:1px">🎯 월 목표 550만원</span>
-          <span style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:${pctColor}">${calPct}%</span>
+          <span style="font-size:1.3rem;color:var(--text-dim);font-weight:700">🎯 월 목표 550만원</span>
+          <span style="font-size:2rem;font-weight:700;color:${pctColor}">${calPct}%</span>
         </div>
         <div class="goal-progress-bar" style="height:8px">
-          <div class="goal-progress-fill ${calPct >= 100 ? 'complete' : calPct >= 70 ? 'on-track' : calPct >= 40 ? 'warning' : 'danger'}" style="width:${calPct}%"></div>
+          <div class="goal-progress-fill ${calPct>=100?'complete':calPct>=70?'on-track':calPct>=40?'warning':'danger'}"
+            style="width:${calPct}%"></div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -1711,10 +2364,11 @@ const BASE_GOAL = 5500000;
 const BASE_PROFIT = 1600000;
 const OVER_RATE = 0.9;
 
-function calcProfit(revenue) {
-  if (revenue < BASE_GOAL) return 0;                         // 550만 미달 → 0원
-  if (revenue === BASE_GOAL) return BASE_PROFIT;             // 550만 정확히 → 160만원
-  const over = revenue - BASE_GOAL;
+function calcProfit(revenue, fuel) {
+  const net = revenue - (fuel || 0);                         // 주유비 차감 후 순매출
+  if (net < BASE_GOAL) return 0;                             // 550만 미달 → 0원
+  if (net === BASE_GOAL) return BASE_PROFIT;                 // 550만 정확히 → 160만원
+  const over = net - BASE_GOAL;
   return BASE_PROFIT + Math.round(over * OVER_RATE);         // 초과분 × 90% 추가
 }
 
@@ -1726,36 +2380,67 @@ function renderProfit() {
   const [y, m] = month.split('-').map(Number);
   const daysInMonth = new Date(y, m, 0).getDate();
 
-  let totalRev = 0;
+  let totalRev = 0, totalFuel = 0, totalGas = 0;
   for (let d = 1; d <= daysInMonth; d++) {
     const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    totalRev += db[key]?.revenue || 0;
+    totalRev  += db[key]?.revenue || 0;
+    totalFuel += db[key]?.fuel    || 0;
+    totalGas  += db[key]?.gas     || 0;
   }
-
-  const profit = calcProfit(totalRev);
-  const isOver = totalRev > BASE_GOAL;
-  const isAtGoal = totalRev >= BASE_GOAL;
-  const isUnder = totalRev < BASE_GOAL * 0.5;
-  const overAmt = Math.max(0, totalRev - BASE_GOAL);
+  const netRev     = totalRev - totalFuel;          // 주유비 차감 순매출
+  const profit     = calcProfit(totalRev, totalFuel); // 순매출 기준 예상 소득
+  const isOver     = netRev > BASE_GOAL;
+  const isAtGoal   = netRev >= BASE_GOAL;
+  const isUnder    = netRev < BASE_GOAL * 0.5;
+  const overAmt    = Math.max(0, netRev - BASE_GOAL);
   const overProfit = isOver ? Math.round(overAmt * OVER_RATE) : 0;
-  const pct = Math.min(100, Math.round(totalRev / BASE_GOAL * 100));
+  const pct        = Math.min(100, Math.round(netRev / BASE_GOAL * 100));
   const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
 
   const box = document.getElementById('profitResultBox');
-  const stateClass = isOver ? 'over-goal' : isUnder ? 'under-goal' : '';
+  if (!box) return;
 
   box.innerHTML = `
-    <div class="profit-result-main ${stateClass}">
-      <div style="font-size:0.75rem;color:var(--text-dim);font-weight:700;letter-spacing:1px;margin-bottom:4px">
+    <!-- 이달 실적 요약 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div class="goal-stat">
+        <div class="goal-stat-val gold">${fmt(totalRev)}</div>
+        <div class="goal-stat-lbl">이달 총 매출</div>
+      </div>
+      <div class="goal-stat">
+        <div class="goal-stat-val red">− ${fmt(totalFuel)}</div>
+        <div class="goal-stat-lbl">이달 총 주유</div>
+      </div>
+      <div class="goal-stat">
+        <div class="goal-stat-val blue">${totalGas > 0 ? totalGas.toFixed(1)+'L' : '-'}</div>
+        <div class="goal-stat-lbl">이달 총 가스</div>
+      </div>
+      <div class="goal-stat" style="border-color:${netRev>=0?'rgba(46,204,113,0.3)':'rgba(232,68,90,0.3)'}">
+        <div class="goal-stat-val" style="color:${netRev>=0?'#2ecc71':'#e8445a'}">${netRev>=0?'+':''}${fmt(netRev)}</div>
+        <div class="goal-stat-lbl">순매출 (매출−주유)</div>
+      </div>
+    </div>
+
+    <!-- 계산 구조 안내 -->
+    <div style="background:rgba(245,166,35,0.06);border:1px dashed rgba(245,166,35,0.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:1.1rem;color:var(--text-dim);line-height:1.9">
+      📌 <strong style="color:var(--text)">예상 소득 계산 기준</strong><br>
+      순매출 <strong style="color:#2ecc71">${fmt(totalRev)} − ${fmt(totalFuel)} = ${fmt(netRev)}</strong> 기준으로 계산<br>
+      순매출 550만원 달성 시 기본 <strong style="color:var(--accent)">160만원</strong>
+      + 초과분 × <strong style="color:#a78bfa">90%</strong>
+    </div>
+
+    <!-- 예상 소득 메인 -->
+    <div class="profit-result-main ${isOver?'over-goal':isUnder?'under-goal':''}">
+      <div style="font-size:1.3rem;color:var(--text-dim);font-weight:700;letter-spacing:1px;margin-bottom:4px">
         ${y}년 ${m}월 · 예상 소득
       </div>
       <div class="profit-big-num" style="color:${profitColor}">${fmt(profit)}</div>
-      <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:14px">
-        누적 매출 <strong style="color:var(--accent)">${fmt(totalRev)}</strong>
+      <div style="font-size:1.2rem;color:var(--text-dim);margin-bottom:14px">
+        순매출 <strong style="color:#2ecc71">${fmt(netRev)}</strong>
         &nbsp;·&nbsp; 목표 달성률 <strong style="color:${profitColor}">${pct}%</strong>
       </div>
       <div class="goal-progress-bar" style="height:8px;margin-bottom:16px">
-        <div class="goal-progress-fill ${isOver ? 'complete' : pct >= 70 ? 'on-track' : pct >= 40 ? 'warning' : 'danger'}"
+        <div class="goal-progress-fill ${isOver?'complete':pct>=70?'on-track':pct>=40?'warning':'danger'}"
           style="width:${pct}%"></div>
       </div>
       <div class="profit-breakdown">
@@ -1764,68 +2449,84 @@ function renderProfit() {
           <div class="pbi-lbl">총 매출</div>
         </div>
         <div class="profit-breakdown-item">
-          <div class="pbi-val" style="color:${isOver ? '#a78bfa' : 'var(--accent2)'}">
-            ${isOver ? '+' + fmt(overAmt) : fmt(Math.max(0, BASE_GOAL - totalRev))}
-          </div>
-          <div class="pbi-lbl">${isOver ? '목표 초과금액' : '목표 잔여금액'}</div>
+          <div class="pbi-val red">− ${fmt(totalFuel)}</div>
+          <div class="pbi-lbl">총 주유비</div>
         </div>
-        <div class="profit-breakdown-item" style="${!isOver ? 'opacity:0.35' : ''}">
-          <div class="pbi-val" style="color:#a78bfa">${isOver ? '+' + fmt(overProfit) : '-'}</div>
-          <div class="pbi-lbl">초과 추가소득 (90%)</div>
+        <div class="profit-breakdown-item">
+          <div class="pbi-val" style="color:#2ecc71">${fmt(netRev)}</div>
+          <div class="pbi-lbl">순매출</div>
+        </div>
+        <div class="profit-breakdown-item" style="${!isOver?'opacity:0.35':''}">
+          <div class="pbi-val" style="color:#a78bfa">${isOver ? '+'+fmt(overProfit) : '-'}</div>
+          <div class="pbi-lbl">초과소득 (90%)</div>
         </div>
       </div>
       ${isOver ? `
       <div class="over-bonus-banner">
-        🎉 목표 초과 달성!&nbsp;&nbsp;
-        기본 예상 소득 <strong>${fmt(BASE_PROFIT)}</strong>
+        🎉 목표 초과!&nbsp;
+        기본 <strong>${fmt(BASE_PROFIT)}</strong>
         + 추가 <strong>${fmt(overProfit)}</strong>
         = 총 <strong>${fmt(profit)}</strong>
       </div>` : isAtGoal ? `
-      <div style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:0.84rem;color:#2ecc71;text-align:center">
+      <div style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:1.3rem;color:#2ecc71;text-align:center">
         ✅ 목표 달성! 예상 소득 <strong>160만원</strong> 확정
       </div>` : `
-      <div style="background:rgba(245,166,35,0.07);border:1px dashed rgba(245,166,35,0.25);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:0.8rem;color:var(--text-dim);line-height:1.7;text-align:center">
-        550만원 달성 → 예상 소득 <strong style="color:var(--accent)">160만원</strong> 확정<br>
-        초과분 발생 시 초과금액의 <strong style="color:#a78bfa">90%</strong>가 추가 예상 소득으로 발생
+      <div style="background:rgba(245,166,35,0.07);border:1px dashed rgba(245,166,35,0.25);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:1.2rem;color:var(--text-dim);line-height:1.7;text-align:center">
+        순매출 550만원 달성 시 예상 소득 <strong style="color:var(--accent)">160만원</strong> 확정<br>
+        잔여 순매출 <strong style="color:#e8445a">${fmt(Math.max(0, BASE_GOAL - netRev))}</strong> 더 필요
       </div>`}
     </div>
   `;
 
-  renderProfitTable(totalRev);
+  renderProfitTable(totalRev, totalFuel);
 
   if (totalRev > 0) {
-    document.getElementById('simRevenue').value = totalRev;
-    document.getElementById('simSlider').value = Math.min(totalRev, 10000000);
-    document.getElementById('sliderLabel').textContent = fmt(totalRev);
+    const sEl = document.getElementById('simRevenue');
+    const slEl = document.getElementById('simSlider');
+    const lbEl = document.getElementById('sliderLabel');
+    if (sEl) sEl.value = totalRev;
+    if (slEl) slEl.value = Math.min(totalRev, 10000000);
+    if (lbEl) lbEl.textContent = fmt(totalRev);
     calcSimulator();
   }
 }
 
-function renderProfitTable(currentRev) {
+
+function renderProfitTable(currentRev, currentFuel) {
   const samples = [2000000, 3000000, 4000000, 5000000, 5500000, 6000000, 6500000, 7000000, 8000000, 10000000];
   const el = document.getElementById('profitTable');
   if (!el) return;
-  let html = '';
+  const fuel = currentFuel || 0;
+  let h = '';
+  // 헤더 안내
+  h += `<div style="font-size:1rem;color:var(--text-dim);padding:8px 12px;background:var(--surface2);border-radius:6px 6px 0 0;border:1px solid var(--border);border-bottom:none">
+    📊 아래는 <strong style="color:var(--accent)">순매출(매출−주유비)</strong> 기준 예상 소득 예시
+  </div>`;
   samples.forEach(rev => {
-    const p = calcProfit(rev);
-    const isGoal = rev === BASE_GOAL;
-    const isOver = rev > BASE_GOAL;
+    const netSample = Math.max(0, rev - fuel);
+    const p = calcProfit(rev, fuel);
+    const isGoal = netSample === BASE_GOAL || (fuel === 0 && rev === BASE_GOAL);
+    const isOver = netSample > BASE_GOAL;
     let cls = 'profit-table-row';
     if (isGoal) cls += ' highlight';
     else if (isOver) cls += ' over';
-    html += `<div class="${cls}">
-      <span class="ptr-revenue" style="${isGoal ? 'color:var(--accent);font-weight:700' : ''}">${(rev / 10000).toFixed(0)}만원${isGoal ? ' ⭐ 목표' : ''}</span>
-      <span class="ptr-profit" style="color:${isOver ? '#a78bfa' : isGoal ? '#2ecc71' : 'var(--text-dim)'}">
+    h += `<div class="${cls}">
+      <span class="ptr-revenue" style="${isGoal?'color:var(--accent);font-weight:700':''}">
+        매출 ${(rev/10000).toFixed(0)}만${isGoal?' ⭐':''}
+        ${fuel>0 ? `<span style="font-size:0.9em;color:var(--text-dim)"> (순 ${(netSample/10000).toFixed(1)}만)</span>` : ''}
+      </span>
+      <span class="ptr-profit" style="color:${isOver?'#a78bfa':isGoal?'#2ecc71':'var(--text-dim)'}">
         예상 소득 ${fmt(p)}
       </span>
     </div>`;
   });
-  el.innerHTML = html;
+  el.innerHTML = h;
 }
+
 
 function calcSimulator() {
   const input = document.getElementById('simRevenue');
-  const box = document.getElementById('simResult');
+  const box   = document.getElementById('simResult');
   if (!input || !box) return;
   const val = parseAmount(input.value);
   const slider = document.getElementById('simSlider');
@@ -1834,30 +2535,49 @@ function calcSimulator() {
   if (lbl) lbl.textContent = val ? fmt(val) : '';
   if (!val || val <= 0) { box.style.display = 'none'; return; }
 
-  const profit = calcProfit(val);
-  const isOver = val > BASE_GOAL;
-  const isAtGoal = val >= BASE_GOAL;
-  const overAmt = Math.max(0, val - BASE_GOAL);
+  // 이달 주유비 가져오기 (profitMonthSelect 기준)
+  let simFuel = 0;
+  const mSel = document.getElementById('profitMonthSelect');
+  if (mSel && mSel.value) {
+    const [sy, sm] = mSel.value.split('-').map(Number);
+    const dim = new Date(sy, sm, 0).getDate();
+    for (let d = 1; d <= dim; d++) {
+      const key = `${sy}-${String(sm).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      simFuel += db[key]?.fuel || 0;
+    }
+  }
+  const netVal   = val - simFuel;
+  const profit   = calcProfit(val, simFuel);
+  const isOver   = netVal > BASE_GOAL;
+  const isAtGoal = netVal >= BASE_GOAL;
+  const overAmt  = Math.max(0, netVal - BASE_GOAL);
   const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
 
   box.style.display = 'block';
   box.innerHTML = `
-    <div style="margin-bottom:4px;font-size:0.72rem;color:var(--text-dim);font-weight:700;letter-spacing:1px">예상 소득</div>
+    ${simFuel > 0 ? `
+    <div style="font-size:1.1rem;color:var(--text-dim);margin-bottom:8px;padding:6px 10px;background:rgba(232,68,90,0.07);border-radius:6px">
+      입력 매출 <strong style="color:var(--accent)">${fmt(val)}</strong>
+      − 주유 <strong style="color:#e8445a">${fmt(simFuel)}</strong>
+      = 순매출 <strong style="color:#2ecc71">${fmt(netVal)}</strong>
+    </div>` : ''}
+    <div style="margin-bottom:4px;font-size:1.2rem;color:var(--text-dim);font-weight:700;letter-spacing:1px">예상 소득</div>
     <div class="sim-profit-num" style="color:${profitColor}">${fmt(profit)}</div>
     ${isOver ? `
-    <div style="margin-top:10px;font-size:0.82rem;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:10px">
+    <div style="margin-top:10px;font-size:1.3rem;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:10px">
       기본 예상 소득 &nbsp;<strong style="color:#2ecc71">${fmt(BASE_PROFIT)}</strong><br>
       초과 ${fmt(overAmt)} × 90% = <strong style="color:#a78bfa">+${fmt(Math.round(overAmt * OVER_RATE))}</strong>
     </div>` : isAtGoal ? `
-    <div style="margin-top:8px;font-size:0.82rem;color:#2ecc71">✅ 목표 달성 — 예상 소득 160만원 확정</div>
+    <div style="margin-top:8px;font-size:1.3rem;color:#2ecc71">✅ 목표 달성 — 예상 소득 160만원 확정</div>
     ` : `
-    <div style="margin-top:8px;font-size:0.82rem;color:var(--text-dim)">
-      목표 550만원의 <strong style="color:var(--accent)">${Math.round(val / BASE_GOAL * 100)}%</strong> 달성
-      &nbsp;·&nbsp; 잔여 <strong style="color:var(--accent2)">${fmt(BASE_GOAL - val)}</strong><br>
+    <div style="margin-top:8px;font-size:1.3rem;color:var(--text-dim)">
+      순매출 기준 목표 550만원의 <strong style="color:var(--accent)">${Math.round(Math.max(0,netVal) / BASE_GOAL * 100)}%</strong> 달성<br>
+      잔여 순매출 <strong style="color:var(--accent2)">${fmt(Math.max(0, BASE_GOAL - netVal))}</strong> 더 필요<br>
       <span style="color:var(--accent2);margin-top:4px;display:inline-block">550만원 달성 전까지 예상 소득 <strong>0원</strong></span>
     </div>`}
   `;
 }
+
 
 function syncSlider() {
   const val = parseAmount(document.getElementById('simSlider').value);
@@ -1868,10 +2588,14 @@ function syncSlider() {
 
 
 // 초기 네트워크 상태 표시
-window.__initApp = initApp;
-window.addEventListener('load', updateNetworkStatus);
 
-;
+
+
+
+// ─── 모듈 로드 후 이벤트 연결 ───
+
+// deleteEntry window 노출 (renderRecentLog 템플릿용)
+window.deleteEntry = deleteEntry;
 
 
 
