@@ -983,6 +983,58 @@
     color: var(--accent2);
   }
 
+
+  /* ─── 메시지/채팅 ─── */
+  .chat-wrap { display:flex; flex-direction:column; gap:10px; max-height:400px; overflow-y:auto; padding:4px 0 12px; }
+  .chat-msg { display:flex; flex-direction:column; max-width:82%; gap:3px; }
+  .chat-msg.mine { align-self:flex-end; align-items:flex-end; }
+  .chat-msg.theirs { align-self:flex-start; align-items:flex-start; }
+  .chat-bubble { padding:10px 14px; border-radius:14px; font-size:1.3rem; line-height:1.5; word-break:break-word; }
+  .chat-msg.mine   .chat-bubble { background:var(--accent); color:#000; border-bottom-right-radius:4px; }
+  .chat-msg.theirs .chat-bubble { background:var(--surface2); color:var(--text); border-bottom-left-radius:4px; }
+  .chat-meta { font-size:1rem; color:var(--text-dim); }
+  .chat-input-row { display:flex; gap:8px; margin-top:8px; }
+  .chat-input-row input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; }
+  .chat-input-row input:focus { border-color:var(--accent); }
+  .chat-send-btn { background:var(--accent); border:none; border-radius:10px; padding:10px 18px; font-size:1.3rem; font-weight:700; color:#000; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+  .chat-send-btn:hover { background:#f7b84b; }
+  .chat-empty { text-align:center; color:var(--text-dim); font-size:1.2rem; padding:32px 0; }
+  .chat-room-item { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; background:var(--surface2); border-radius:10px; margin-bottom:8px; cursor:pointer; border:1px solid var(--border); transition:border-color 0.15s; }
+  .chat-room-item:hover { border-color:var(--accent); }
+  .chat-room-name { font-size:1.3rem; font-weight:700; }
+  .chat-room-preview { font-size:1.1rem; color:var(--text-dim); margin-top:2px; }
+  .chat-room-badge { background:var(--accent2); color:#fff; border-radius:10px; padding:2px 8px; font-size:1rem; font-weight:700; }
+
+  /* ─── 관리자 대시보드 ─── */
+  .admin-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .admin-stat-box { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
+  .admin-stat-num { font-size:2rem; font-weight:900; color:var(--accent); }
+  .admin-stat-lbl { font-size:1.1rem; color:var(--text-dim); margin-top:2px; }
+  .admin-log-item { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .admin-log-item:last-child { border-bottom:none; }
+  .admin-log-icon { font-size:1.6rem; flex-shrink:0; }
+  .admin-log-info { flex:1; }
+  .admin-log-name { font-size:1.2rem; font-weight:700; }
+  .admin-log-detail { font-size:1rem; color:var(--text-dim); margin-top:2px; line-height:1.6; }
+  .admin-time-bar { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .admin-time-label { font-size:1rem; color:var(--text-dim); width:40px; flex-shrink:0; }
+  .admin-time-track { flex:1; background:var(--surface2); border-radius:4px; height:16px; overflow:hidden; }
+  .admin-time-fill { height:100%; background:var(--accent); border-radius:4px; transition:width 0.4s; }
+  .admin-time-count { font-size:1rem; color:var(--text-dim); width:30px; text-align:right; flex-shrink:0; }
+
+  /* ─── 계정 설정 ─── */
+  .settings-section { margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid var(--border); }
+  .settings-section:last-child { border-bottom:none; margin-bottom:0; }
+  .settings-label { font-size:1.1rem; color:var(--text-dim); font-weight:700; margin-bottom:6px; }
+  .settings-input { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:1.4rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; box-sizing:border-box; margin-bottom:8px; transition:border-color 0.2s; }
+  .settings-input:focus { border-color:var(--accent); }
+  .settings-btn { padding:10px 20px; border:none; border-radius:10px; font-size:1.3rem; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; transition:all 0.15s; }
+  .settings-btn.primary { background:var(--accent); color:#000; }
+  .settings-btn.primary:hover { background:#f7b84b; }
+  .settings-btn.danger  { background:transparent; border:1px solid var(--accent2); color:var(--accent2); }
+  .settings-btn.danger:hover { background:rgba(232,68,90,0.1); }
+  .settings-btn.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
+
 </style>
 </head>
 <body>
@@ -1003,6 +1055,9 @@
       <div class="auth-label">비밀번호</div>
       <input class="auth-input" id="loginPw" type="password" placeholder="비밀번호 입력">
       <button class="auth-btn" id="loginBtn" onclick="doLogin()">로그인 →</button>
+      <div style="text-align:right;margin-top:8px">
+        <button onclick="forgotPassword()" style="background:none;border:none;color:var(--text-dim,#7a8099);font-size:1rem;cursor:pointer;font-family:'Noto Sans KR',sans-serif">비밀번호를 잊으셨나요?</button>
+      </div>
       <div class="auth-err" id="loginErr"></div>
     </div>
     <!-- 회원가입 폼 -->
@@ -1042,6 +1097,9 @@
     <button class="tab-btn" onclick="switchTab('monthly',this)">📈 월간</button>
     <button class="tab-btn" onclick="switchTab('calendar',this)">🗓️ 달력</button>
     <button class="tab-btn" onclick="switchTab('profit',this)">💵 예상소득</button>
+    <button class="tab-btn" onclick="switchTab('message',this)">💬 문의</button>
+    <button class="tab-btn" onclick="switchTab('settings',this)">⚙️ 설정</button>
+    <button class="tab-btn" id="adminTabBtn" style="display:none" onclick="switchTab('admin',this)">🔧 관리자</button>
   </div>
 
   <!-- 데이터 입력 탭 -->
@@ -1326,6 +1384,84 @@
         실제 소득은 차이가 있을 수 있으니 참고만 하시면 됩니다.
       </div>
     </div>
+
+  <!-- 문의/채팅 탭 -->
+  <div id="tab-message" class="tab-panel">
+    <div class="card">
+      <div class="card-title">💬 관리자에게 문의</div>
+      <div id="msgUserView">
+        <div class="chat-wrap" id="chatMessages">
+          <div class="chat-empty">메시지를 보내보세요</div>
+        </div>
+        <div class="chat-input-row">
+          <input id="chatInput" type="text" placeholder="메시지를 입력하세요..." maxlength="500">
+          <button class="chat-send-btn" onclick="sendMessage()">전송</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 계정 설정 탭 -->
+  <div id="tab-settings" class="tab-panel">
+    <div class="card">
+      <div class="card-title">⚙️ 계정 설정</div>
+
+      <div class="settings-section">
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">👤 프로필</div>
+        <div class="settings-label">이름</div>
+        <input class="settings-input" id="settingsName" type="text" placeholder="이름 입력">
+        <button class="settings-btn primary" onclick="updateProfile()">이름 변경</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">📧 이메일 변경</div>
+        <div class="settings-label">새 이메일</div>
+        <input class="settings-input" id="settingsEmail" type="email" placeholder="새 이메일 주소">
+        <div class="settings-label">현재 비밀번호 (확인용)</div>
+        <input class="settings-input" id="settingsEmailPw" type="password" placeholder="현재 비밀번호">
+        <button class="settings-btn primary" onclick="updateEmail()">이메일 변경</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">🔒 비밀번호 변경</div>
+        <div class="settings-label">현재 비밀번호</div>
+        <input class="settings-input" id="settingsOldPw" type="password" placeholder="현재 비밀번호">
+        <div class="settings-label">새 비밀번호 (6자 이상)</div>
+        <input class="settings-input" id="settingsNewPw" type="password" placeholder="새 비밀번호">
+        <button class="settings-btn primary" onclick="updatePassword()">비밀번호 변경</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">🔑 비밀번호 찾기</div>
+        <p style="font-size:1.2rem;color:var(--text-dim);margin-bottom:12px">가입한 이메일로 비밀번호 재설정 링크를 보내드립니다</p>
+        <button class="settings-btn secondary" onclick="sendPasswordReset()">재설정 이메일 발송</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 관리자 대시보드 탭 -->
+  <div id="tab-admin" class="tab-panel">
+    <div class="card">
+      <div class="card-title">🔧 관리자 대시보드</div>
+      <div id="adminDashboard">
+        <div class="admin-stat-grid" id="adminStats"></div>
+        <div class="section-title">📋 최근 접속 로그</div>
+        <div id="adminLogList" style="margin-bottom:20px"></div>
+        <div class="section-title">⏰ 시간대별 접속</div>
+        <div id="adminTimeChart" style="margin-bottom:20px"></div>
+        <div class="section-title">💬 사용자 문의</div>
+        <div id="adminChatRooms"></div>
+        <div id="adminChatDetail" style="display:none">
+          <button class="settings-btn secondary" style="margin-bottom:12px" onclick="closeAdminChat()">← 목록으로</button>
+          <div class="chat-wrap" id="adminChatMessages"></div>
+          <div class="chat-input-row">
+            <input id="adminChatInput" type="text" placeholder="답장 입력..." maxlength="500">
+            <button class="chat-send-btn" onclick="adminReply()">답장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 
 </div>
@@ -1458,12 +1594,32 @@ async function doLogout() {
   await auth.signOut();
 }
 window.doLogout = doLogout;
+
+async function forgotPassword() {
+  const email = document.getElementById('loginEmail')?.value.trim();
+  if (!email) return showAuthErr('login', '❌ 이메일을 먼저 입력하세요');
+  if (!auth) return showAuthErr('login', '⚠️ 네트워크를 확인하세요');
+  try {
+    await auth.sendPasswordResetEmail(email);
+    showAuthErr('login', '✅ ' + email + '로 재설정 링크를 보냈습니다');
+    document.getElementById('loginErr').style.color = '#2ecc71';
+  } catch(e) {
+    showAuthErr('login', '❌ 발송 실패: 이메일을 확인하세요');
+  }
+}
+window.forgotPassword = forgotPassword;
 window.switchAuthTab = switchAuthTab;
 window.doLogin  = doLogin;
 window.doSignup = doSignup;
 
 const COL = 'taxiData'; // legacy (미사용)
+const ADMIN_EMAIL = 'artist4rhythm@gmail.com'; // 관리자 이메일
 let auth = null; // Firebase Auth 인스턴스
+let adminChatTargetUid = null; // 관리자가 현재 보는 채팅방 uid
+
+function isAdmin(user) {
+  return user && user.email === ADMIN_EMAIL;
+}
 // ─── 사용자별 Firestore 경로 헬퍼 ───
 function getUserCol() {
   if (!firestore || !currentUser) return null;
@@ -1643,12 +1799,24 @@ window.onload = async function() {
       // 헤더에 이름 표시
       const nameEl = document.getElementById('headerUserDisplay');
       if (nameEl) nameEl.textContent = (user.displayName || user.email) + ' 님';
+      // 관리자 탭 표시/숨김
+      const adminBtn = document.getElementById('adminTabBtn');
+      if (adminBtn) adminBtn.style.display = isAdmin(user) ? 'flex' : 'none';
       db = {};
       await initApp();
+      // 접속 로그 기록
+      await logAccess(user);
+      // 계정 설정 초기값
+      loadSettings();
+      // 사용자 채팅 로드
+      if (!isAdmin(user)) loadChatMessages('chatMessages', user.uid);
     } else {
       currentUser = null;
       db = {};
       overlay.style.display = 'flex';
+      // 관리자 탭 숨김
+      const adminBtn = document.getElementById('adminTabBtn');
+      if (adminBtn) adminBtn.style.display = 'none';
     }
   });
 };
@@ -1697,6 +1865,145 @@ function parseAmount(str) {
   const val = Math.floor(Number(str));
   return isNaN(val) ? 0 : val;
 }
+
+// ─── 채팅 (사용자↔관리자) ───
+async function loadChatMessages(containerId, uid) {
+  const el = document.getElementById(containerId);
+  if (!el || !firestore) return;
+  try {
+    const snap = await firestore.collection('messages').doc(uid)
+      .collection('chats').orderBy('time', 'asc').limit(50).get();
+    if (snap.empty) { el.innerHTML = '<div class="chat-empty">메시지가 없습니다</div>'; return; }
+    const myUid = currentUser?.uid;
+    let h = '';
+    snap.forEach(d => {
+      const m = d.data();
+      const isMine = m.sender === myUid || (isAdmin(currentUser) && m.sender === 'admin');
+      const t = new Date(m.time);
+      const ts = `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+      h += `<div class="chat-msg ${isMine ? 'mine' : 'theirs'}">
+        <div class="chat-bubble">${m.text.replace(/</g,'&lt;')}</div>
+        <div class="chat-meta">${isMine ? '' : (m.senderName||'') + ' · '}${ts}</div>
+      </div>`;
+    });
+    el.innerHTML = h;
+    el.scrollTop = el.scrollHeight;
+  } catch(e) { el.innerHTML = '<div class="chat-empty">로드 실패</div>'; }
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input?.value.trim();
+  if (!text || !currentUser || !firestore) return;
+  input.value = '';
+  const uid = currentUser.uid;
+  const msg = {
+    sender: uid,
+    senderName: currentUser.displayName || currentUser.email,
+    text,
+    time: new Date().toISOString()
+  };
+  try {
+    // 채팅방 메타 upsert
+    await firestore.collection('messages').doc(uid).set({
+      uid,
+      userName: currentUser.displayName || currentUser.email,
+      userEmail: currentUser.email,
+      lastMsg: text,
+      lastTime: msg.time,
+      unread: firebase.firestore.FieldValue.increment(1)
+    }, { merge: true });
+    await firestore.collection('messages').doc(uid).collection('chats').add(msg);
+    await loadChatMessages('chatMessages', uid);
+  } catch(e) { showToast('❌ 전송 실패'); }
+}
+
+// 채팅 Enter 키
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('chatInput')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendMessage();
+  });
+  document.getElementById('adminChatInput')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') adminReply();
+  });
+});
+window.sendMessage = sendMessage;
+
+// ─── 계정 설정 ───
+async function loadSettings() {
+  const user = currentUser;
+  if (!user) return;
+  const nameEl = document.getElementById('settingsName');
+  const emailEl = document.getElementById('settingsEmail');
+  if (nameEl) nameEl.value = user.displayName || '';
+  if (emailEl) emailEl.placeholder = user.email;
+}
+
+async function updateProfile() {
+  const name = document.getElementById('settingsName')?.value.trim();
+  if (!name) return showToast('❌ 이름을 입력하세요');
+  try {
+    await currentUser.updateProfile({ displayName: name });
+    if (firestore) await firestore.collection('users').doc(currentUser.uid).update({ name });
+    const hud = document.getElementById('headerUserDisplay');
+    if (hud) hud.textContent = name + ' 님';
+    showToast('✅ 이름이 변경되었습니다');
+  } catch(e) { showToast('❌ 변경 실패: ' + e.message); }
+}
+
+async function updateEmail() {
+  const newEmail = document.getElementById('settingsEmail')?.value.trim();
+  const pw = document.getElementById('settingsEmailPw')?.value;
+  if (!newEmail) return showToast('❌ 새 이메일을 입력하세요');
+  if (!pw) return showToast('❌ 현재 비밀번호를 입력하세요');
+  try {
+    // 재인증
+    const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, pw);
+    await currentUser.reauthenticateWithCredential(cred);
+    await currentUser.updateEmail(newEmail);
+    if (firestore) await firestore.collection('users').doc(currentUser.uid).update({ email: newEmail });
+    document.getElementById('settingsEmailPw').value = '';
+    showToast('✅ 이메일이 변경되었습니다');
+  } catch(e) {
+    const msgs = {
+      'auth/wrong-password': '❌ 비밀번호가 틀렸습니다',
+      'auth/email-already-in-use': '❌ 이미 사용 중인 이메일입니다',
+      'auth/invalid-email': '❌ 이메일 형식이 올바르지 않습니다',
+    };
+    showToast(msgs[e.code] || '❌ 변경 실패: ' + e.message);
+  }
+}
+
+async function updatePassword() {
+  const oldPw = document.getElementById('settingsOldPw')?.value;
+  const newPw = document.getElementById('settingsNewPw')?.value;
+  if (!oldPw) return showToast('❌ 현재 비밀번호를 입력하세요');
+  if (!newPw || newPw.length < 6) return showToast('❌ 새 비밀번호는 6자 이상이어야 합니다');
+  try {
+    const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, oldPw);
+    await currentUser.reauthenticateWithCredential(cred);
+    await currentUser.updatePassword(newPw);
+    document.getElementById('settingsOldPw').value = '';
+    document.getElementById('settingsNewPw').value = '';
+    showToast('✅ 비밀번호가 변경되었습니다');
+  } catch(e) {
+    const msgs = { 'auth/wrong-password': '❌ 현재 비밀번호가 틀렸습니다' };
+    showToast(msgs[e.code] || '❌ 변경 실패: ' + e.message);
+  }
+}
+
+async function sendPasswordReset() {
+  if (!auth || !currentUser) return showToast('❌ 로그인 상태를 확인하세요');
+  try {
+    await auth.sendPasswordResetEmail(currentUser.email);
+    showToast('✅ ' + currentUser.email + '로 재설정 링크를 보냈습니다');
+  } catch(e) { showToast('❌ 발송 실패: ' + e.message); }
+}
+
+window.updateProfile = updateProfile;
+window.updateEmail   = updateEmail;
+window.updatePassword = updatePassword;
+window.sendPasswordReset = sendPasswordReset;
 
 // ─── 로그 유틸 ───
 function genId() {
@@ -1782,6 +2089,152 @@ async function migrateOldData() {
     console.warn('[Migration] 이전 실패:', e.message);
   }
 }
+
+// ─── 접속 로그 기록 ───
+async function logAccess(user) {
+  if (!firestore || !user) return;
+  try {
+    const ua = navigator.userAgent;
+    const isMobile = /iPhone|Android|iPad/i.test(ua);
+    const isTablet = /iPad|Tablet/i.test(ua);
+    const deviceType = isTablet ? '태블릿' : isMobile ? '모바일' : 'PC';
+    const browser = ua.includes('Chrome') ? 'Chrome'
+                  : ua.includes('Safari') ? 'Safari'
+                  : ua.includes('Firefox') ? 'Firefox' : '기타';
+    const now = new Date();
+    const hour = now.getHours();
+    const logData = {
+      uid:        user.uid,
+      name:       user.displayName || user.email,
+      email:      user.email,
+      time:       now.toISOString(),
+      hour,
+      deviceType,
+      browser,
+      ua:         ua.slice(0, 150),
+    };
+    await firestore.collection('accessLogs').add(logData);
+  } catch(e) { console.warn('[log]', e.message); }
+}
+
+// ─── 관리자 대시보드 렌더 ───
+async function renderAdminDashboard() {
+  if (!firestore) return;
+  try {
+    // 접속 로그 조회 (최근 100개)
+    const snap = await firestore.collection('accessLogs')
+      .orderBy('time', 'desc').limit(100).get();
+    const logs = [];
+    snap.forEach(d => logs.push(d.data()));
+
+    // 통계
+    const uniqueUsers = new Set(logs.map(l => l.uid)).size;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayCount = logs.filter(l => l.time.startsWith(todayStr)).length;
+
+    // 통계 카드
+    const statsEl = document.getElementById('adminStats');
+    if (statsEl) statsEl.innerHTML = `
+      <div class="admin-stat-box"><div class="admin-stat-num">${logs.length}</div><div class="admin-stat-lbl">총 접속 수</div></div>
+      <div class="admin-stat-box"><div class="admin-stat-num">${uniqueUsers}</div><div class="admin-stat-lbl">총 사용자</div></div>
+      <div class="admin-stat-box"><div class="admin-stat-num">${todayCount}</div><div class="admin-stat-lbl">오늘 접속</div></div>
+      <div class="admin-stat-box"><div class="admin-stat-num">${logs.filter(l=>l.deviceType==='모바일').length}</div><div class="admin-stat-lbl">모바일 접속</div></div>
+    `;
+
+    // 최근 로그 목록
+    const logEl = document.getElementById('adminLogList');
+    if (logEl) {
+      if (!logs.length) { logEl.innerHTML = '<div class="chat-empty">접속 기록 없음</div>'; }
+      else {
+        logEl.innerHTML = logs.slice(0, 20).map(l => {
+          const t = new Date(l.time);
+          const ts = `${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+          const icon = l.deviceType==='모바일' ? '📱' : l.deviceType==='태블릿' ? '📲' : '💻';
+          return `<div class="admin-log-item">
+            <div class="admin-log-icon">${icon}</div>
+            <div class="admin-log-info">
+              <div class="admin-log-name">${l.name}</div>
+              <div class="admin-log-detail">${ts} · ${l.deviceType} · ${l.browser}</div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+    }
+
+    // 시간대별 통계
+    const hourCounts = Array(24).fill(0);
+    logs.forEach(l => { if (l.hour >= 0 && l.hour < 24) hourCounts[l.hour]++; });
+    const maxCount = Math.max(...hourCounts, 1);
+    const timeEl = document.getElementById('adminTimeChart');
+    if (timeEl) {
+      timeEl.innerHTML = [0,6,9,12,15,18,21,23].map(h => {
+        const cnt = hourCounts[h];
+        const pct = Math.round(cnt / maxCount * 100);
+        return `<div class="admin-time-bar">
+          <div class="admin-time-label">${String(h).padStart(2,'0')}시</div>
+          <div class="admin-time-track"><div class="admin-time-fill" style="width:${pct}%"></div></div>
+          <div class="admin-time-count">${cnt}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // 사용자 채팅방 목록
+    await renderAdminChatRooms();
+
+  } catch(e) { console.error('[admin]', e.message); }
+}
+
+async function renderAdminChatRooms() {
+  const el = document.getElementById('adminChatRooms');
+  if (!el || !firestore) return;
+  try {
+    const snap = await firestore.collection('messages').get();
+    if (snap.empty) { el.innerHTML = '<div class="chat-empty">문의 없음</div>'; return; }
+    let rooms = [];
+    snap.forEach(d => rooms.push({ uid: d.id, ...d.data() }));
+    el.innerHTML = rooms.map(r => `
+      <div class="chat-room-item" onclick="openAdminChat('${r.uid}','${(r.userName||'').replace(/'/g,"\'")}')">
+        <div>
+          <div class="chat-room-name">${r.userName || r.uid}</div>
+          <div class="chat-room-preview">${r.lastMsg || '메시지 없음'}</div>
+        </div>
+        ${r.unread ? `<span class="chat-room-badge">${r.unread}</span>` : ''}
+      </div>`).join('');
+  } catch(e) { el.innerHTML = '<div class="chat-empty">로드 실패</div>'; }
+}
+
+async function openAdminChat(uid, name) {
+  adminChatTargetUid = uid;
+  document.getElementById('adminChatRooms').style.display = 'none';
+  document.getElementById('adminChatDetail').style.display = 'block';
+  await loadChatMessages('adminChatMessages', uid);
+  // 읽음 처리
+  if (firestore) firestore.collection('messages').doc(uid).update({ unread: 0 }).catch(()=>{});
+}
+
+function closeAdminChat() {
+  adminChatTargetUid = null;
+  document.getElementById('adminChatRooms').style.display = 'block';
+  document.getElementById('adminChatDetail').style.display = 'none';
+}
+
+async function adminReply() {
+  const input = document.getElementById('adminChatInput');
+  const text = input?.value.trim();
+  if (!text || !adminChatTargetUid || !firestore) return;
+  input.value = '';
+  const msg = { sender:'admin', senderName:'관리자', text, time: new Date().toISOString() };
+  try {
+    await firestore.collection('messages').doc(adminChatTargetUid)
+      .collection('chats').add(msg);
+    await firestore.collection('messages').doc(adminChatTargetUid)
+      .update({ lastMsg: text, lastTime: msg.time });
+    await loadChatMessages('adminChatMessages', adminChatTargetUid);
+  } catch(e) { showToast('❌ 답장 실패'); }
+}
+window.openAdminChat = openAdminChat;
+window.closeAdminChat = closeAdminChat;
+window.adminReply = adminReply;
 
 // ─── 입력 ───
 async function saveRevenue() {
