@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>이무종 매출 관리</title>
+<title>🚕 택시 매출 관리</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Oswald:wght@400;700&display=swap');
 
@@ -743,50 +743,32 @@
 
 
 
-  /* ─── 비밀번호 잠금 ─── */
-  #lockOverlay {
-    position:fixed; inset:0; background:#0d0f14; z-index:99999;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;
-  }
-  .lk-icon { font-size: 5.7rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
-  @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-9px)rotate(4deg);} }
-  .lk-title { font-size: 2.18rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
-  .lk-sub { font-size: 1.16rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
-  .lk-card { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
-  .lk-label { font-size: 1.2rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
-  .lk-wrap { position:relative; margin-bottom:14px; }
-  #lkInput {
-    width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px;
-    padding:14px 48px 14px 16px; font-size: 1.66rem; color:#e8eaf0;
-    font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; letter-spacing:4px;
-  }
-  #lkInput:focus { border-color:#f5a623; }
-  #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
+  /* ─── 인증 화면 ─── */
+  #authOverlay { position:fixed; inset:0; background:#0d0f14; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; overflow-y:auto; }
+  .auth-icon { font-size:5rem; margin-bottom:12px; animation:lkbob 2.5s ease-in-out infinite; }
+  @keyframes lkbob { 0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-9px) rotate(4deg);} }
+  .auth-title { font-size:2.2rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
+  .auth-sub   { font-size:1.1rem; color:#7a8099; margin-bottom:28px; letter-spacing:1px; }
+  .auth-card  { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+  .auth-tabs  { display:flex; gap:0; margin-bottom:22px; border-radius:10px; overflow:hidden; border:1px solid #2a3045; }
+  .auth-tab   { flex:1; padding:11px; text-align:center; font-size:1.3rem; font-weight:700; cursor:pointer; background:#1e2333; color:#7a8099; transition:all 0.2s; border:none; font-family:'Noto Sans KR',sans-serif; }
+  .auth-tab.active { background:#f5a623; color:#000; }
+  .auth-label { font-size:1.1rem; color:#7a8099; margin-bottom:6px; font-weight:700; }
+  .auth-input { width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px; padding:13px 16px; font-size:1.5rem; color:#e8eaf0; font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; box-sizing:border-box; margin-bottom:12px; }
+  .auth-input:focus { border-color:#f5a623; }
+  .auth-btn   { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1.5rem; font-weight:900; cursor:pointer; transition:all 0.2s; margin-top:4px; }
+  .auth-btn:hover { background:#f7b84b; transform:translateY(-1px); }
+  .auth-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+  .auth-err   { text-align:center; color:#e8445a; font-size:1.2rem; margin-top:12px; min-height:20px; font-weight:700; display:none; }
+  .auth-footer{ text-align:center; color:#7a8099; font-size:1rem; margin-top:20px; }
   @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);} }
-  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size: 1.66rem; cursor:pointer; padding:4px; }
-  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size: 1.5rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
-  #lkBtn:hover { background:#f7b84b; transform:translateY(-1px); }
-  #lkErr { text-align:center; color:#e8445a; font-size: 1.28rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
-  .lk-footer { text-align:center; color:#7a8099; font-size: 1.08rem; margin-top:22px; line-height:1.7; }
+  .auth-shake { animation:lkshake 0.4s ease; }
+  .user-bar   { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:2px; }
+  .user-name  { font-size:1.1rem; color:var(--text-dim); font-weight:700; }
+  .logout-btn { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; padding:4px 10px; font-size:1rem; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+  .logout-btn:hover { border-color:var(--accent2); color:var(--accent2); }
 
-  /* ─── 비밀번호 잠금 ─── */
-  #lockOverlay { position:fixed; inset:0; background:#0d0f14; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
-  .lk-icon { font-size: 5.7rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
-  @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-9px)rotate(4deg);} }
-  .lk-title { font-size: 2.18rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
-  .lk-sub { font-size: 1.16rem; color:#7a8099; margin-bottom:34px; letter-spacing:1px; }
-  .lk-card { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
-  .lk-label { font-size: 1.2rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
-  .lk-wrap { position:relative; margin-bottom:14px; }
-  #lkInput { width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px; padding:14px 48px 14px 16px; font-size: 1.66rem; color:#e8eaf0; font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; letter-spacing:4px; }
-  #lkInput:focus { border-color:#f5a623; }
-  #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
-  @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);} }
-  #lkEye { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:none; color:#7a8099; font-size: 1.66rem; cursor:pointer; padding:4px; }
-  #lkBtn { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size: 1.5rem; font-weight:900; cursor:pointer; transition:all 0.2s; }
-  #lkBtn:hover { background:#f7b84b; transform:translateY(-1px); }
-  #lkErr { text-align:center; color:#e8445a; font-size: 1.28rem; margin-top:14px; min-height:22px; font-weight:700; display:none; }
-  .lk-footer { text-align:center; color:#7a8099; font-size: 1.08rem; margin-top:22px; }
+
 
 
   /* ─── 날짜 입력 반응형 fix ─── */
@@ -816,44 +798,7 @@
   .form-group { width: 100%; overflow: hidden; }
 
 
-  /* ─── 비밀번호 잠금 ─── */
-  #lockOverlay {
-    position:fixed; inset:0; background:#0d0f14; z-index:99999;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;
-  }
-  .lk-icon { font-size:3rem; margin-bottom:14px; animation:lkbob 2.5s ease-in-out infinite; }
-  @keyframes lkbob { 0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-8px)rotate(4deg);} }
-  .lk-title { font-size:1.6rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
-  .lk-sub { font-size:0.9rem; color:#7a8099; margin-bottom:28px; letter-spacing:1px; }
-  .lk-card {
-    background:#161923; border:1px solid #2a3045; border-radius:16px;
-    padding:24px 20px 20px; width:100%; max-width:320px;
-  }
-  .lk-label { font-size:0.9rem; color:#7a8099; margin-bottom:10px; font-weight:700; }
-  .lk-wrap { position:relative; margin-bottom:12px; }
-  #lkInput {
-    width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px;
-    padding:14px 44px 14px 14px; font-size:1.1rem; color:#e8eaf0;
-    font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s;
-  }
-  #lkInput:focus { border-color:#f5a623; }
-  #lkInput.lk-shake { animation:lkshake 0.4s ease; border-color:#e8445a !important; }
-  @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-7px);}40%,80%{transform:translateX(7px);} }
-  #lkEye {
-    position:absolute; right:12px; top:50%; transform:translateY(-50%);
-    background:none; border:none; color:#7a8099; font-size:1rem; cursor:pointer;
-  }
-  #lkBtn {
-    width:100%; padding:13px; background:#f5a623; border:none; border-radius:10px;
-    color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1rem;
-    font-weight:900; cursor:pointer; transition:all 0.2s;
-  }
-  #lkBtn:hover { background:#f7b84b; }
-  #lkErr {
-    text-align:center; color:#e8445a; font-size:0.85rem;
-    margin-top:12px; min-height:18px; font-weight:700; display:none;
-  }
-  .lk-footer { text-align:center; color:#7a8099; font-size:0.75rem; margin-top:18px; }
+
 
   /* ─── 가스 현황 ─── */
   .stat-value.blue { color: #4db8ff; }
@@ -1041,65 +986,50 @@
 </style>
 </head>
 <body>
-<!-- ═══ 비밀번호 잠금 ═══ -->
-<div id="lockOverlay">
-  <div class="lk-icon">🔐</div>
-  <div class="lk-title">이무종 매출 관리</div>
-  <div class="lk-sub">LEE MOO JONG · TAXI REVENUE TRACKER</div>
-  <div class="lk-card">
-    <div class="lk-label">🔑 비밀번호를 입력하세요</div>
-    <div class="lk-wrap">
-      <input id="lkInput" type="password" placeholder="비밀번호 입력">
-      <button id="lkEye" type="button" onclick="
-        var i=document.getElementById('lkInput');
-        i.type=i.type==='password'?'text':'password';
-        this.textContent=i.type==='password'?'👁️':'🙈';
-        i.focus();
-      ">👁️</button>
+<!-- ═══ 로그인/회원가입 ═══ -->
+<div id="authOverlay">
+  <div class="auth-icon">🚕</div>
+  <div class="auth-title">택시 매출 관리</div>
+  <div class="auth-sub">TAXI REVENUE TRACKER</div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin"  onclick="switchAuthTab('login')">로그인</button>
+      <button class="auth-tab"        id="tabSignup" onclick="switchAuthTab('signup')">회원가입</button>
     </div>
-    <button id="lkBtn" type="button" onclick="doUnlock()">입장하기 →</button>
-    <div id="lkErr">❌ 비밀번호가 틀렸습니다. 다시 입력해주세요.</div>
+    <!-- 로그인 폼 -->
+    <div id="loginForm">
+      <div class="auth-label">이메일</div>
+      <input class="auth-input" id="loginEmail" type="email" placeholder="example@email.com">
+      <div class="auth-label">비밀번호</div>
+      <input class="auth-input" id="loginPw" type="password" placeholder="비밀번호 입력">
+      <button class="auth-btn" id="loginBtn" onclick="doLogin()">로그인 →</button>
+      <div class="auth-err" id="loginErr"></div>
+    </div>
+    <!-- 회원가입 폼 -->
+    <div id="signupForm" style="display:none">
+      <div class="auth-label">이름</div>
+      <input class="auth-input" id="signupName" type="text" placeholder="홍길동">
+      <div class="auth-label">이메일</div>
+      <input class="auth-input" id="signupEmail" type="email" placeholder="example@email.com">
+      <div class="auth-label">비밀번호 (6자 이상)</div>
+      <input class="auth-input" id="signupPw" type="password" placeholder="비밀번호 입력">
+      <button class="auth-btn" id="signupBtn" onclick="doSignup()">가입하기 →</button>
+      <div class="auth-err" id="signupErr"></div>
+    </div>
   </div>
-  <div class="lk-footer">이무종님만 접근 가능한 앱입니다 🚕</div>
+  <div class="auth-footer">🚕 택시 기사님들을 위한 매출 관리 앱</div>
 </div>
-
-<script>
-var _LK_DONE = false;
-function doUnlock() {
-  if (_LK_DONE) return;
-  var inp = document.getElementById('lkInput');
-  var err = document.getElementById('lkErr');
-  var ov  = document.getElementById('lockOverlay');
-  if (inp.value === '590806') {
-    _LK_DONE = true;
-    ov.style.display = 'none';
-    err.style.display = 'none';
-    inp.value = '';
-  } else {
-    err.style.display = 'block';
-    inp.classList.remove('lk-shake');
-    void inp.offsetWidth;
-    inp.classList.add('lk-shake');
-    inp.value = '';
-    inp.focus();
-    setTimeout(function(){
-      inp.classList.remove('lk-shake');
-      err.style.display = 'none';
-    }, 2500);
-  }
-}
-document.getElementById('lkInput').onkeydown = function(e){
-  if(e.key==='Enter') doUnlock();
-};
-document.getElementById('lkInput').focus();
-</script>
 
 
 <div id="toast" class="toast"></div>
 <div class="container">
   <header>
-    <div class="logo">🚕 이무종 매출 관리</div>
-    <div class="sub">LEE MOO JONG · TAXI REVENUE TRACKER</div>
+    <div class="logo">🚕 택시 매출 관리</div>
+    <div class="sub"><span id="headerUserName"></span></div>
+    <div class="user-bar">
+      <span class="user-name" id="headerUserDisplay"></span>
+      <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+    </div>
     <div class="sync-status" id="syncStatus">
       <div class="sync-dot" id="syncDot"></div>
       <span id="syncText">Firebase 연결 중...</span>
@@ -1410,6 +1340,7 @@ document.getElementById('lkInput').focus();
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
@@ -1419,11 +1350,13 @@ document.getElementById('lkInput').focus();
 // ─── Firebase 초기화 ───
 var firebaseApp, firestore;
 
+let currentUser = null; // 현재 로그인 사용자
+
 function initFirebase() {
-  if (firestore) return; // 중복 초기화 방지
+  if (firestore) return;
   if (typeof firebase === 'undefined') {
-    console.warn('[Firebase] SDK 미로드 - 로컬 전용 모드로 실행');
-    return; // firebase SDK가 없으면 조용히 종료 (localStorage만 사용)
+    console.warn('[Firebase] SDK 미로드 - 로컬 전용 모드');
+    return;
   }
   var cfg = {
     apiKey: "AIzaSyCG5PqWKzsJQADzebyPbDxN2IPsfazGDv0",
@@ -1440,12 +1373,103 @@ function initFirebase() {
       firebaseApp = firebase.apps[0];
     }
     firestore = firebase.firestore();
+    auth = firebase.auth();
   } catch(e) {
-    console.warn('[Firebase] 초기화 실패 - 로컬 전용 모드:', e.message);
+    console.warn('[Firebase] 초기화 실패:', e.message);
   }
 }
 
-const COL = 'taxiData';
+// ─── 인증 화면 탭 전환 ───
+function switchAuthTab(tab) {
+  document.getElementById('loginForm').style.display  = tab === 'login'  ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active',  tab === 'login');
+  document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+}
+
+function showAuthErr(formType, msg) {
+  const el = document.getElementById(formType + 'Err');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+// ─── 로그인 ───
+async function doLogin() {
+  if (!auth) return showAuthErr('login', '⚠️ 네트워크 연결을 확인하세요');
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPw').value;
+  if (!email || !pw) return showAuthErr('login', '❌ 이메일과 비밀번호를 입력하세요');
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = '로그인 중...';
+  try {
+    await auth.signInWithEmailAndPassword(email, pw);
+    // onAuthStateChanged가 처리
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found': '❌ 등록되지 않은 이메일입니다',
+      'auth/wrong-password': '❌ 비밀번호가 틀렸습니다',
+      'auth/invalid-email':  '❌ 이메일 형식이 올바르지 않습니다',
+      'auth/too-many-requests': '⚠️ 너무 많이 시도했습니다. 잠시 후 다시 시도해주세요',
+      'auth/invalid-credential': '❌ 이메일 또는 비밀번호가 틀렸습니다',
+    };
+    showAuthErr('login', msgs[e.code] || '❌ 로그인 실패: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '로그인 →';
+  }
+}
+
+// ─── 회원가입 ───
+async function doSignup() {
+  if (!auth) return showAuthErr('signup', '⚠️ 네트워크 연결을 확인하세요');
+  const name  = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const pw    = document.getElementById('signupPw').value;
+  if (!name)  return showAuthErr('signup', '❌ 이름을 입력하세요');
+  if (!email) return showAuthErr('signup', '❌ 이메일을 입력하세요');
+  if (pw.length < 6) return showAuthErr('signup', '❌ 비밀번호는 6자 이상이어야 합니다');
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.textContent = '가입 중...';
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, pw);
+    await cred.user.updateProfile({ displayName: name });
+    // 사용자 프로필 Firestore에도 저장
+    await firestore.collection('users').doc(cred.user.uid).set({
+      name, email, createdAt: new Date().toISOString()
+    });
+    // onAuthStateChanged가 처리
+  } catch(e) {
+    const msgs = {
+      'auth/email-already-in-use': '❌ 이미 사용 중인 이메일입니다',
+      'auth/invalid-email':        '❌ 이메일 형식이 올바르지 않습니다',
+      'auth/weak-password':        '❌ 비밀번호가 너무 짧습니다 (6자 이상)',
+    };
+    showAuthErr('signup', msgs[e.code] || '❌ 가입 실패: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '가입하기 →';
+  }
+}
+
+// ─── 로그아웃 ───
+async function doLogout() {
+  if (!auth) return;
+  if (!confirm('로그아웃 하시겠습니까?')) return;
+  await auth.signOut();
+}
+window.doLogout = doLogout;
+window.switchAuthTab = switchAuthTab;
+window.doLogin  = doLogin;
+window.doSignup = doSignup;
+
+const COL = 'taxiData'; // legacy (미사용)
+let auth = null; // Firebase Auth 인스턴스
+// ─── 사용자별 Firestore 경로 헬퍼 ───
+function getUserCol() {
+  if (!firestore || !currentUser) return null;
+  return firestore.collection('users').doc(currentUser.uid).collection('records');
+}
+
 
 
 // ═══════════════════════════════════════════════════
@@ -1468,31 +1492,43 @@ function hideLoading() {
 
 // ─── Firestore 전체 로드 ───
 async function loadFromFirestore() {
-  if (!firestore) {
-    // Firebase 없으면 localStorage에서 복원
-    const local = localStorage.getItem('taxiDB');
+  const uid = currentUser?.uid || 'local';
+  const lsKey = `taxiDB_${uid}`;
+  const col = getUserCol();
+  if (!col) {
+    const local = localStorage.getItem(lsKey);
     if (local) { try { db = JSON.parse(local); } catch(e) {} }
     hideLoading();
     return false;
   }
   showLoading('☁️ 데이터 불러오는 중...');
   try {
-    const snapshot = await firestore.collection(COL).get();
+    const snapshot = await col.get();
     db = {};
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
-      db[docSnap.id] = { revenue: data.revenue || 0, fuel: data.fuel || 0, gas: data.gas || 0, logs: data.logs || [] };
+      db[docSnap.id] = { revenue: data.revenue||0, fuel: data.fuel||0, gas: data.gas||0, logs: data.logs||[] };
     });
-    // Firebase 데이터를 localStorage에도 백업
-    localStorage.setItem('taxiDB', JSON.stringify(db));
-    console.log('[Firestore] 로드 성공, 항목 수:', Object.keys(db).length);
+    localStorage.setItem(lsKey, JSON.stringify(db));
+    console.log('[Firestore] 로드 성공:', Object.keys(db).length, '항목');
+    // 신규 사용자이면 기존 taxiData 이전 시도
+    if (Object.keys(db).length === 0) {
+      await migrateOldData();
+      // 이전 후 다시 로드
+      const snap2 = await col.get();
+      db = {};
+      snap2.forEach(d => {
+        const data = d.data();
+        db[d.id] = { revenue:data.revenue||0, fuel:data.fuel||0, gas:data.gas||0, logs:data.logs||[] };
+      });
+      localStorage.setItem(lsKey, JSON.stringify(db));
+    }
     hideLoading();
     return true;
   } catch(e) {
     console.error('[Firestore] 로드 오류:', e.code, e.message);
-    // localStorage 폴백
-    const local = localStorage.getItem('taxiDB');
-    if (local) { db = JSON.parse(local); showToast('⚠️ 로컬 데이터 사용 중'); }
+    const local = localStorage.getItem(lsKey);
+    if (local) { try { db = JSON.parse(local); showToast('⚠️ 로컬 데이터 사용 중'); } catch(_){} }
     hideLoading();
     showToast('❌ 데이터 로드 실패. 인터넷을 확인하세요');
     return false;
@@ -1502,29 +1538,29 @@ async function loadFromFirestore() {
 // ─── Firestore 단건 저장 ───
 async function saveToFirestore(dateStr) {
   // localStorage 항상 백업
-  localStorage.setItem('taxiDB', JSON.stringify(db));
-  if (!firestore) return; // Firebase 미연결 시 로컬 저장만 (콘솔 오류 방지)
+  localStorage.setItem(`taxiDB_${currentUser?.uid||'local'}`, JSON.stringify(db));
+  const col = getUserCol();
+  if (!col) return;
   try {
-    await firestore.collection(COL).doc(dateStr).set({
+    await col.doc(dateStr).set({
       revenue: db[dateStr]?.revenue || 0,
       fuel: db[dateStr]?.fuel || 0,
       gas: db[dateStr]?.gas || 0,
       logs: db[dateStr]?.logs || [],
       updatedAt: new Date().toISOString()
     });
-    console.log('[Firestore] 저장 성공:', dateStr);
   } catch(e) {
     console.error('[Firestore] 저장 오류:', e.code, e.message);
-    // Firebase 실패해도 localStorage는 저장됨 - 오류 던지지 않음
     showToast('⚠️ 클라우드 저장 실패 (로컬 저장됨)');
   }
 }
 
 // ─── Firestore 단건 삭제 ───
 async function deleteFromFirestore(dateStr) {
-  if (!firestore) return; // Firebase 미연결 시 무시
+  const col = getUserCol();
+  if (!col) return;
   try {
-    await firestore.collection(COL).doc(dateStr).delete();
+    await col.doc(dateStr).delete();
   } catch(e) {
     console.error('Firestore 삭제 오류:', e);
     showToast('❌ 삭제 실패. 인터넷을 확인하세요');
@@ -1592,7 +1628,29 @@ function refreshActiveStats() {
 
 window.onload = async function() {
   initFirebase();
-  await initApp();
+  if (!auth) {
+    // Firebase 미연결 (프리뷰 환경) → 바로 앱 진입
+    document.getElementById('authOverlay').style.display = 'none';
+    await initApp();
+    return;
+  }
+  // Auth 상태 감지: 로그인 여부에 따라 화면 전환
+  auth.onAuthStateChanged(async (user) => {
+    const overlay = document.getElementById('authOverlay');
+    if (user) {
+      currentUser = user;
+      overlay.style.display = 'none';
+      // 헤더에 이름 표시
+      const nameEl = document.getElementById('headerUserDisplay');
+      if (nameEl) nameEl.textContent = (user.displayName || user.email) + ' 님';
+      db = {};
+      await initApp();
+    } else {
+      currentUser = null;
+      db = {};
+      overlay.style.display = 'flex';
+    }
+  });
 };
 
 async function initApp() {
@@ -1682,6 +1740,48 @@ async function deleteLog(date, logId) {
   } catch(e) { hideLoading(); }
 }
 window.deleteLog = deleteLog;
+
+// ─── 인증 폼 Enter 키 지원 ───
+document.addEventListener('DOMContentLoaded', () => {
+  const loginPw = document.getElementById('loginPw');
+  if (loginPw) loginPw.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+  const loginEmail = document.getElementById('loginEmail');
+  if (loginEmail) loginEmail.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('loginPw')?.focus(); });
+  const signupPw = document.getElementById('signupPw');
+  if (signupPw) signupPw.addEventListener('keydown', e => { if(e.key==='Enter') doSignup(); });
+});
+
+// ─── 기존 데이터 이전 (taxiData → users/{uid}/records) ───
+async function migrateOldData() {
+  if (!firestore || !currentUser) return;
+  try {
+    // 이미 이전했는지 확인
+    const flag = localStorage.getItem(`migrated_${currentUser.uid}`);
+    if (flag) return;
+
+    const oldSnapshot = await firestore.collection('taxiData').get();
+    if (oldSnapshot.empty) {
+      localStorage.setItem(`migrated_${currentUser.uid}`, '1');
+      return;
+    }
+
+    showLoading('📦 기존 데이터 이전 중...');
+    const col = getUserCol();
+    const batch = firestore.batch();
+    let count = 0;
+    oldSnapshot.forEach(docSnap => {
+      batch.set(col.doc(docSnap.id), docSnap.data());
+      count++;
+    });
+    await batch.commit();
+    localStorage.setItem(`migrated_${currentUser.uid}`, '1');
+    hideLoading();
+    if (count > 0) showToast(`✅ 기존 데이터 ${count}일치 이전 완료!`);
+  } catch(e) {
+    hideLoading();
+    console.warn('[Migration] 이전 실패:', e.message);
+  }
+}
 
 // ─── 입력 ───
 async function saveRevenue() {
