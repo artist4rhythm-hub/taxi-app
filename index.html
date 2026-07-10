@@ -1092,11 +1092,13 @@
   </header>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('input',this)">📅 입력</button>
-    <button class="tab-btn" onclick="switchTab('weekly',this)">📊 주간</button>
-    <button class="tab-btn" onclick="switchTab('monthly',this)">📈 월간</button>
-    <button class="tab-btn" onclick="switchTab('calendar',this)">🗓️ 달력</button>
-    <button class="tab-btn" onclick="switchTab('profit',this)">💵 예상소득</button>
+    <span id="revenueTabs" style="display:contents">
+      <button class="tab-btn active" onclick="switchTab('input',this)">📅 입력</button>
+      <button class="tab-btn" onclick="switchTab('weekly',this)">📊 주간</button>
+      <button class="tab-btn" onclick="switchTab('monthly',this)">📈 월간</button>
+      <button class="tab-btn" onclick="switchTab('calendar',this)">🗓️ 달력</button>
+      <button class="tab-btn" onclick="switchTab('profit',this)">💵 예상소득</button>
+    </span>
     <button class="tab-btn" onclick="switchTab('message',this)">💬 문의</button>
     <button class="tab-btn" onclick="switchTab('settings',this)">⚙️ 설정</button>
     <button class="tab-btn" id="adminTabBtn" style="display:none" onclick="switchTab('admin',this)">🔧 관리자</button>
@@ -1384,6 +1386,7 @@
         실제 소득은 차이가 있을 수 있으니 참고만 하시면 됩니다.
       </div>
     </div>
+  </div>
 
   <!-- 문의/채팅 탭 -->
   <div id="tab-message" class="tab-panel">
@@ -1443,25 +1446,22 @@
   <div id="tab-admin" class="tab-panel">
     <div class="card">
       <div class="card-title">🔧 관리자 대시보드</div>
-      <div id="adminDashboard">
-        <div class="admin-stat-grid" id="adminStats"></div>
-        <div class="section-title">📋 최근 접속 로그</div>
-        <div id="adminLogList" style="margin-bottom:20px"></div>
-        <div class="section-title">⏰ 시간대별 접속</div>
-        <div id="adminTimeChart" style="margin-bottom:20px"></div>
-        <div class="section-title">💬 사용자 문의</div>
-        <div id="adminChatRooms"></div>
-        <div id="adminChatDetail" style="display:none">
-          <button class="settings-btn secondary" style="margin-bottom:12px" onclick="closeAdminChat()">← 목록으로</button>
-          <div class="chat-wrap" id="adminChatMessages"></div>
-          <div class="chat-input-row">
-            <input id="adminChatInput" type="text" placeholder="답장 입력..." maxlength="500">
-            <button class="chat-send-btn" onclick="adminReply()">답장</button>
-          </div>
+      <div class="admin-stat-grid" id="adminStats"></div>
+      <div class="section-title">📋 최근 접속 로그</div>
+      <div id="adminLogList" style="margin-bottom:20px"></div>
+      <div class="section-title">⏰ 시간대별 접속</div>
+      <div id="adminTimeChart" style="margin-bottom:20px"></div>
+      <div class="section-title">💬 사용자 문의</div>
+      <div id="adminChatRooms"></div>
+      <div id="adminChatDetail" style="display:none">
+        <button class="settings-btn secondary" style="margin-bottom:12px" onclick="closeAdminChat()">← 목록으로</button>
+        <div class="chat-wrap" id="adminChatMessages"></div>
+        <div class="chat-input-row">
+          <input id="adminChatInput" type="text" placeholder="답장 입력..." maxlength="500">
+          <button class="chat-send-btn" onclick="adminReply()">답장</button>
         </div>
       </div>
     </div>
-  </div>
   </div>
 
 </div>
@@ -1799,9 +1799,20 @@ window.onload = async function() {
       // 헤더에 이름 표시
       const nameEl = document.getElementById('headerUserDisplay');
       if (nameEl) nameEl.textContent = (user.displayName || user.email) + ' 님';
-      // 관리자 탭 표시/숨김
+      // 관리자/사용자 탭 분리
       const adminBtn = document.getElementById('adminTabBtn');
-      if (adminBtn) adminBtn.style.display = isAdmin(user) ? 'flex' : 'none';
+      const revenueTabs = document.getElementById('revenueTabs');
+      if (isAdmin(user)) {
+        // 관리자: 매출 탭들 숨기고 관리자 탭 표시
+        if (adminBtn) adminBtn.style.display = 'flex';
+        if (revenueTabs) revenueTabs.style.display = 'none';
+        switchTab('admin', document.getElementById('adminTabBtn'));
+      } else {
+        // 일반사용자: 관리자 탭 숨기고 매출 탭 표시
+        if (adminBtn) adminBtn.style.display = 'none';
+        if (revenueTabs) revenueTabs.style.display = '';
+        switchTab('input', document.querySelector('.tab-btn'));
+      }
       db = {};
       await initApp();
       // 접속 로그 기록
