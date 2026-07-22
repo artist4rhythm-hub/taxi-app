@@ -273,6 +273,38 @@
 
   canvas { width: 100% !important; }
 
+  /* ─── 월별 추이 / 요일 인사이트 ─── */
+  .trend-toggle { display: flex; gap: 6px; margin-bottom: 4px; }
+  .trend-btn {
+    flex: 1; padding: 8px 0; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text-dim);
+    border-radius: 9px; font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s;
+  }
+  .trend-btn.active { background: var(--accent); color: #1a1200; border-color: var(--accent); }
+  .trend-insight, .weekday-insight {
+    margin-top: 12px; padding: 12px 14px; border-radius: 10px;
+    background: var(--surface2); border: 1px solid var(--border);
+    font-size: 13px; line-height: 1.65; color: var(--text);
+  }
+  .trend-insight .ti-row, .weekday-insight .ti-row {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .trend-insight .ti-row + .ti-row, .weekday-insight .ti-row + .ti-row { margin-top: 6px; }
+  .ti-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 9px; border-radius: 999px; font-weight: 700; font-size: 12px;
+  }
+  .ti-up   { background: rgba(46,204,113,.15); color: #2ecc71; }
+  .ti-down { background: rgba(232,68,90,.15);  color: #e8445a; }
+  .ti-flat { background: rgba(122,128,153,.15); color: #7a8099; }
+  .ti-key  { color: var(--text-dim); }
+  .ti-val  { font-weight: 700; }
+  body.large-mode  .trend-insight, body.large-mode  .weekday-insight { font-size: 16px; }
+  body.xlarge-mode .trend-insight, body.xlarge-mode .weekday-insight { font-size: 19px; }
+  body.large-mode  .trend-btn { font-size: 15px; padding: 11px 0; }
+  body.xlarge-mode .trend-btn { font-size: 17px; padding: 13px 0; }
+
   /* Month selector */
   .month-selector {
     display: flex;
@@ -1649,7 +1681,7 @@
     <div class="card">
       <div class="card-title">📈 월간 통계</div>
       <div class="month-selector">
-        <select id="monthSelect" onchange="renderMonthly(); renderCompare(); calcFuelEff(); renderWeekdayPattern();" ></select>
+        <select id="monthSelect" onchange="renderMonthly(); renderTrend(); renderCompare(); calcFuelEff(); renderWeekdayPattern();" ></select>
       </div>
       <div class="stats-grid">
         <div class="stat-box">
@@ -1674,6 +1706,27 @@
       </div>
     </div>
 
+    <!-- 월별 추이 (Pro) -->
+    <div class="card" id="trendCard">
+      <div class="card-title">📈 월별 추이 <span id="trendRangeLabel" style="font-size:0.85rem;color:var(--text-dim);font-weight:400"></span></div>
+      <div class="pro-lock-banner" id="trendLockBanner" style="display:none">
+        <div class="plb-icon">🔒</div>
+        <div class="plb-text">
+          <div class="plb-title">Pro 기능</div>
+          <div class="plb-desc">월별 추이 분석은 Pro 플랜에서 사용할 수 있어요</div>
+        </div>
+      </div>
+      <div id="trendContent">
+        <div class="trend-toggle">
+          <button class="trend-btn active" id="trendBtn-6" onclick="setTrendRange(6)">최근 6개월</button>
+          <button class="trend-btn" id="trendBtn-12" onclick="setTrendRange(12)">최근 12개월</button>
+        </div>
+        <div class="chart-wrap"><canvas id="trendChart" height="240"></canvas></div>
+        <div class="trend-insight" id="trendInsight"></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.5">막대는 월 매출, 보라색 선은 월 순익(매출−주유)입니다</p>
+      </div>
+    </div>
+
     <!-- 요일별 수익 패턴 (Pro) -->
     <div class="card" id="weekdayCard">
       <div class="card-title">📅 요일별 수익 패턴</div>
@@ -1685,8 +1738,9 @@
         </div>
       </div>
       <div id="weekdayContent">
-        <div class="weekday-grid" id="weekdayGrid"></div>
-        <p style="font-size:12px;color:var(--text-dim);margin-top:10px;line-height:1.5">요일별 평균 매출입니다. 어느 요일에 수익이 높은지 파악해보세요</p>
+        <div class="chart-wrap"><canvas id="weekdayChart" height="220"></canvas></div>
+        <div class="weekday-insight" id="weekdayInsight"></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.5">요일별 평균 매출·순익입니다. 👑 표시가 순익이 가장 높은 요일이에요</p>
       </div>
     </div>
 
@@ -2513,7 +2567,7 @@ function switchTab(id, btnEl) {
   if (btnEl) btnEl.classList.add('active');
   if (id === 'input') renderMemoList();
   if (id === 'weekly') renderWeekly();
-  if (id === 'monthly') { renderMonthly(); renderCompare(); calcFuelEff(); renderWeekdayPattern(); applyProLocksMonthly(); }
+  if (id === 'monthly') { renderMonthly(); renderTrend(); renderCompare(); calcFuelEff(); renderWeekdayPattern(); applyProLocksMonthly(); }
   if (id === 'calendar') renderCalendar();
   if (id === 'profit') renderProfit();
   if (id === 'admin' && isAdmin(currentUser)) { renderAdminDashboard(); renderAdminMemberList(); renderAdminCouponList(); }
@@ -2523,7 +2577,7 @@ function switchTab(id, btnEl) {
 
 function refreshActiveStats() {
   if (_activeTab === 'weekly') renderWeekly();
-  if (_activeTab === 'monthly') renderMonthly();
+  if (_activeTab === 'monthly') { renderMonthly(); renderTrend(); renderCompare(); calcFuelEff(); renderWeekdayPattern(); }
   if (_activeTab === 'calendar') renderCalendar();
   if (_activeTab === 'profit') renderProfit();
 }
@@ -2900,8 +2954,148 @@ async function deleteMemo(date) {
 window.deleteMemo = deleteMemo;
 
 // ════════════════════════════════════════
+// ─── 월별 추이 (트렌드) ───
+// ════════════════════════════════════════
+let trendChartInst = null;
+let trendRange = 6;
+
+function setTrendRange(n) {
+  trendRange = n;
+  [6,12].forEach(k => {
+    const b = document.getElementById('trendBtn-'+k);
+    if (b) b.classList.toggle('active', k === n);
+  });
+  renderTrend();
+}
+window.setTrendRange = setTrendRange;
+
+// 기준 월(YYYY-MM)에서 back개월 이전의 월 키 반환
+function monthKeyOffset(baseYm, back) {
+  let [y, m] = baseYm.split('-').map(Number);
+  m -= back;
+  while (m < 1) { m += 12; y--; }
+  return `${y}-${String(m).padStart(2,'0')}`;
+}
+
+// 해당 월(YYYY-MM)의 매출/순익 합계
+function sumMonthAll(ym) {
+  let rev = 0, fuel = 0;
+  const [y, m] = ym.split('-').map(Number);
+  const dim = new Date(y, m, 0).getDate();
+  for (let d = 1; d <= dim; d++) {
+    const k = `${ym}-${String(d).padStart(2,'0')}`;
+    rev  += db[k]?.revenue || 0;
+    fuel += db[k]?.fuel    || 0;
+  }
+  return { rev, net: rev - fuel };
+}
+
+function trendBadge(pct) {
+  if (pct > 0)  return `<span class="ti-badge ti-up">▲ +${pct}%</span>`;
+  if (pct < 0)  return `<span class="ti-badge ti-down">▼ ${pct}%</span>`;
+  return `<span class="ti-badge ti-flat">─ 0%</span>`;
+}
+
+function renderTrend() {
+  const banner  = document.getElementById('trendLockBanner');
+  const content = document.getElementById('trendContent');
+  if (userPlan === 'free') {
+    if (banner) banner.style.display = 'flex';
+    if (content) content.style.display = 'none';
+    return;
+  }
+  if (banner) banner.style.display = 'none';
+  if (content) content.style.display = 'block';
+
+  const sel = document.getElementById('monthSelect');
+  if (!sel || !sel.value) return;
+  const base = sel.value;
+
+  const rangeLbl = document.getElementById('trendRangeLabel');
+  if (rangeLbl) rangeLbl.textContent = `(최근 ${trendRange}개월)`;
+
+  const labels = [], revs = [], nets = [];
+  for (let i = trendRange - 1; i >= 0; i--) {
+    const ym = monthKeyOffset(base, i);
+    const mo = parseInt(ym.split('-')[1]);
+    labels.push(`${mo}월`);
+    const s = sumMonthAll(ym);
+    revs.push(s.rev);
+    nets.push(s.net);
+  }
+
+  const canvas = document.getElementById('trendChart');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (trendChartInst) trendChartInst.destroy();
+    trendChartInst = new Chart(ctx, {
+      data: {
+        labels,
+        datasets: [
+          {
+            type: 'bar', label: '매출', data: revs, order: 2,
+            backgroundColor: 'rgba(245,166,35,0.8)', borderRadius: 6
+          },
+          {
+            type: 'line', label: '순익', data: nets, order: 1,
+            borderColor: '#a78bfa', backgroundColor: 'rgba(167,139,250,0.15)',
+            tension: 0.3, fill: true, pointRadius: 3, pointBackgroundColor: '#a78bfa', borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+          tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw.toLocaleString()}원` } }
+        },
+        scales: {
+          x: { ticks: { color: '#7a8099' }, grid: { color: '#2a3045' } },
+          y: { ticks: { color: '#7a8099', callback: v => fmtShort(v) }, grid: { color: '#2a3045' } }
+        }
+      }
+    });
+  }
+
+  // ─── 인사이트: 최근 3개월 vs 직전 3개월 (순익) ───
+  const ins = document.getElementById('trendInsight');
+  if (!ins) return;
+  const hasData = nets.some(v => v !== 0) || revs.some(v => v !== 0);
+  if (!hasData) {
+    ins.innerHTML = '<div class="ti-row"><span class="ti-key">데이터가 쌓이면 월별 추세를 분석해드릴게요</span></div>';
+    return;
+  }
+
+  let rows = '';
+  if (nets.length >= 6) {
+    const recent3 = nets.slice(-3), prev3 = nets.slice(-6, -3);
+    const avgR = Math.round(recent3.reduce((a,b)=>a+b,0) / 3);
+    const avgP = Math.round(prev3.reduce((a,b)=>a+b,0) / 3);
+    let badge;
+    if (avgP > 0) {
+      const pct = Math.round((avgR - avgP) / avgP * 100);
+      badge = trendBadge(pct);
+    } else {
+      badge = '<span class="ti-badge ti-flat">직전 데이터 없음</span>';
+    }
+    rows += `<div class="ti-row"><span class="ti-key">최근 3개월 평균 순익</span> <span class="ti-val">${fmt(avgR)}</span> ${badge} <span class="ti-key">(직전 3개월 대비)</span></div>`;
+  }
+
+  // 최고 순익 월
+  let maxIdx = 0;
+  nets.forEach((v,i) => { if (v > nets[maxIdx]) maxIdx = i; });
+  if (nets[maxIdx] > 0) {
+    rows += `<div class="ti-row"><span class="ti-key">기간 내 최고 순익</span> <span class="ti-val" style="color:#a78bfa">${labels[maxIdx]} · ${fmt(nets[maxIdx])}</span></div>`;
+  }
+  ins.innerHTML = rows || '<div class="ti-row"><span class="ti-key">분석할 데이터가 부족해요</span></div>';
+}
+window.renderTrend = renderTrend;
+
+// ════════════════════════════════════════
 // ─── 요일별 수익 패턴 ───
 // ════════════════════════════════════════
+let weekdayChartInst = null;
+
 function renderWeekdayPattern() {
   const banner  = document.getElementById('weekdayLockBanner');
   const content = document.getElementById('weekdayContent');
@@ -2914,39 +3108,84 @@ function renderWeekdayPattern() {
   if (content) content.style.display = 'block';
 
   const sel = document.getElementById('monthSelect');
-  const grid = document.getElementById('weekdayGrid');
-  if (!grid) return;
+  const useMonth = sel?.value;
 
-  // 요일별 매출 집계 (선택 월, 없으면 전체)
-  const sums = [0,0,0,0,0,0,0];   // 일~토
-  const counts = [0,0,0,0,0,0,0];
-  let useMonth = sel?.value;
+  // 요일별 매출·순익 집계 (일~토)
+  const revSums = [0,0,0,0,0,0,0];
+  const netSums = [0,0,0,0,0,0,0];
+  const counts  = [0,0,0,0,0,0,0];
 
   Object.keys(db).forEach(dateStr => {
     if (useMonth && !dateStr.startsWith(useMonth)) return;
-    const rev = db[dateStr]?.revenue || 0;
+    const e = db[dateStr] || {};
+    const rev = e.revenue || 0;
     if (rev <= 0) return;
+    const net = rev - (e.fuel || 0);
     const wd = new Date(dateStr + 'T00:00:00').getDay();
-    sums[wd] += rev;
+    revSums[wd] += rev;
+    netSums[wd] += net;
     counts[wd]++;
   });
 
-  const avgs = sums.map((s,i) => counts[i] > 0 ? Math.round(s/counts[i]) : 0);
-  const maxAvg = Math.max(...avgs, 1);
+  const revAvg = revSums.map((s,i) => counts[i] > 0 ? Math.round(s/counts[i]) : 0);
+  const netAvg = netSums.map((s,i) => counts[i] > 0 ? Math.round(s/counts[i]) : 0);
   const labels = ['일','월','화','수','목','금','토'];
-  const clsMap = {0:'sun', 6:'sat'};
+  const fullNames = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
 
-  grid.innerHTML = labels.map((lb, i) => {
-    const pct = avgs[i] > 0 ? Math.max(8, (avgs[i]/maxAvg)*100) : 0;
-    const cls = clsMap[i] || '';
-    const fill = avgs[i] > 0
-      ? `<div class="weekday-fill" style="width:${pct}%"><span class="weekday-val">${fmt(avgs[i])}</span></div>`
-      : `<span class="weekday-empty">데이터 없음</span>`;
-    return `<div class="weekday-row">
-      <span class="weekday-label ${cls}">${lb}</span>
-      <div class="weekday-track">${fill}</div>
-    </div>`;
-  }).join('');
+  const canvas = document.getElementById('weekdayChart');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (weekdayChartInst) weekdayChartInst.destroy();
+    weekdayChartInst = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: '평균 매출', data: revAvg, backgroundColor: 'rgba(245,166,35,0.8)', borderRadius: 5 },
+          { label: '평균 순익', data: netAvg, backgroundColor: 'rgba(167,139,250,0.85)', borderRadius: 5 }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+          tooltip: {
+            callbacks: {
+              label: c => ` ${c.dataset.label}: ${c.raw.toLocaleString()}원`,
+              afterBody: items => {
+                const i = items[0].dataIndex;
+                return counts[i] > 0 ? `근무 ${counts[i]}일` : '데이터 없음';
+              }
+            }
+          }
+        },
+        scales: {
+          x: { ticks: { color: '#7a8099' }, grid: { color: '#2a3045' } },
+          y: { ticks: { color: '#7a8099', callback: v => fmtShort(v) }, grid: { color: '#2a3045' } }
+        }
+      }
+    });
+  }
+
+  // ─── 인사이트: 순익 최고/매출 최고 요일 ───
+  const ins = document.getElementById('weekdayInsight');
+  if (!ins) return;
+  const active = [0,1,2,3,4,5,6].filter(i => counts[i] > 0);
+  if (!active.length) {
+    ins.innerHTML = '<div class="ti-row"><span class="ti-key">이 달의 매출 데이터가 없어요</span></div>';
+    return;
+  }
+  let bestNet = active[0], bestRev = active[0];
+  active.forEach(i => {
+    if (netAvg[i] > netAvg[bestNet]) bestNet = i;
+    if (revAvg[i] > revAvg[bestRev]) bestRev = i;
+  });
+
+  let rows = `<div class="ti-row"><span>👑</span><span class="ti-key">순익 최고 요일</span> <span class="ti-val" style="color:#a78bfa">${fullNames[bestNet]}</span> <span class="ti-val">${fmt(netAvg[bestNet])}</span> <span class="ti-key">(근무 ${counts[bestNet]}일)</span></div>`;
+  if (bestRev !== bestNet) {
+    rows += `<div class="ti-row"><span>💰</span><span class="ti-key">매출 최고 요일</span> <span class="ti-val gold">${fullNames[bestRev]}</span> <span class="ti-val">${fmt(revAvg[bestRev])}</span></div>`;
+  }
+  ins.innerHTML = rows;
 }
 window.renderWeekdayPattern = renderWeekdayPattern;
 
@@ -3154,7 +3393,7 @@ window.exportMonthSummary = exportMonthSummary;
 
 // Pro 잠금 UI를 월간 탭 요소에도 적용
 function applyProLocksMonthly() {
-  ['compare','fuelEff','export','weekday'].forEach(name => {
+  ['trend','compare','fuelEff','export','weekday'].forEach(name => {
     const banner  = document.getElementById(name+'LockBanner');
     const content = document.getElementById(name+'Content');
     if (userPlan === 'free') {
