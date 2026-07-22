@@ -26,55 +26,91 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1.64rem;
+    font-size: 15px;
     min-height: 100vh;
-    padding: 24px 16px;
+    padding: 0 16px 40px;
+    -webkit-font-smoothing: antialiased;
   }
 
-  header {
-    text-align: center;
-    margin-bottom: 32px;
+  /* ─── 앱 헤더 (상단바) ─── */
+  .app-header {
+    margin: -20px -20px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(13,15,20,.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
   }
-
-  header .logo {
-    font-family: 'Oswald', sans-serif;
-    font-size: font-size: 4.8rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: var(--accent);
-    text-transform: uppercase;
+  .app-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 860px;
+    margin: 0 auto;
   }
-
-  header .sub {
-    font-size: 1.28rem;
-    color: var(--text-dim);
-    margin-top: 4px;
-    letter-spacing: 1px;
+  .app-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .app-brand-icon { font-size: 1.8rem; flex-shrink: 0; }
+  .app-brand-text { min-width: 0; }
+  .app-brand-title {
+    font-size: 1.35rem; font-weight: 900; color: var(--accent);
+    letter-spacing: -.3px; line-height: 1.2; white-space: nowrap;
   }
+  .app-brand-sub {
+    font-size: .95rem; color: var(--text-dim);
+    display: flex; align-items: center; gap: 5px; line-height: 1.3; margin-top: 1px;
+  }
+  .app-brand-sub::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); display: inline-block; flex-shrink: 0;
+  }
+  .app-user-menu { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .app-user-info { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .app-user-name {
+    font-size: 1.15rem; font-weight: 700; color: var(--text); line-height: 1.2;
+    white-space: nowrap; max-width: 130px; overflow: hidden; text-overflow: ellipsis;
+  }
+  .app-user-plan { font-size: .9rem; }
+  .app-logout-btn {
+    width: 36px; height: 36px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; transition: all .15s; flex-shrink: 0;
+  }
+  .app-logout-btn:hover { border-color: var(--accent2); color: var(--accent2); }
 
-  .container { max-width: 860px; margin: 0 auto; }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 4px; }
 
   /* Tabs */
   .tabs {
     display: flex;
-    gap: 4px;
+    gap: 3px;
     background: var(--surface);
-    border-radius: var(--radius);
-    padding: 6px;
-    margin-bottom: 24px;
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 18px;
     border: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .tabs::-webkit-scrollbar { display: none; }
 
   .tab-btn {
     flex: 1;
-    padding: 10px 8px;
+    min-width: fit-content;
+    padding: 9px 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 9px;
     background: transparent;
     color: var(--text-dim);
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1.28rem;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
@@ -98,18 +134,20 @@
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 20px;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
   }
 
   .card-title {
-    font-size: 1.12rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -.2px;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
   /* Form */
@@ -376,12 +414,12 @@
   .toast.show { transform: translateX(-50%) translateY(0); }
 
   .section-title {
-    font-size: 1.16rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 10px;
+    letter-spacing: -.2px;
+    color: var(--text);
+    margin-bottom: 12px;
+    margin-top: 4px;
   }
 
   select option { background: var(--surface2); }
@@ -1007,6 +1045,10 @@
 
   /* ─── 관리자 대시보드 ─── */
   .admin-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .admin-stat { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; }
+  .admin-stat .as-label { font-size:1.05rem; color:var(--text-dim); margin-bottom:4px; }
+  .admin-stat .as-value { font-size:1.9rem; font-weight:800; color:var(--accent); }
+
   .admin-stat-box { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
   .admin-stat-num { font-size:2rem; font-weight:900; color:var(--accent); }
   .admin-stat-lbl { font-size:1.1rem; color:var(--text-dim); margin-top:2px; }
@@ -1271,13 +1313,13 @@
 
 
   /* ─── 돋보기 모드 (글자 확대) ─── */
-  body.large-mode { font-size:118%; }
+  body.large-mode { font-size:17px; }
   body.large-mode .tab-btn { padding:12px 6px; }
   body.large-mode .card-title { font-size:1.7rem; }
   body.large-mode .stat-value { font-size:2.2rem; }
   body.large-mode .settings-btn { padding:14px 20px; font-size:1.5rem; }
   body.large-mode .save-btn, body.large-mode .btn-save { min-height:52px; }
-  body.xlarge-mode { font-size:135%; }
+  body.xlarge-mode { font-size:19px; }
   body.xlarge-mode .tab-btn { padding:14px 6px; }
 
   /* ─── 표시 설정 토글 ─── */
@@ -1312,6 +1354,37 @@
   .export-btn-row { display:flex; gap:8px; margin-top:8px; }
   .export-btn { flex:1; padding:12px; border:1.5px solid var(--border); border-radius:10px; background:var(--surface2); color:var(--text); font-size:1.2rem; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .15s; }
   .export-btn:hover { border-color:var(--accent); }
+
+
+  /* ─── 운행 메모 ─── */
+  .memo-input-row { display:flex; gap:8px; margin-bottom:10px; }
+  .memo-input-row textarea {
+    flex:1; background:var(--surface2); border:1.5px solid var(--border);
+    border-radius:8px; padding:10px 14px; font-size:14px; color:var(--text);
+    font-family:'Noto Sans KR',sans-serif; outline:none; resize:vertical;
+    min-height:44px; box-sizing:border-box;
+  }
+  .memo-input-row textarea:focus { border-color:var(--accent); }
+  .memo-item {
+    display:flex; align-items:flex-start; gap:10px; padding:11px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .memo-item:last-child { border-bottom:none; }
+  .memo-date { font-size:12px; font-weight:700; color:var(--accent); min-width:56px; flex-shrink:0; padding-top:2px; }
+  .memo-text { flex:1; font-size:14px; color:var(--text); line-height:1.5; word-break:break-word; }
+  .memo-del { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; width:26px; height:26px; cursor:pointer; font-size:12px; flex-shrink:0; }
+  .memo-del:hover { border-color:var(--accent2); color:var(--accent2); }
+
+  /* ─── 요일별 패턴 ─── */
+  .weekday-grid { display:flex; flex-direction:column; gap:6px; }
+  .weekday-row { display:flex; align-items:center; gap:10px; }
+  .weekday-label { font-size:13px; font-weight:700; width:32px; flex-shrink:0; }
+  .weekday-label.sun { color:var(--accent2); }
+  .weekday-label.sat { color:#4db8ff; }
+  .weekday-track { flex:1; background:var(--surface2); border-radius:6px; height:26px; overflow:hidden; position:relative; }
+  .weekday-fill { height:100%; background:linear-gradient(90deg, var(--accent), #f7b84b); border-radius:6px; transition:width .5s; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
+  .weekday-val { font-size:11px; font-weight:700; color:#000; white-space:nowrap; }
+  .weekday-empty { font-size:11px; color:var(--text-dim); padding-left:8px; line-height:26px; }
 
 </style>
 </head>
@@ -1386,16 +1459,24 @@
 
 <div id="toast" class="toast"></div>
 <div class="container">
-  <header>
-    <div class="logo">🚕 택시 매출 관리</div>
-    <div class="sub"><span id="headerUserName"></span></div>
-    <div class="user-bar">
-      <span class="user-name" id="headerUserDisplay"></span>
-      <button class="logout-btn" onclick="doLogout()">로그아웃</button>
-    </div>
-    <div class="sync-status" id="syncStatus">
-      <div class="sync-dot" id="syncDot"></div>
-      <span id="syncText">Firebase 연결 중...</span>
+  <header class="app-header">
+    <div class="app-header-top">
+      <div class="app-brand">
+        <span class="app-brand-icon">🚕</span>
+        <div class="app-brand-text">
+          <div class="app-brand-title">택시 매출 관리</div>
+          <div class="app-brand-sub" id="syncText">연결 중...</div>
+        </div>
+      </div>
+      <div class="app-user-menu">
+        <div class="app-user-info">
+          <span class="app-user-name" id="headerUserDisplay">-</span>
+          <span class="app-user-plan plan-badge free" id="headerPlanBadge">Free</span>
+        </div>
+        <button class="app-logout-btn" onclick="doLogout()" title="로그아웃">
+          <i class="ti ti-logout" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -1442,6 +1523,16 @@
         <input type="number" id="inputGas" placeholder="예: 45" min="0" step="0.1">
       </div>
       <button class="btn btn-primary" onclick="saveFuel()">주유/가스 저장</button>
+    </div>
+
+    <!-- 운행 메모 -->
+    <div class="card">
+      <div class="card-title">📝 운행 메모</div>
+      <div class="memo-input-row">
+        <textarea id="memoInput" placeholder="오늘 운행 중 특이사항, 정비 내역 등을 기록하세요" rows="2"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="saveMemo()" style="width:100%;margin-bottom:14px">메모 저장</button>
+      <div id="memoList"><div class="empty-state">저장된 메모가 없습니다</div></div>
     </div>
 
     <div class="card">
@@ -1558,7 +1649,7 @@
     <div class="card">
       <div class="card-title">📈 월간 통계</div>
       <div class="month-selector">
-        <select id="monthSelect" onchange="renderMonthly(); renderCompare(); calcFuelEff();" ></select>
+        <select id="monthSelect" onchange="renderMonthly(); renderCompare(); calcFuelEff(); renderWeekdayPattern();" ></select>
       </div>
       <div class="stats-grid">
         <div class="stat-box">
@@ -1580,6 +1671,22 @@
       </div>
       <div class="chart-wrap">
         <canvas id="monthChart" height="240"></canvas>
+      </div>
+    </div>
+
+    <!-- 요일별 수익 패턴 (Pro) -->
+    <div class="card" id="weekdayCard">
+      <div class="card-title">📅 요일별 수익 패턴</div>
+      <div class="pro-lock-banner" id="weekdayLockBanner" style="display:none">
+        <div class="plb-icon">🔒</div>
+        <div class="plb-text">
+          <div class="plb-title">Pro 기능</div>
+          <div class="plb-desc">요일별 패턴 분석은 Pro 플랜에서 사용할 수 있어요</div>
+        </div>
+      </div>
+      <div id="weekdayContent">
+        <div class="weekday-grid" id="weekdayGrid"></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:10px;line-height:1.5">요일별 평균 매출입니다. 어느 요일에 수익이 높은지 파악해보세요</p>
       </div>
     </div>
 
@@ -2300,7 +2407,7 @@ async function loadFromFirestore() {
     db = {};
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
-      db[docSnap.id] = { revenue: data.revenue||0, fuel: data.fuel||0, gas: data.gas||0, logs: data.logs||[] };
+      db[docSnap.id] = { revenue: data.revenue||0, fuel: data.fuel||0, gas: data.gas||0, logs: data.logs||[], memo: data.memo||'' };
     });
     localStorage.setItem(lsKey, JSON.stringify(db));
     console.log('[Firestore] 로드 성공:', Object.keys(db).length, '항목');
@@ -2340,6 +2447,7 @@ async function saveToFirestore(dateStr) {
       fuel: db[dateStr]?.fuel || 0,
       gas: db[dateStr]?.gas || 0,
       logs: db[dateStr]?.logs || [],
+      memo: db[dateStr]?.memo || '',
       updatedAt: new Date().toISOString()
     });
   } catch(e) {
@@ -2403,8 +2511,9 @@ function switchTab(id, btnEl) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   if (btnEl) btnEl.classList.add('active');
+  if (id === 'input') renderMemoList();
   if (id === 'weekly') renderWeekly();
-  if (id === 'monthly') { renderMonthly(); renderCompare(); calcFuelEff(); applyProLocksMonthly(); }
+  if (id === 'monthly') { renderMonthly(); renderCompare(); calcFuelEff(); renderWeekdayPattern(); applyProLocksMonthly(); }
   if (id === 'calendar') renderCalendar();
   if (id === 'profit') renderProfit();
   if (id === 'admin' && isAdmin(currentUser)) { renderAdminDashboard(); renderAdminMemberList(); renderAdminCouponList(); }
@@ -2438,9 +2547,7 @@ window.onload = async function() {
     if (user) {
       currentUser = user;
       overlay.style.display = 'none';
-      // 헤더에 이름 표시
-      const nameEl = document.getElementById('headerUserDisplay');
-      if (nameEl) nameEl.textContent = (user.displayName || user.email) + ' 님';
+      // 헤더 이름은 applyPlanUI()에서 처리
       // 관리자/사용자 탭 분리
       const adminBtn = document.getElementById('adminTabBtn');
       const revenueTabs = document.getElementById('revenueTabs');
@@ -2703,13 +2810,16 @@ async function loadUserPlan() {
 }
 
 function applyPlanUI() {
-  // 헤더 배지
+  // 헤더 사용자명 + 플랜 배지
   const hud = document.getElementById('headerUserDisplay');
-  if (hud) {
-    const name = currentUser?.displayName || currentUser?.email || '';
+  const badge = document.getElementById('headerPlanBadge');
+  const name = currentUser?.displayName || (currentUser?.email ? currentUser.email.split('@')[0] : '게스트');
+  if (hud) hud.textContent = name;
+  if (badge) {
     const planLabel = userPlan === 'pro' ? 'Pro' : userPlan === 'enterprise' ? 'ENT' : 'Free';
     const planCls   = userPlan === 'pro' ? 'pro' : userPlan === 'enterprise' ? 'ent' : 'free';
-    hud.innerHTML = `${name} 님 <span class="plan-badge ${planCls}">${planLabel}</span>`;
+    badge.textContent = planLabel;
+    badge.className = 'app-user-plan plan-badge ' + planCls;
   }
   // 급여 설정 잠금 배너
   const banner  = document.getElementById('salaryLockBanner');
@@ -2731,6 +2841,114 @@ function applyPlanUI() {
 }
 
 
+
+
+// ════════════════════════════════════════
+// ─── 운행 메모 ───
+// ════════════════════════════════════════
+async function saveMemo() {
+  const date = document.getElementById('inputDate')?.value;
+  const text = document.getElementById('memoInput')?.value.trim();
+  if (!date) return showToast('❌ 날짜를 선택하세요');
+  if (!text) return showToast('❌ 메모 내용을 입력하세요');
+  if (!db[date]) db[date] = { revenue:0, fuel:0, gas:0, logs:[], memo:'' };
+  db[date].memo = text;
+  showLoading('💾 메모 저장 중...');
+  try {
+    await saveToFirestore(date);
+    hideLoading();
+    document.getElementById('memoInput').value = '';
+    showToast('✅ 메모가 저장되었습니다');
+    renderMemoList();
+  } catch(e) { hideLoading(); showToast('❌ 저장 실패'); }
+}
+window.saveMemo = saveMemo;
+
+function renderMemoList() {
+  const el = document.getElementById('memoList');
+  if (!el) return;
+  // memo가 있는 날짜만 최신순
+  const entries = Object.keys(db)
+    .filter(d => db[d]?.memo)
+    .sort((a,b) => b.localeCompare(a))
+    .slice(0, 30);
+  if (!entries.length) {
+    el.innerHTML = '<div class="empty-state">저장된 메모가 없습니다</div>';
+    return;
+  }
+  el.innerHTML = entries.map(d => {
+    const [y,m,dd] = d.split('-');
+    return `<div class="memo-item">
+      <span class="memo-date">${m}/${dd}</span>
+      <span class="memo-text">${db[d].memo.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</span>
+      <button class="memo-del" onclick="deleteMemo('${d}')">✕</button>
+    </div>`;
+  }).join('');
+}
+window.renderMemoList = renderMemoList;
+
+async function deleteMemo(date) {
+  if (!db[date]) return;
+  if (!confirm('이 메모를 삭제하시겠습니까?')) return;
+  db[date].memo = '';
+  try {
+    await saveToFirestore(date);
+    showToast('🗑️ 메모 삭제됨');
+    renderMemoList();
+  } catch(e) { showToast('❌ 삭제 실패'); }
+}
+window.deleteMemo = deleteMemo;
+
+// ════════════════════════════════════════
+// ─── 요일별 수익 패턴 ───
+// ════════════════════════════════════════
+function renderWeekdayPattern() {
+  const banner  = document.getElementById('weekdayLockBanner');
+  const content = document.getElementById('weekdayContent');
+  if (userPlan === 'free') {
+    if (banner) banner.style.display = 'flex';
+    if (content) content.style.display = 'none';
+    return;
+  }
+  if (banner) banner.style.display = 'none';
+  if (content) content.style.display = 'block';
+
+  const sel = document.getElementById('monthSelect');
+  const grid = document.getElementById('weekdayGrid');
+  if (!grid) return;
+
+  // 요일별 매출 집계 (선택 월, 없으면 전체)
+  const sums = [0,0,0,0,0,0,0];   // 일~토
+  const counts = [0,0,0,0,0,0,0];
+  let useMonth = sel?.value;
+
+  Object.keys(db).forEach(dateStr => {
+    if (useMonth && !dateStr.startsWith(useMonth)) return;
+    const rev = db[dateStr]?.revenue || 0;
+    if (rev <= 0) return;
+    const wd = new Date(dateStr + 'T00:00:00').getDay();
+    sums[wd] += rev;
+    counts[wd]++;
+  });
+
+  const avgs = sums.map((s,i) => counts[i] > 0 ? Math.round(s/counts[i]) : 0);
+  const maxAvg = Math.max(...avgs, 1);
+  const labels = ['일','월','화','수','목','금','토'];
+  const clsMap = {0:'sun', 6:'sat'};
+
+  grid.innerHTML = labels.map((lb, i) => {
+    const pct = avgs[i] > 0 ? Math.max(8, (avgs[i]/maxAvg)*100) : 0;
+    const cls = clsMap[i] || '';
+    const fill = avgs[i] > 0
+      ? `<div class="weekday-fill" style="width:${pct}%"><span class="weekday-val">${fmt(avgs[i])}</span></div>`
+      : `<span class="weekday-empty">데이터 없음</span>`;
+    return `<div class="weekday-row">
+      <span class="weekday-label ${cls}">${lb}</span>
+      <div class="weekday-track">${fill}</div>
+    </div>`;
+  }).join('');
+}
+window.renderWeekdayPattern = renderWeekdayPattern;
 
 // ════════════════════════════════════════
 // ─── 표시 설정 (글자 크기) ───
@@ -2936,7 +3154,7 @@ window.exportMonthSummary = exportMonthSummary;
 
 // Pro 잠금 UI를 월간 탭 요소에도 적용
 function applyProLocksMonthly() {
-  ['compare','fuelEff','export'].forEach(name => {
+  ['compare','fuelEff','export','weekday'].forEach(name => {
     const banner  = document.getElementById(name+'LockBanner');
     const content = document.getElementById(name+'Content');
     if (userPlan === 'free') {
@@ -3724,10 +3942,10 @@ function updateNetworkStatus() {
   if (!dot || !txt) return;
   if (navigator.onLine) {
     dot.classList.remove('offline');
-    txt.textContent = '☁️ Firebase 연결됨';
+    txt.textContent = '온라인';
   } else {
     dot.classList.add('offline');
-    txt.textContent = '⚠️ 오프라인 - 인터넷 확인 필요';
+    txt.textContent = '오프라인 - 인터넷 확인 필요';
   }
 }
 window.addEventListener('online', () => { updateNetworkStatus(); showToast('✅ 인터넷 연결됨'); });
