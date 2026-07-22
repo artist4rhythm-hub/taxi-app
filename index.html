@@ -1170,6 +1170,78 @@
   body.large-mode .sp-start-btn { font-size:21px; padding:20px; }
   body.large-mode .sp-icon   { font-size:96px; }
 
+
+  /* ─── 급여 유형 선택 ─── */
+  .salary-type-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .salary-type-card {
+    border:1.5px solid var(--border); border-radius:10px;
+    padding:12px 10px; cursor:pointer; background:var(--surface2);
+    transition:all .15s;
+  }
+  .salary-type-card.selected { border-color:var(--accent); background:rgba(245,166,35,.08); }
+  .salary-type-card .stc-badge {
+    font-size:1rem; font-weight:700; padding:2px 8px;
+    border-radius:99px; display:inline-block; margin-bottom:6px;
+  }
+  .salary-type-card.selected .stc-badge { background:var(--accent); color:#000; }
+  .salary-type-card:not(.selected) .stc-badge { background:var(--surface); color:var(--text-dim); }
+  .salary-type-card .stc-name { font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:2px; }
+  .salary-type-card .stc-desc { font-size:1rem; color:var(--text-dim); line-height:1.4; }
+
+  /* ─── 급여 수치 입력 그리드 ─── */
+  .salary-fields { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .salary-field { display:flex; flex-direction:column; gap:4px; }
+  .salary-field label { font-size:1.05rem; color:var(--text-dim); font-weight:700; }
+  .salary-field input { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:8px; padding:9px 12px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; box-sizing:border-box; }
+  .salary-field input:focus { border-color:var(--accent); }
+  .salary-field .sf-unit { font-size:1rem; color:var(--text-dim); margin-top:2px; }
+
+  /* ─── 실수령 미리보기 ─── */
+  .salary-preview { background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; padding:14px; margin:12px 0; }
+  .sp-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; font-size:1.2rem; }
+  .sp-row .sp-lbl { color:var(--text-dim); }
+  .sp-row .sp-val { font-weight:700; }
+  .sp-row.total { border-top:1px solid var(--border); margin-top:6px; padding-top:10px; }
+  .sp-row.total .sp-lbl { font-size:1.3rem; font-weight:700; color:var(--text); }
+  .sp-row.total .sp-val { font-size:1.8rem; color:var(--accent); }
+
+  /* ─── 설정 이력 ─── */
+  .history-item { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:1.2rem; }
+  .history-item:last-child { border-bottom:none; }
+  .history-month { font-weight:700; color:var(--text); min-width:58px; }
+  .history-type-pill { font-size:1rem; padding:2px 7px; border-radius:99px; background:var(--surface); color:var(--text-dim); }
+  .history-pay { font-weight:700; color:var(--accent); }
+  .history-copy-btn { font-size:1rem; padding:3px 10px; border:1px solid var(--border); border-radius:6px; background:transparent; color:var(--text-dim); cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+  .history-copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* ─── 플랜 잠금 배너 ─── */
+  .pro-lock-banner {
+    display:flex; align-items:center; gap:10px;
+    padding:12px 14px; border-radius:10px;
+    background:rgba(245,166,35,.07); border:1.5px dashed rgba(245,166,35,.3);
+    margin-bottom:12px;
+  }
+  .pro-lock-banner .plb-icon { font-size:1.8rem; }
+  .pro-lock-banner .plb-text { flex:1; }
+  .pro-lock-banner .plb-title { font-size:1.2rem; font-weight:700; color:var(--accent); }
+  .pro-lock-banner .plb-desc { font-size:1.05rem; color:var(--text-dim); margin-top:2px; }
+  .pro-lock-banner .plb-btn { background:var(--accent); border:none; border-radius:8px; padding:7px 14px; font-size:1.1rem; font-weight:700; color:#000; cursor:pointer; white-space:nowrap; font-family:'Noto Sans KR',sans-serif; }
+
+  /* ─── 플랜 배지 (헤더) ─── */
+  .plan-badge { font-size:1rem; font-weight:700; padding:2px 8px; border-radius:99px; margin-left:6px; }
+  .plan-badge.free { background:var(--surface2); color:var(--text-dim); }
+  .plan-badge.pro  { background:var(--accent); color:#000; }
+  .plan-badge.ent  { background:#a78bfa; color:#fff; }
+
+  /* ─── 관리자 회원 목록 ─── */
+  .member-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .member-item:last-child { border-bottom:none; }
+  .member-avatar { width:36px; height:36px; border-radius:50%; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:700; color:var(--accent); flex-shrink:0; border:1px solid var(--border); }
+  .member-info { flex:1; }
+  .member-name { font-size:1.2rem; font-weight:700; color:var(--text); }
+  .member-email { font-size:1rem; color:var(--text-dim); }
+  .member-plan-select { font-size:1rem; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:4px 8px; color:var(--text); font-family:'Noto Sans KR',sans-serif; cursor:pointer; }
+
 </style>
 </head>
 <body>
@@ -1572,15 +1644,110 @@
   <!-- 계정 설정 탭 -->
   <div id="tab-settings" class="tab-panel">
     <div class="card">
-      <div class="card-title">⚙️ 계정 설정</div>
+      <div class="card-title">💰 급여 설정</div>
 
+      <!-- 플랜 잠금 배너 (Free 사용자에게만 표시) -->
+      <div class="pro-lock-banner" id="salaryLockBanner" style="display:none">
+        <div class="plb-icon">🔒</div>
+        <div class="plb-text">
+          <div class="plb-title">Pro 기능</div>
+          <div class="plb-desc">개인 급여 설정은 Pro 플랜에서 사용할 수 있어요</div>
+        </div>
+        <button class="plb-btn" onclick="showToast('Pro 플랜 준비 중입니다!')">업그레이드</button>
+      </div>
+
+      <div id="salarySettingsContent">
+        <!-- 급여 유형 선택 -->
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:10px">급여 유형 선택</div>
+        <div class="salary-type-grid">
+          <div class="salary-type-card selected" id="stypeA" onclick="selectSalaryType('A')">
+            <div class="stc-badge">A형</div>
+            <div class="stc-name">전액관리제</div>
+            <div class="stc-desc">기본급 + 기준금 초과 성과급</div>
+          </div>
+          <div class="salary-type-card" id="stypeB" onclick="selectSalaryType('B')">
+            <div class="stc-badge">B형</div>
+            <div class="stc-name">변형 사납금</div>
+            <div class="stc-desc">일 기준금 기반 초과 배분</div>
+          </div>
+          <div class="salary-type-card" id="stypeC" onclick="selectSalaryType('C')">
+            <div class="stc-badge">C형</div>
+            <div class="stc-name">성과급형</div>
+            <div class="stc-desc">기준금 초과분 전액 성과급</div>
+          </div>
+          <div class="salary-type-card" id="stypeD" onclick="selectSalaryType('D')">
+            <div class="stc-badge">D형</div>
+            <div class="stc-name">개인택시</div>
+            <div class="stc-desc">매출 - 비용 직접 계산</div>
+          </div>
+        </div>
+        <div id="salaryTypeNote" style="font-size:1.1rem;color:var(--text-dim);padding:8px 12px;background:var(--surface2);border-radius:8px;margin-bottom:12px;line-height:1.6"></div>
+
+        <!-- 수치 입력 -->
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:10px">기준 수치 설정</div>
+        <div class="salary-fields">
+          <div class="salary-field">
+            <label>월 기준운송수입</label>
+            <input type="number" id="sfMonthlyBase" value="4600000" oninput="recalcSalary()">
+            <span class="sf-unit">원 (서울 기준 약 460만)</span>
+          </div>
+          <div class="salary-field">
+            <label>기본 보장급</label>
+            <input type="number" id="sfBaseProfit" value="1600000" oninput="recalcSalary()">
+            <span class="sf-unit">원 (기준금 달성 시)</span>
+          </div>
+          <div class="salary-field">
+            <label>초과분 배분율</label>
+            <input type="number" id="sfOverRate" value="90" min="0" max="100" oninput="recalcSalary()">
+            <span class="sf-unit">% (내 몫)</span>
+          </div>
+          <div class="salary-field">
+            <label>월 근무일수</label>
+            <input type="number" id="sfWorkDays" value="22" min="1" max="31" oninput="recalcSalary()">
+            <span class="sf-unit">일</span>
+          </div>
+          <div class="salary-field">
+            <label>월 가스 한도</label>
+            <input type="number" id="sfGasLimit" value="1000" oninput="recalcSalary()">
+            <span class="sf-unit">L</span>
+          </div>
+          <div class="salary-field">
+            <label>일 기본 가스 지급</label>
+            <input type="number" id="sfGasDaily" value="25" oninput="recalcSalary()">
+            <span class="sf-unit">L/일</span>
+          </div>
+        </div>
+
+        <!-- 실수령 미리보기 -->
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:8px">이달 실수령 미리보기</div>
+        <div class="salary-preview">
+          <div class="sp-row"><span class="sp-lbl">이달 총 매출</span><span class="sp-val gold" id="sprRevenue">-</span></div>
+          <div class="sp-row"><span class="sp-lbl">- 주유비</span><span class="sp-val red" id="sprFuel">-</span></div>
+          <div class="sp-row"><span class="sp-lbl">순매출</span><span class="sp-val" id="sprNet">-</span></div>
+          <div class="sp-row"><span class="sp-lbl">- 기준운송수입</span><span class="sp-val" id="sprBase">-</span></div>
+          <div class="sp-row"><span class="sp-lbl">초과분 × 배분율</span><span class="sp-val" id="sprShare">-</span></div>
+          <div class="sp-row total"><span class="sp-lbl">예상 실수령</span><span class="sp-val" id="sprTotal">-</span></div>
+        </div>
+
+        <button class="settings-btn primary" onclick="saveSalarySettings()" style="width:100%;margin-bottom:8px">이 설정으로 저장</button>
+      </div>
+    </div>
+
+    <!-- 월별 이력 -->
+    <div class="card" id="salaryHistoryCard">
+      <div class="card-title">📅 월별 급여 설정 이력</div>
+      <div id="salaryHistoryList"><div class="empty-state">저장된 이력이 없습니다</div></div>
+    </div>
+
+    <!-- 계정 설정 -->
+    <div class="card">
+      <div class="card-title">⚙️ 계정 설정</div>
       <div class="settings-section">
         <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">👤 프로필</div>
         <div class="settings-label">이름</div>
         <input class="settings-input" id="settingsName" type="text" placeholder="이름 입력">
         <button class="settings-btn primary" onclick="updateProfile()">이름 변경</button>
       </div>
-
       <div class="settings-section">
         <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">📧 이메일 변경</div>
         <div class="settings-label">새 이메일</div>
@@ -1589,7 +1756,6 @@
         <input class="settings-input" id="settingsEmailPw" type="password" placeholder="현재 비밀번호">
         <button class="settings-btn primary" onclick="updateEmail()">이메일 변경</button>
       </div>
-
       <div class="settings-section">
         <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">🔒 비밀번호 변경</div>
         <div class="settings-label">현재 비밀번호</div>
@@ -1598,10 +1764,9 @@
         <input class="settings-input" id="settingsNewPw" type="password" placeholder="새 비밀번호">
         <button class="settings-btn primary" onclick="updatePassword()">비밀번호 변경</button>
       </div>
-
       <div class="settings-section">
         <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">🔑 비밀번호 찾기</div>
-        <p style="font-size:1.2rem;color:var(--text-dim);margin-bottom:12px">가입한 이메일로 비밀번호 재설정 링크를 보내드립니다</p>
+        <p style="font-size:1.2rem;color:var(--text-dim);margin-bottom:12px">가입한 이메일로 재설정 링크를 보내드립니다</p>
         <button class="settings-btn secondary" onclick="sendPasswordReset()">재설정 이메일 발송</button>
       </div>
     </div>
@@ -1612,6 +1777,9 @@
     <div class="card">
       <div class="card-title">🔧 관리자 대시보드</div>
       <div class="admin-stat-grid" id="adminStats"></div>
+      <div class="section-title">👥 회원 목록 · 플랜 관리</div>
+      <div id="adminMemberList" style="margin-bottom:20px"><div class="chat-empty">불러오는 중...</div></div>
+      <div class="section-title" style="margin-top:4px">📋 최근 접속 로그</div>
       <div class="section-title">📋 최근 접속 로그</div>
       <div id="adminLogList" style="margin-bottom:20px"></div>
       <div class="section-title">⏰ 시간대별 접속</div>
@@ -1872,6 +2040,11 @@ function dismissSplash() {
   setTimeout(() => { el.style.display = 'none'; }, 620);
 }
 
+// 급여 타입 초기 노트 자동 표시
+document.addEventListener('DOMContentLoaded', () => {
+  selectSalaryType('A');
+});
+
 function initSplash() {
   const el = document.getElementById('splashOverlay');
   if (!el) return;
@@ -2091,6 +2264,11 @@ window.onload = async function() {
       await initApp();
       // 접속 로그 기록
       await logAccess(user);
+      // 플랜 로드
+      await loadUserPlan();
+      // 급여 설정 로드
+      loadSalarySettings();
+      loadSalaryHistory();
       // 계정 설정 초기값
       loadSettings();
       // 사용자 채팅 로드
@@ -2289,6 +2467,260 @@ window.updateProfile = updateProfile;
 window.updateEmail   = updateEmail;
 window.updatePassword = updatePassword;
 window.sendPasswordReset = sendPasswordReset;
+
+// ════════════════════════════════════════
+// ─── 플랜 관리 ───
+// ════════════════════════════════════════
+let userPlan = 'free'; // 'free' | 'pro' | 'enterprise'
+
+async function loadUserPlan() {
+  if (!firestore || !currentUser) return;
+  try {
+    const doc = await firestore.collection('users').doc(currentUser.uid).get();
+    if (doc.exists) {
+      userPlan = doc.data().plan || 'free';
+    }
+  } catch(e) { console.warn('[plan]', e.message); }
+  applyPlanUI();
+}
+
+function applyPlanUI() {
+  // 헤더 배지
+  const hud = document.getElementById('headerUserDisplay');
+  if (hud) {
+    const name = currentUser?.displayName || currentUser?.email || '';
+    const planLabel = userPlan === 'pro' ? 'Pro' : userPlan === 'enterprise' ? 'ENT' : 'Free';
+    const planCls   = userPlan === 'pro' ? 'pro' : userPlan === 'enterprise' ? 'ent' : 'free';
+    hud.innerHTML = `${name} 님 <span class="plan-badge ${planCls}">${planLabel}</span>`;
+  }
+  // 급여 설정 잠금 배너
+  const banner  = document.getElementById('salaryLockBanner');
+  const content = document.getElementById('salarySettingsContent');
+  const histCard= document.getElementById('salaryHistoryCard');
+  if (userPlan === 'free') {
+    if (banner)   banner.style.display  = 'flex';
+    if (content)  content.style.opacity = '0.35';
+    if (content)  content.style.pointerEvents = 'none';
+    if (histCard) histCard.style.display = 'none';
+  } else {
+    if (banner)   banner.style.display  = 'none';
+    if (content)  content.style.opacity = '1';
+    if (content)  content.style.pointerEvents = '';
+    if (histCard) histCard.style.display = 'block';
+  }
+}
+
+// ════════════════════════════════════════
+// ─── 급여 유형 설정 ───
+// ════════════════════════════════════════
+const SALARY_TYPE_NOTES = {
+  A: 'A형 (전액관리제): 주 40시간 기본급을 보장받고, 월 기준운송수입 초과분에서 배분율만큼 성과급을 추가로 수령합니다.',
+  B: 'B형 (변형 사납금): 일 기준금 × 근무일수를 채우면 기본급, 초과분은 배분율만큼 수령합니다. 현장 70% 이상 적용.',
+  C: 'C형 (성과급형): 기본급 없이 기준금 초과분 전액(또는 배분율)이 급여입니다.',
+  D: 'D형 (개인택시): 총매출에서 주유비·보험·세금 등 비용을 직접 빼서 순수익을 계산합니다.',
+};
+
+let currentSalaryType = 'A';
+
+function selectSalaryType(type) {
+  currentSalaryType = type;
+  ['A','B','C','D'].forEach(t => {
+    const el = document.getElementById('stype'+t);
+    if (el) el.classList.toggle('selected', t === type);
+  });
+  const note = document.getElementById('salaryTypeNote');
+  if (note) note.textContent = SALARY_TYPE_NOTES[type];
+  recalcSalary();
+}
+
+function recalcSalary() {
+  // 이달 실적 가져오기
+  const sel = document.getElementById('profitMonthSelect');
+  const month = sel ? sel.value : '';
+  let totalRev = 0, totalFuel = 0;
+  if (month) {
+    const [y, m] = month.split('-').map(Number);
+    const dim = new Date(y, m, 0).getDate();
+    for (let d = 1; d <= dim; d++) {
+      const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      totalRev  += db[key]?.revenue || 0;
+      totalFuel += db[key]?.fuel    || 0;
+    }
+  }
+  const base   = +document.getElementById('sfMonthlyBase')?.value || 0;
+  const bp     = +document.getElementById('sfBaseProfit')?.value  || 0;
+  const rate   = (+document.getElementById('sfOverRate')?.value  || 0) / 100;
+  const netRev = totalRev - totalFuel;
+  const over   = Math.max(0, netRev - base);
+  const share  = Math.round(over * rate);
+  const total  = bp + share;
+
+  const set = (id, val, color) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val;
+    if (color) el.style.color = color;
+  };
+  set('sprRevenue', fmt(totalRev), 'var(--accent)');
+  set('sprFuel',    '- ' + fmt(totalFuel), 'var(--accent2)');
+  set('sprNet',     fmt(netRev), netRev >= 0 ? 'var(--green)' : 'var(--accent2)');
+  set('sprBase',    '- ' + fmt(base), 'var(--text-dim)');
+  set('sprShare',   '+' + fmt(share), '#a78bfa');
+  set('sprTotal',   fmt(total), 'var(--accent)');
+}
+
+async function saveSalarySettings() {
+  if (!firestore || !currentUser) return showToast('❌ 로그인 상태를 확인하세요');
+  if (userPlan === 'free') return showToast('🔒 Pro 플랜에서 사용 가능합니다');
+  const settings = {
+    salaryType:   currentSalaryType,
+    monthlyBase:  +document.getElementById('sfMonthlyBase')?.value || 0,
+    baseProfit:   +document.getElementById('sfBaseProfit')?.value  || 0,
+    overRate:     +document.getElementById('sfOverRate')?.value    || 0,
+    workDays:     +document.getElementById('sfWorkDays')?.value    || 0,
+    gasLimit:     +document.getElementById('sfGasLimit')?.value    || 0,
+    gasDaily:     +document.getElementById('sfGasDaily')?.value    || 0,
+    updatedAt:    new Date().toISOString(),
+  };
+  // 현재 설정 저장
+  showLoading('💾 저장 중...');
+  try {
+    await firestore.collection('users').doc(currentUser.uid).set({ settings }, { merge: true });
+    // 이달 이력도 저장
+    const now = new Date();
+    const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    // 이달 실적 계산
+    const sel = document.getElementById('profitMonthSelect');
+    let totalRev = 0, totalFuel = 0;
+    const m2use = sel?.value || monthKey;
+    const [y2, m2] = m2use.split('-').map(Number);
+    for (let d = 1; d <= new Date(y2,m2,0).getDate(); d++) {
+      const key = `${y2}-${String(m2).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      totalRev  += db[key]?.revenue || 0;
+      totalFuel += db[key]?.fuel    || 0;
+    }
+    const netRev = totalRev - totalFuel;
+    const over   = Math.max(0, netRev - settings.monthlyBase);
+    const estPay = settings.baseProfit + Math.round(over * settings.overRate / 100);
+    await firestore.collection('users').doc(currentUser.uid)
+      .collection('salaryHistory').doc(monthKey).set({
+        ...settings, month: monthKey,
+        totalRevenue: totalRev, totalFuel, estimatedPay: estPay,
+        savedAt: new Date().toISOString(),
+      });
+    hideLoading();
+    showToast('✅ 급여 설정이 저장되었습니다');
+    loadSalaryHistory();
+  } catch(e) { hideLoading(); showToast('❌ 저장 실패: ' + e.message); }
+}
+
+async function loadSalarySettings() {
+  if (!firestore || !currentUser) return;
+  try {
+    const doc = await firestore.collection('users').doc(currentUser.uid).get();
+    const s = doc.data()?.settings;
+    if (!s) return;
+    if (s.salaryType) selectSalaryType(s.salaryType);
+    const fields = {
+      sfMonthlyBase: s.monthlyBase, sfBaseProfit: s.baseProfit,
+      sfOverRate: s.overRate, sfWorkDays: s.workDays,
+      sfGasLimit: s.gasLimit, sfGasDaily: s.gasDaily,
+    };
+    Object.entries(fields).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el && val !== undefined) el.value = val;
+    });
+    recalcSalary();
+  } catch(e) { console.warn('[settings]', e.message); }
+}
+
+async function loadSalaryHistory() {
+  const el = document.getElementById('salaryHistoryList');
+  if (!el || !firestore || !currentUser) return;
+  if (userPlan === 'free') return;
+  try {
+    const snap = await firestore.collection('users').doc(currentUser.uid)
+      .collection('salaryHistory').orderBy('month','desc').limit(12).get();
+    if (snap.empty) { el.innerHTML = '<div class="empty-state">저장된 이력 없음</div>'; return; }
+    let h = '';
+    snap.forEach(d => {
+      const s = d.data();
+      const typeLabel = {A:'전액관리',B:'사납금형',C:'성과급형',D:'개인택시'}[s.salaryType] || s.salaryType;
+      h += `<div class="history-item">
+        <span class="history-month">${s.month}</span>
+        <span class="history-type-pill">${typeLabel}</span>
+        <span class="history-pay">${fmt(s.estimatedPay||0)}</span>
+        <button class="history-copy-btn" onclick="copyHistorySetting('${d.id}')">복사</button>
+      </div>`;
+    });
+    el.innerHTML = h;
+  } catch(e) { el.innerHTML = '<div class="empty-state">로드 실패</div>'; }
+}
+window.copyHistorySetting = async function(monthKey) {
+  if (!firestore || !currentUser) return;
+  try {
+    const doc = await firestore.collection('users').doc(currentUser.uid)
+      .collection('salaryHistory').doc(monthKey).get();
+    if (!doc.exists) return;
+    const s = doc.data();
+    selectSalaryType(s.salaryType || 'A');
+    const fields = {
+      sfMonthlyBase: s.monthlyBase, sfBaseProfit: s.baseProfit,
+      sfOverRate: s.overRate, sfWorkDays: s.workDays,
+      sfGasLimit: s.gasLimit, sfGasDaily: s.gasDaily,
+    };
+    Object.entries(fields).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el && val !== undefined) el.value = val;
+    });
+    recalcSalary();
+    showToast('✅ ' + monthKey + ' 설정을 복사했습니다');
+  } catch(e) { showToast('❌ 복사 실패'); }
+};
+window.selectSalaryType = selectSalaryType;
+window.recalcSalary = recalcSalary;
+window.saveSalarySettings = saveSalarySettings;
+
+// ════════════════════════════════════════
+// ─── 관리자: 회원 목록 + 플랜 변경 ───
+// ════════════════════════════════════════
+async function renderAdminMemberList() {
+  const el = document.getElementById('adminMemberList');
+  if (!el || !firestore) return;
+  try {
+    const snap = await firestore.collection('users').orderBy('createdAt','desc').limit(50).get();
+    if (snap.empty) { el.innerHTML = '<div class="chat-empty">가입 회원 없음</div>'; return; }
+    let h = '';
+    snap.forEach(d => {
+      const u = d.data();
+      const initial = (u.name||u.email||'?')[0].toUpperCase();
+      const planVal = u.plan || 'free';
+      const planLabel = {free:'Free',pro:'Pro',enterprise:'Enterprise'}[planVal] || planVal;
+      h += `<div class="member-item">
+        <div class="member-avatar">${initial}</div>
+        <div class="member-info">
+          <div class="member-name">${u.name || '이름 없음'} <span class="plan-badge ${planVal}" style="font-size:0.9rem">${planLabel}</span></div>
+          <div class="member-email">${u.email || d.id}</div>
+        </div>
+        <select class="member-plan-select" onchange="updateMemberPlan('${d.id}',this.value)">
+          <option value="free"  ${planVal==='free'       ?'selected':''}>Free</option>
+          <option value="pro"   ${planVal==='pro'        ?'selected':''}>Pro</option>
+          <option value="enterprise" ${planVal==='enterprise'?'selected':''}>Enterprise</option>
+        </select>
+      </div>`;
+    });
+    el.innerHTML = h;
+  } catch(e) { el.innerHTML = '<div class="chat-empty">로드 실패: ' + e.message + '</div>'; }
+}
+
+async function updateMemberPlan(uid, plan) {
+  if (!firestore) return;
+  try {
+    await firestore.collection('users').doc(uid).update({ plan });
+    showToast('✅ 플랜 변경 완료');
+  } catch(e) { showToast('❌ 변경 실패: ' + e.message); }
+}
+window.updateMemberPlan = updateMemberPlan;
 
 // ─── 로그 유틸 ───
 function genId() {
