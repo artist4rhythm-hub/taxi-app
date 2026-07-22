@@ -1242,6 +1242,33 @@
   .member-email { font-size:1rem; color:var(--text-dim); }
   .member-plan-select { font-size:1rem; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:4px 8px; color:var(--text); font-family:'Noto Sans KR',sans-serif; cursor:pointer; }
 
+
+  /* ─── 쿠폰 입력 ─── */
+  .coupon-box { display:flex; gap:8px; margin-bottom:10px; }
+  .coupon-box input { flex:1; background:var(--surface2); border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; text-transform:uppercase; letter-spacing:1px; }
+  .coupon-box input:focus { border-color:var(--accent); }
+  .coupon-box button { background:var(--accent); border:none; border-radius:8px; padding:10px 18px; font-size:1.2rem; font-weight:700; color:#000; cursor:pointer; white-space:nowrap; font-family:'Noto Sans KR',sans-serif; }
+
+  /* ─── 체험/구독 상태 카드 ─── */
+  .plan-status-card { background:linear-gradient(135deg, rgba(245,166,35,.12), rgba(245,166,35,.04)); border:1.5px solid rgba(245,166,35,.25); border-radius:12px; padding:16px; margin-bottom:14px; }
+  .psc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .psc-plan { font-size:1.6rem; font-weight:900; color:var(--accent); }
+  .psc-badge { font-size:1rem; padding:3px 10px; border-radius:99px; font-weight:700; }
+  .psc-badge.trial { background:#a78bfa; color:#fff; }
+  .psc-badge.active { background:var(--green); color:#fff; }
+  .psc-badge.free { background:var(--surface2); color:var(--text-dim); }
+  .psc-desc { font-size:1.15rem; color:var(--text-dim); line-height:1.5; }
+  .psc-days { font-size:1.3rem; font-weight:700; color:var(--accent); }
+
+  /* ─── 관리자 쿠폰 관리 ─── */
+  .coupon-create-row { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .coupon-create-row input, .coupon-create-row select { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-size:1.1rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; }
+  .coupon-item { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+  .coupon-item:last-child { border-bottom:none; }
+  .coupon-code { font-family:monospace; font-size:1.3rem; font-weight:700; color:var(--accent); letter-spacing:1px; }
+  .coupon-meta { font-size:1rem; color:var(--text-dim); }
+  .coupon-del-btn { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; width:26px; height:26px; cursor:pointer; font-size:0.9rem; }
+
 </style>
 </head>
 <body>
@@ -1643,6 +1670,24 @@
 
   <!-- 계정 설정 탭 -->
   <div id="tab-settings" class="tab-panel">
+    <!-- 플랜 상태 카드 -->
+    <div class="card">
+      <div class="card-title">🎫 내 플랜</div>
+      <div class="plan-status-card" id="planStatusCard">
+        <div class="psc-top">
+          <span class="psc-plan" id="pscPlan">Free</span>
+          <span class="psc-badge free" id="pscBadge">무료</span>
+        </div>
+        <div class="psc-desc" id="pscDesc">Pro로 업그레이드하면 급여 설정·내보내기·연비 분석을 사용할 수 있어요</div>
+      </div>
+      <div class="settings-label" style="margin-bottom:6px">쿠폰 코드 입력</div>
+      <div class="coupon-box">
+        <input id="couponInput" type="text" placeholder="쿠폰 코드" maxlength="20">
+        <button onclick="redeemCoupon()">적용</button>
+      </div>
+      <p style="font-size:1.05rem;color:var(--text-dim);line-height:1.5">쿠폰을 입력하면 Pro 기능을 사용할 수 있습니다</p>
+    </div>
+
     <div class="card">
       <div class="card-title">💰 급여 설정</div>
 
@@ -1777,6 +1822,23 @@
     <div class="card">
       <div class="card-title">🔧 관리자 대시보드</div>
       <div class="admin-stat-grid" id="adminStats"></div>
+      <div class="section-title">🎫 쿠폰 관리</div>
+      <div class="coupon-create-row">
+        <input id="newCouponCode" type="text" placeholder="쿠폰 코드 (예: PRO2026)" style="flex:1;text-transform:uppercase">
+        <select id="newCouponPlan">
+          <option value="pro">Pro</option>
+          <option value="enterprise">Enterprise</option>
+        </select>
+        <select id="newCouponDuration">
+          <option value="0">무제한</option>
+          <option value="30">30일</option>
+          <option value="90">90일</option>
+          <option value="365">1년</option>
+        </select>
+        <button class="settings-btn primary" style="padding:8px 14px" onclick="createCoupon()">발급</button>
+      </div>
+      <div id="adminCouponList" style="margin-bottom:20px"><div class="chat-empty">쿠폰 없음</div></div>
+
       <div class="section-title">👥 회원 목록 · 플랜 관리</div>
       <div id="adminMemberList" style="margin-bottom:20px"><div class="chat-empty">불러오는 중...</div></div>
       <div class="section-title" style="margin-top:4px">📋 최근 접속 로그</div>
@@ -1903,9 +1965,12 @@ async function doSignup() {
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, pw);
     await cred.user.updateProfile({ displayName: name });
-    // 사용자 프로필 Firestore에도 저장
+    // 30일 무료 체험 부여
+    const trialUntil = new Date();
+    trialUntil.setDate(trialUntil.getDate() + 30);
     await firestore.collection('users').doc(cred.user.uid).set({
-      name, email, createdAt: new Date().toISOString()
+      name, email, createdAt: new Date().toISOString(),
+      plan: 'pro', trialUntil: trialUntil.toISOString(),
     });
     // onAuthStateChanged가 처리
   } catch(e) {
@@ -2478,10 +2543,32 @@ async function loadUserPlan() {
   try {
     const doc = await firestore.collection('users').doc(currentUser.uid).get();
     if (doc.exists) {
-      userPlan = doc.data().plan || 'free';
+      const data = doc.data();
+      userPlan = data.plan || 'free';
+      userPlanMeta = {
+        trialUntil: data.trialUntil || null,
+        couponCode: data.couponCode || null,
+        planUntil:  data.planUntil  || null,
+      };
+      // 만료 체크
+      const now = new Date();
+      if (userPlanMeta.planUntil && new Date(userPlanMeta.planUntil) < now) {
+        userPlan = 'free';
+        await firestore.collection('users').doc(currentUser.uid)
+          .update({ plan: 'free', planUntil: null, couponCode: null }).catch(()=>{});
+      }
+      if (userPlanMeta.trialUntil && new Date(userPlanMeta.trialUntil) < now && userPlan !== 'free') {
+        // 체험 만료 & 쿠폰 없으면 free로
+        if (!userPlanMeta.couponCode) {
+          userPlan = 'free';
+          await firestore.collection('users').doc(currentUser.uid)
+            .update({ plan: 'free', trialUntil: null }).catch(()=>{});
+        }
+      }
     }
   } catch(e) { console.warn('[plan]', e.message); }
   applyPlanUI();
+  renderPlanStatus();
 }
 
 function applyPlanUI() {
@@ -2509,6 +2596,145 @@ function applyPlanUI() {
     if (histCard) histCard.style.display = 'block';
   }
 }
+
+
+// ════════════════════════════════════════
+// ─── 쿠폰 & 무료 체험 ───
+// ════════════════════════════════════════
+
+// 플랜 상태 카드 렌더
+function renderPlanStatus() {
+  const plan = userPlan;
+  const planEl  = document.getElementById('pscPlan');
+  const badgeEl = document.getElementById('pscBadge');
+  const descEl  = document.getElementById('pscDesc');
+  if (!planEl) return;
+
+  if (plan === 'pro' || plan === 'enterprise') {
+    planEl.textContent = plan === 'enterprise' ? 'Enterprise' : 'Pro';
+    // 체험 여부 확인
+    if (userPlanMeta.trialUntil) {
+      const daysLeft = Math.ceil((new Date(userPlanMeta.trialUntil) - new Date()) / 86400000);
+      if (daysLeft > 0) {
+        badgeEl.textContent = '무료 체험'; badgeEl.className = 'psc-badge trial';
+        descEl.innerHTML = `무료 체험 <span class="psc-days">${daysLeft}일</span> 남았습니다`;
+        return;
+      }
+    }
+    if (userPlanMeta.couponCode) {
+      badgeEl.textContent = '쿠폰 적용'; badgeEl.className = 'psc-badge active';
+      descEl.innerHTML = `쿠폰 <strong style="color:var(--accent)">${userPlanMeta.couponCode}</strong> 적용 중`;
+      if (userPlanMeta.planUntil) {
+        const d = Math.ceil((new Date(userPlanMeta.planUntil) - new Date()) / 86400000);
+        if (d > 0) descEl.innerHTML += ` · ${d}일 남음`;
+      }
+      return;
+    }
+    badgeEl.textContent = '이용 중'; badgeEl.className = 'psc-badge active';
+    descEl.textContent = plan === 'enterprise' ? 'Enterprise 플랜 이용 중입니다' : 'Pro 플랜 이용 중입니다';
+  } else {
+    planEl.textContent = 'Free';
+    badgeEl.textContent = '무료'; badgeEl.className = 'psc-badge free';
+    descEl.textContent = 'Pro로 업그레이드하면 급여 설정·내보내기·연비 분석을 사용할 수 있어요';
+  }
+}
+
+let userPlanMeta = {}; // trialUntil, couponCode, planUntil 등
+
+// 쿠폰 사용 (사용자)
+async function redeemCoupon() {
+  const input = document.getElementById('couponInput');
+  const code = input?.value.trim().toUpperCase();
+  if (!code) return showToast('❌ 쿠폰 코드를 입력하세요');
+  if (!firestore || !currentUser) return showToast('❌ 로그인 상태를 확인하세요');
+  showLoading('🎫 쿠폰 확인 중...');
+  try {
+    const doc = await firestore.collection('coupons').doc(code).get();
+    if (!doc.exists) { hideLoading(); return showToast('❌ 존재하지 않는 쿠폰입니다'); }
+    const c = doc.data();
+    if (c.disabled) { hideLoading(); return showToast('❌ 사용할 수 없는 쿠폰입니다'); }
+    // 플랜 적용
+    const update = { plan: c.plan, couponCode: code };
+    if (c.duration && c.duration > 0) {
+      const until = new Date();
+      until.setDate(until.getDate() + c.duration);
+      update.planUntil = until.toISOString();
+    } else {
+      update.planUntil = null; // 무제한
+    }
+    update.trialUntil = null; // 체험 종료
+    await firestore.collection('users').doc(currentUser.uid).set(update, { merge: true });
+    // 쿠폰 사용 카운트
+    await firestore.collection('coupons').doc(code).update({
+      usedCount: (c.usedCount || 0) + 1,
+      lastUsedBy: currentUser.email,
+      lastUsedAt: new Date().toISOString(),
+    }).catch(()=>{});
+    hideLoading();
+    input.value = '';
+    showToast('🎉 ' + (c.plan === 'enterprise' ? 'Enterprise' : 'Pro') + ' 플랜이 적용되었습니다!');
+    await loadUserPlan();
+    renderPlanStatus();
+  } catch(e) { hideLoading(); showToast('❌ 쿠폰 적용 실패: ' + e.message); }
+}
+window.redeemCoupon = redeemCoupon;
+
+// ─── 관리자: 쿠폰 발급 ───
+async function createCoupon() {
+  if (!firestore) return;
+  const code = document.getElementById('newCouponCode')?.value.trim().toUpperCase();
+  const plan = document.getElementById('newCouponPlan')?.value || 'pro';
+  const duration = +document.getElementById('newCouponDuration')?.value || 0;
+  if (!code) return showToast('❌ 쿠폰 코드를 입력하세요');
+  try {
+    const existing = await firestore.collection('coupons').doc(code).get();
+    if (existing.exists) return showToast('❌ 이미 존재하는 코드입니다');
+    await firestore.collection('coupons').doc(code).set({
+      code, plan, duration,
+      createdAt: new Date().toISOString(),
+      usedCount: 0, disabled: false,
+    });
+    document.getElementById('newCouponCode').value = '';
+    showToast('✅ 쿠폰 발급 완료: ' + code);
+    renderAdminCouponList();
+  } catch(e) { showToast('❌ 발급 실패: ' + e.message); }
+}
+window.createCoupon = createCoupon;
+
+async function renderAdminCouponList() {
+  const el = document.getElementById('adminCouponList');
+  if (!el || !firestore) return;
+  try {
+    const snap = await firestore.collection('coupons').orderBy('createdAt','desc').limit(30).get();
+    if (snap.empty) { el.innerHTML = '<div class="chat-empty">발급된 쿠폰 없음</div>'; return; }
+    let h = '';
+    snap.forEach(d => {
+      const c = d.data();
+      const planLabel = c.plan === 'enterprise' ? 'ENT' : 'Pro';
+      const durLabel  = c.duration > 0 ? c.duration + '일' : '무제한';
+      h += `<div class="coupon-item">
+        <div>
+          <span class="coupon-code">${c.code}</span>
+          <div class="coupon-meta">${planLabel} · ${durLabel} · ${c.usedCount || 0}회 사용</div>
+        </div>
+        <button class="coupon-del-btn" onclick="deleteCoupon('${c.code}')">✕</button>
+      </div>`;
+    });
+    el.innerHTML = h;
+  } catch(e) { el.innerHTML = '<div class="chat-empty">로드 실패</div>'; }
+}
+window.renderAdminCouponList = renderAdminCouponList;
+
+async function deleteCoupon(code) {
+  if (!firestore) return;
+  if (!confirm(code + ' 쿠폰을 삭제하시겠습니까?')) return;
+  try {
+    await firestore.collection('coupons').doc(code).delete();
+    showToast('🗑️ 쿠폰 삭제 완료');
+    renderAdminCouponList();
+  } catch(e) { showToast('❌ 삭제 실패'); }
+}
+window.deleteCoupon = deleteCoupon;
 
 // ════════════════════════════════════════
 // ─── 급여 유형 설정 ───
