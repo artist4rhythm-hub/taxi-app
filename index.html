@@ -1269,6 +1269,50 @@
   .coupon-meta { font-size:1rem; color:var(--text-dim); }
   .coupon-del-btn { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; width:26px; height:26px; cursor:pointer; font-size:0.9rem; }
 
+
+  /* ─── 돋보기 모드 (글자 확대) ─── */
+  body.large-mode { font-size:118%; }
+  body.large-mode .tab-btn { padding:12px 6px; }
+  body.large-mode .card-title { font-size:1.7rem; }
+  body.large-mode .stat-value { font-size:2.2rem; }
+  body.large-mode .settings-btn { padding:14px 20px; font-size:1.5rem; }
+  body.large-mode .save-btn, body.large-mode .btn-save { min-height:52px; }
+  body.xlarge-mode { font-size:135%; }
+  body.xlarge-mode .tab-btn { padding:14px 6px; }
+
+  /* ─── 표시 설정 토글 ─── */
+  .display-option-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border); }
+  .display-option-row:last-child { border-bottom:none; }
+  .dor-label { font-size:1.3rem; font-weight:700; color:var(--text); }
+  .dor-desc { font-size:1.05rem; color:var(--text-dim); margin-top:2px; }
+  .font-size-btns { display:flex; gap:6px; }
+  .fsb { padding:7px 14px; border:1.5px solid var(--border); border-radius:8px; background:var(--surface2); color:var(--text-dim); cursor:pointer; font-size:1.2rem; font-weight:700; font-family:'Noto Sans KR',sans-serif; transition:all .15s; }
+  .fsb.active { border-color:var(--accent); background:rgba(245,166,35,.1); color:var(--accent); }
+
+  /* ─── 전월 비교 ─── */
+  .compare-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .compare-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; }
+  .compare-label { font-size:1.05rem; color:var(--text-dim); margin-bottom:4px; }
+  .compare-value { font-size:1.7rem; font-weight:700; }
+  .compare-change { font-size:1.1rem; font-weight:700; margin-top:2px; }
+  .compare-change.up   { color:var(--green); }
+  .compare-change.down { color:var(--accent2); }
+  .compare-change.same { color:var(--text-dim); }
+
+  /* ─── 연비 트래킹 ─── */
+  .fuel-eff-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:12px; }
+  .fuel-eff-big { font-size:2.4rem; font-weight:900; color:#4db8ff; text-align:center; }
+  .fuel-eff-unit { font-size:1.2rem; color:var(--text-dim); text-align:center; margin-bottom:8px; }
+  .fuel-eff-fields { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .fuel-eff-field label { font-size:1.05rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px; }
+  .fuel-eff-field input { width:100%; background:var(--surface); border:1.5px solid var(--border); border-radius:8px; padding:9px 12px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; box-sizing:border-box; }
+  .fuel-eff-field input:focus { border-color:#4db8ff; }
+
+  /* ─── 내보내기 버튼 ─── */
+  .export-btn-row { display:flex; gap:8px; margin-top:8px; }
+  .export-btn { flex:1; padding:12px; border:1.5px solid var(--border); border-radius:10px; background:var(--surface2); color:var(--text); font-size:1.2rem; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .15s; }
+  .export-btn:hover { border-color:var(--accent); }
+
 </style>
 </head>
 <body>
@@ -1514,7 +1558,7 @@
     <div class="card">
       <div class="card-title">📈 월간 통계</div>
       <div class="month-selector">
-        <select id="monthSelect" onchange="renderMonthly()" ></select>
+        <select id="monthSelect" onchange="renderMonthly(); renderCompare(); calcFuelEff();" ></select>
       </div>
       <div class="stats-grid">
         <div class="stat-box">
@@ -1536,6 +1580,50 @@
       </div>
       <div class="chart-wrap">
         <canvas id="monthChart" height="240"></canvas>
+      </div>
+    </div>
+
+    <!-- 전월 비교 (Pro) -->
+    <div class="card" id="compareCard">
+      <div class="card-title">📊 전월 대비</div>
+      <div class="pro-lock-banner" id="compareLockBanner" style="display:none">
+        <div class="plb-icon">🔒</div>
+        <div class="plb-text">
+          <div class="plb-title">Pro 기능</div>
+          <div class="plb-desc">전월 비교는 Pro 플랜에서 사용할 수 있어요</div>
+        </div>
+      </div>
+      <div id="compareContent">
+        <div class="compare-grid" id="compareGrid"></div>
+      </div>
+    </div>
+
+    <!-- 연비 트래킹 (Pro) -->
+    <div class="card" id="fuelEffCard">
+      <div class="card-title">⛽ 연비 계산</div>
+      <div class="pro-lock-banner" id="fuelEffLockBanner" style="display:none">
+        <div class="plb-icon">🔒</div>
+        <div class="plb-text">
+          <div class="plb-title">Pro 기능</div>
+          <div class="plb-desc">연비 트래킹은 Pro 플랜에서 사용할 수 있어요</div>
+        </div>
+      </div>
+      <div id="fuelEffContent">
+        <div class="fuel-eff-card">
+          <div class="fuel-eff-big" id="fuelEffValue">-</div>
+          <div class="fuel-eff-unit">km/L (이달 평균)</div>
+          <div class="fuel-eff-fields">
+            <div class="fuel-eff-field">
+              <label>이달 주행거리</label>
+              <input type="number" id="fuelEffKm" placeholder="km 입력" oninput="calcFuelEff()">
+            </div>
+            <div class="fuel-eff-field">
+              <label>이달 주유량 (자동)</label>
+              <input type="number" id="fuelEffLiter" placeholder="L" readonly style="opacity:0.7">
+            </div>
+          </div>
+          <p style="font-size:1rem;color:var(--text-dim);margin-top:8px;line-height:1.5">주행거리를 입력하면 이달 가스 사용량 기준으로 연비를 계산합니다</p>
+        </div>
       </div>
     </div>
 
@@ -1666,6 +1754,28 @@
         </div>
       </div>
     </div>
+
+    <!-- 내보내기 (Pro) -->
+    <div class="card" id="exportCard">
+      <div class="card-title">📤 내보내기</div>
+      <div class="pro-lock-banner" id="exportLockBanner" style="display:none">
+        <div class="plb-icon">🔒</div>
+        <div class="plb-text">
+          <div class="plb-title">Pro 기능</div>
+          <div class="plb-desc">데이터 내보내기는 Pro 플랜에서 사용할 수 있어요</div>
+        </div>
+      </div>
+      <div id="exportContent">
+        <div class="export-btn-row">
+          <button class="export-btn" onclick="exportMonthCSV()">
+            <i class="ti ti-file-spreadsheet" aria-hidden="true"></i> CSV 내보내기
+          </button>
+          <button class="export-btn" onclick="exportMonthSummary()">
+            <i class="ti ti-clipboard-text" aria-hidden="true"></i> 요약 복사
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 계정 설정 탭 -->
@@ -1686,6 +1796,22 @@
         <button onclick="redeemCoupon()">적용</button>
       </div>
       <p style="font-size:1.05rem;color:var(--text-dim);line-height:1.5">쿠폰을 입력하면 Pro 기능을 사용할 수 있습니다</p>
+    </div>
+
+    <!-- 표시 설정 -->
+    <div class="card">
+      <div class="card-title">🔍 화면 표시 설정</div>
+      <div class="display-option-row">
+        <div>
+          <div class="dor-label">글자 크기</div>
+          <div class="dor-desc">눈이 편한 크기로 조절하세요</div>
+        </div>
+        <div class="font-size-btns">
+          <button class="fsb active" id="fsBtn-normal" onclick="setFontSize('normal')">보통</button>
+          <button class="fsb" id="fsBtn-large" onclick="setFontSize('large')">크게</button>
+          <button class="fsb" id="fsBtn-xlarge" onclick="setFontSize('xlarge')">아주크게</button>
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -2278,9 +2404,12 @@ function switchTab(id, btnEl) {
   document.getElementById('tab-' + id).classList.add('active');
   if (btnEl) btnEl.classList.add('active');
   if (id === 'weekly') renderWeekly();
-  if (id === 'monthly') renderMonthly();
+  if (id === 'monthly') { renderMonthly(); renderCompare(); calcFuelEff(); applyProLocksMonthly(); }
   if (id === 'calendar') renderCalendar();
   if (id === 'profit') renderProfit();
+  if (id === 'admin' && isAdmin(currentUser)) { renderAdminDashboard(); renderAdminMemberList(); renderAdminCouponList(); }
+  if (id === 'settings') { recalcSalary(); loadSalaryHistory(); renderPlanStatus(); }
+  if (id === 'message' && currentUser && !isAdmin(currentUser)) loadChatMessages('chatMessages', currentUser.uid);
 }
 
 function refreshActiveStats() {
@@ -2300,6 +2429,7 @@ window.onload = async function() {
     // Firebase 미연결 (프리뷰 환경) → 바로 앱 진입
     document.getElementById('authOverlay').style.display = 'none';
     await initApp();
+    loadFontSize();
     return;
   }
   // Auth 상태 감지: 로그인 여부에 따라 화면 전환
@@ -2336,6 +2466,7 @@ window.onload = async function() {
       loadSalaryHistory();
       // 계정 설정 초기값
       loadSettings();
+      loadFontSize();
       // 사용자 채팅 로드
       if (!isAdmin(user)) loadChatMessages('chatMessages', user.uid);
     } else {
@@ -2595,8 +2726,228 @@ function applyPlanUI() {
     if (content)  content.style.pointerEvents = '';
     if (histCard) histCard.style.display = 'block';
   }
+  // 월간 탭 Pro 잠금
+  if (typeof applyProLocksMonthly === 'function') applyProLocksMonthly();
 }
 
+
+
+// ════════════════════════════════════════
+// ─── 표시 설정 (글자 크기) ───
+// ════════════════════════════════════════
+function setFontSize(size) {
+  document.body.classList.remove('large-mode', 'xlarge-mode');
+  if (size === 'large')  document.body.classList.add('large-mode');
+  if (size === 'xlarge') document.body.classList.add('xlarge-mode');
+  ['normal','large','xlarge'].forEach(s => {
+    const btn = document.getElementById('fsBtn-'+s);
+    if (btn) btn.classList.toggle('active', s === size);
+  });
+  try { localStorage.setItem('fontSize', size); } catch(e) {}
+}
+window.setFontSize = setFontSize;
+
+function loadFontSize() {
+  let size = 'normal';
+  try { size = localStorage.getItem('fontSize') || 'normal'; } catch(e) {}
+  setFontSize(size);
+}
+
+// ════════════════════════════════════════
+// ─── 전월 비교 ───
+// ════════════════════════════════════════
+function renderCompare() {
+  const banner  = document.getElementById('compareLockBanner');
+  const content = document.getElementById('compareContent');
+  if (userPlan === 'free') {
+    if (banner) banner.style.display = 'flex';
+    if (content) content.style.display = 'none';
+    return;
+  }
+  if (banner) banner.style.display = 'none';
+  if (content) content.style.display = 'block';
+
+  const sel = document.getElementById('monthSelect');
+  if (!sel || !sel.value) return;
+  const [y, m] = sel.value.split('-').map(Number);
+
+  const sumMonth = (yy, mm) => {
+    let rev=0, fuel=0, gas=0;
+    const dim = new Date(yy, mm, 0).getDate();
+    for (let d=1; d<=dim; d++) {
+      const key = `${yy}-${String(mm).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      rev  += db[key]?.revenue || 0;
+      fuel += db[key]?.fuel    || 0;
+      gas  += db[key]?.gas     || 0;
+    }
+    return { rev, fuel, gas, net: rev - fuel };
+  };
+
+  const cur = sumMonth(y, m);
+  let py = y, pm = m - 1;
+  if (pm < 1) { pm = 12; py = y - 1; }
+  const prev = sumMonth(py, pm);
+
+  const changeHtml = (curVal, prevVal, isGas) => {
+    if (prevVal === 0) return '<span class="compare-change same">전월 데이터 없음</span>';
+    const diff = curVal - prevVal;
+    const pct = Math.round(diff / prevVal * 100);
+    const cls = diff > 0 ? 'up' : diff < 0 ? 'down' : 'same';
+    const arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '─';
+    const valStr = isGas ? `${Math.abs(diff).toFixed(1)}L` : fmt(Math.abs(diff));
+    return `<span class="compare-change ${cls}">${arrow} ${valStr} (${pct>0?'+':''}${pct}%)</span>`;
+  };
+
+  const grid = document.getElementById('compareGrid');
+  if (!grid) return;
+  grid.innerHTML = `
+    <div class="compare-card">
+      <div class="compare-label">매출</div>
+      <div class="compare-value gold">${fmt(cur.rev)}</div>
+      ${changeHtml(cur.rev, prev.rev)}
+    </div>
+    <div class="compare-card">
+      <div class="compare-label">주유비</div>
+      <div class="compare-value red">${fmt(cur.fuel)}</div>
+      ${changeHtml(cur.fuel, prev.fuel)}
+    </div>
+    <div class="compare-card">
+      <div class="compare-label">순매출</div>
+      <div class="compare-value" style="color:var(--green)">${fmt(cur.net)}</div>
+      ${changeHtml(cur.net, prev.net)}
+    </div>
+    <div class="compare-card">
+      <div class="compare-label">가스 사용</div>
+      <div class="compare-value blue">${cur.gas.toFixed(1)}L</div>
+      ${changeHtml(cur.gas, prev.gas, true)}
+    </div>
+  `;
+  const label = document.querySelector('#compareCard .card-title');
+  if (label) label.textContent = `📊 전월 대비 (${pm}월 → ${m}월)`;
+}
+
+// ════════════════════════════════════════
+// ─── 연비 트래킹 ───
+// ════════════════════════════════════════
+function calcFuelEff() {
+  const banner  = document.getElementById('fuelEffLockBanner');
+  const content = document.getElementById('fuelEffContent');
+  if (userPlan === 'free') {
+    if (banner) banner.style.display = 'flex';
+    if (content) content.style.display = 'none';
+    return;
+  }
+  if (banner) banner.style.display = 'none';
+  if (content) content.style.display = 'block';
+
+  const sel = document.getElementById('monthSelect');
+  if (!sel || !sel.value) return;
+  const [y, m] = sel.value.split('-').map(Number);
+  let totalGas = 0;
+  const dim = new Date(y, m, 0).getDate();
+  for (let d=1; d<=dim; d++) {
+    const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    totalGas += db[key]?.gas || 0;
+  }
+  const literEl = document.getElementById('fuelEffLiter');
+  if (literEl) literEl.value = totalGas.toFixed(1);
+
+  const km = +document.getElementById('fuelEffKm')?.value || 0;
+  const effEl = document.getElementById('fuelEffValue');
+  if (effEl) {
+    if (km > 0 && totalGas > 0) {
+      effEl.textContent = (km / totalGas).toFixed(2);
+    } else {
+      effEl.textContent = '-';
+    }
+  }
+}
+window.calcFuelEff = calcFuelEff;
+
+// ════════════════════════════════════════
+// ─── CSV 내보내기 ───
+// ════════════════════════════════════════
+function exportMonthCSV() {
+  if (userPlan === 'free') return showToast('🔒 Pro 플랜에서 사용 가능합니다');
+  const sel = document.getElementById('monthSelect');
+  if (!sel || !sel.value) return showToast('❌ 월을 선택하세요');
+  const [y, m] = sel.value.split('-').map(Number);
+  const dim = new Date(y, m, 0).getDate();
+
+  let csv = '\uFEFF날짜,매출,주유비,가스(L),순매출\n';
+  let tRev=0, tFuel=0, tGas=0;
+  for (let d=1; d<=dim; d++) {
+    const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const rec = db[key];
+    if (!rec || (!rec.revenue && !rec.fuel && !rec.gas)) continue;
+    const rev = rec.revenue||0, fuel = rec.fuel||0, gas = rec.gas||0;
+    csv += `${key},${rev},${fuel},${gas},${rev-fuel}\n`;
+    tRev+=rev; tFuel+=fuel; tGas+=gas;
+  }
+  csv += `합계,${tRev},${tFuel},${tGas.toFixed(1)},${tRev-tFuel}\n`;
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `택시매출_${y}년${m}월.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('✅ CSV 파일이 다운로드되었습니다');
+}
+window.exportMonthCSV = exportMonthCSV;
+
+function exportMonthSummary() {
+  if (userPlan === 'free') return showToast('🔒 Pro 플랜에서 사용 가능합니다');
+  const sel = document.getElementById('monthSelect');
+  if (!sel || !sel.value) return showToast('❌ 월을 선택하세요');
+  const [y, m] = sel.value.split('-').map(Number);
+  const dim = new Date(y, m, 0).getDate();
+  let tRev=0, tFuel=0, tGas=0, days=0;
+  for (let d=1; d<=dim; d++) {
+    const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const rec = db[key];
+    if (rec && (rec.revenue || rec.fuel || rec.gas)) {
+      tRev+=rec.revenue||0; tFuel+=rec.fuel||0; tGas+=rec.gas||0; days++;
+    }
+  }
+  const summary = `📊 ${y}년 ${m}월 매출 요약
+━━━━━━━━━━━━━━
+운행일수: ${days}일
+총 매출: ${fmt(tRev)}
+총 주유비: ${fmt(tFuel)}
+순매출: ${fmt(tRev-tFuel)}
+가스 사용: ${tGas.toFixed(1)}L
+일 평균: ${days>0?fmt(Math.round(tRev/days)):'0원'}
+━━━━━━━━━━━━━━
+택시 매출 관리`;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(summary).then(() => {
+      showToast('✅ 요약이 복사되었습니다');
+    }).catch(() => showToast('❌ 복사 실패'));
+  } else {
+    showToast('❌ 복사 기능을 사용할 수 없습니다');
+  }
+}
+window.exportMonthSummary = exportMonthSummary;
+
+// Pro 잠금 UI를 월간 탭 요소에도 적용
+function applyProLocksMonthly() {
+  ['compare','fuelEff','export'].forEach(name => {
+    const banner  = document.getElementById(name+'LockBanner');
+    const content = document.getElementById(name+'Content');
+    if (userPlan === 'free') {
+      if (banner) banner.style.display = 'flex';
+      if (content) content.style.display = 'none';
+    } else {
+      if (banner) banner.style.display = 'none';
+      if (content) content.style.display = 'block';
+    }
+  });
+}
 
 // ════════════════════════════════════════
 // ─── 쿠폰 & 무료 체험 ───
