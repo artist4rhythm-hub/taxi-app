@@ -1035,9 +1035,174 @@
   .settings-btn.danger:hover { background:rgba(232,68,90,0.1); }
   .settings-btn.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
 
+
+  /* ─── 스플래시 화면 ─── */
+  #splashOverlay {
+    position:fixed; inset:0; z-index:99998;
+    background:#0d0f14;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:32px 24px;
+    overflow:hidden;
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  #splashOverlay.hiding {
+    opacity:0; transform:scale(1.04);
+    pointer-events:none;
+  }
+  .sp-grid {
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(245,166,35,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,166,35,.04) 1px, transparent 1px);
+    background-size:28px 28px;
+    pointer-events:none;
+  }
+  .sp-glow {
+    position:absolute;
+    width:280px; height:280px; border-radius:50%;
+    background:rgba(245,166,35,.05);
+    top:38%; left:50%; transform:translate(-50%,-50%);
+    pointer-events:none;
+  }
+  .sp-icon-wrap {
+    position:relative; margin-bottom:22px;
+    animation:spFloat 3.2s ease-in-out infinite;
+    z-index:1;
+  }
+  @keyframes spFloat {
+    0%,100%{transform:translateY(0) rotate(-3deg)}
+    50%{transform:translateY(-12px) rotate(3deg)}
+  }
+  .sp-icon { font-size:80px; display:block; line-height:1; }
+  .sp-ring {
+    position:absolute;
+    border-radius:50%;
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    animation:spRing 3s ease-in-out infinite;
+  }
+  .sp-ring-1 { width:110px; height:110px; border:1px solid rgba(245,166,35,.22); }
+  .sp-ring-2 { width:155px; height:155px; border:1px solid rgba(245,166,35,.10); animation-delay:.5s; }
+  @keyframes spRing {
+    0%,100%{opacity:1; transform:translate(-50%,-50%) scale(1)}
+    50%{opacity:.35; transform:translate(-50%,-50%) scale(1.07)}
+  }
+  .sp-title {
+    font-size:26px; font-weight:900; color:var(--accent);
+    letter-spacing:-1px; text-align:center; margin-bottom:4px;
+    animation:spUp .7s ease both; animation-delay:.15s; z-index:1;
+  }
+  .sp-sub {
+    font-size:10px; font-weight:500; color:#7a8099;
+    letter-spacing:3px; text-align:center; margin-bottom:28px;
+    animation:spUp .7s ease both; animation-delay:.3s; z-index:1;
+  }
+  @keyframes spUp {
+    from{opacity:0;transform:translateY(14px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .sp-cheer-box {
+    background:rgba(245,166,35,.06);
+    border:1px solid rgba(245,166,35,.18);
+    border-radius:18px; padding:20px 22px;
+    width:100%; max-width:340px;
+    margin-bottom:20px; min-height:110px;
+    display:flex; flex-direction:column; justify-content:center;
+    animation:spUp .7s ease both; animation-delay:.45s; z-index:1;
+    position:relative;
+  }
+  .sp-quote-mark {
+    position:absolute; top:-2px; left:14px;
+    font-size:32px; color:var(--accent); opacity:.4;
+    font-family:serif; line-height:1;
+  }
+  .sp-cat-label {
+    font-size:9px; font-weight:700; letter-spacing:1.5px;
+    text-transform:uppercase; margin-bottom:7px;
+  }
+  .sp-cat-cheer { color:#c4841b; }
+  .sp-cat-bible { color:#4db8ff; }
+  .sp-cat-quote { color:#2ecc71; }
+  .sp-cheer-text {
+    font-size:15px; font-weight:700; color:var(--text);
+    line-height:1.7; text-align:center;
+    transition:opacity .35s, transform .35s;
+  }
+  .sp-cheer-text.fading { opacity:0; transform:translateY(6px); }
+  .sp-cheer-ref {
+    font-size:10px; color:#7a8099;
+    text-align:right; margin-top:8px;
+  }
+  .sp-dots {
+    display:flex; justify-content:center; gap:5px;
+    margin-bottom:22px; animation:spUp .7s ease both;
+    animation-delay:.55s; z-index:1;
+  }
+  .sp-dot {
+    width:5px; height:5px; border-radius:50%;
+    background:rgba(245,166,35,.22);
+    transition:background .3s, transform .3s;
+  }
+  .sp-dot.on { background:var(--accent); transform:scale(1.3); }
+  .sp-start-btn {
+    width:100%; max-width:340px;
+    background:var(--accent); border:none; border-radius:14px;
+    padding:17px; font-size:17px; font-weight:900;
+    color:#0d0f14; cursor:pointer;
+    font-family:'Noto Sans KR',sans-serif;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    animation:spUp .7s ease both; animation-delay:.65s; z-index:1;
+    transition:transform .15s, background .15s;
+    letter-spacing:-.3px;
+  }
+  .sp-start-btn:hover { background:#f7b84b; transform:scale(1.02); }
+  .sp-start-btn:active { transform:scale(.97); }
+  .sp-version {
+    font-size:9px; color:#7a8099; letter-spacing:1px;
+    margin-top:14px; animation:spUp .7s ease both;
+    animation-delay:.75s; z-index:1;
+  }
+  /* 돋보기 모드 스플래시 */
+  body.large-mode .sp-title   { font-size:32px; }
+  body.large-mode .sp-sub     { font-size:12px; }
+  body.large-mode .sp-cheer-text { font-size:19px; }
+  body.large-mode .sp-cheer-box { padding:24px; min-height:130px; }
+  body.large-mode .sp-start-btn { font-size:21px; padding:20px; }
+  body.large-mode .sp-icon   { font-size:96px; }
+
 </style>
 </head>
 <body>
+<!-- ═══ 스플래시 화면 ═══ -->
+<div id="splashOverlay">
+  <div class="sp-grid"></div>
+  <div class="sp-glow"></div>
+
+  <div class="sp-icon-wrap">
+    <div class="sp-ring sp-ring-1"></div>
+    <div class="sp-ring sp-ring-2"></div>
+    <span class="sp-icon">🚕</span>
+  </div>
+
+  <div class="sp-title">택시 매출 관리</div>
+  <div class="sp-sub">TAXI REVENUE TRACKER</div>
+
+  <div class="sp-cheer-box">
+    <span class="sp-quote-mark">"</span>
+    <div class="sp-cat-label" id="spCatLabel"></div>
+    <div class="sp-cheer-text" id="spCheerText"></div>
+    <div class="sp-cheer-ref" id="spCheerRef"></div>
+  </div>
+
+  <div class="sp-dots" id="spDots"></div>
+
+  <button class="sp-start-btn" onclick="dismissSplash()">
+    <i class="ti ti-arrow-right" style="font-size:20px" aria-hidden="true"></i>
+    시작하기
+  </button>
+  <div class="sp-version" id="spVersion">택시 매출 관리 v1.0</div>
+</div>
+
 <!-- ═══ 로그인/회원가입 ═══ -->
 <div id="authOverlay">
   <div class="auth-icon">🚕</div>
@@ -1097,7 +1262,7 @@
       <button class="tab-btn" onclick="switchTab('weekly',this)">📊 주간</button>
       <button class="tab-btn" onclick="switchTab('monthly',this)">📈 월간</button>
       <button class="tab-btn" onclick="switchTab('calendar',this)">🗓️ 달력</button>
-      <button class="tab-btn" onclick="switchTab('profit',this)">💵 예상소득</button>
+      <button class="tab-btn" onclick="switchTab('profit',this)">💵 소득</button>
     </span>
     <button class="tab-btn" onclick="switchTab('message',this)">💬 문의</button>
     <button class="tab-btn" onclick="switchTab('settings',this)">⚙️ 설정</button>
@@ -1612,6 +1777,114 @@ window.switchAuthTab = switchAuthTab;
 window.doLogin  = doLogin;
 window.doSignup = doSignup;
 
+
+// ─── 스플래시 멘트 데이터 ───
+const SPLASH_MSGS = [
+  // 응원
+  {cat:'cheer', text:'오늘도 핸들을 잡는 당신,\n대한민국 도로의 진짜 주인공입니다.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'비가 오든 눈이 오든\n오늘 하루도 수고 많으십니다.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'기사님의 하루하루가\n가족의 내일을 만듭니다.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'천 번을 달려도\n처음처럼 안전하게.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'새벽을 여는 사람,\n기사님이 있어 도시가 움직입니다.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'기사님의 땀이\n가장 정직한 매출입니다.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'심야를 달리는 기사님께\n경의를 표합니다.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'오늘 하루\n단 한 번의 사고 없이 마치시길.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'목표를 향해 달리는 오늘,\n내일의 여유가 됩니다.', ref:'— 택시 매출 관리'},
+  {cat:'cheer', text:'오늘도 응원합니다.\n좋은 하루 되십시오.', ref:'— 택시 매출 관리'},
+  // 성경
+  {cat:'bible', text:'여호와는 나의 목자시니\n내게 부족함이 없으리로다.', ref:'— 시편 23:1'},
+  {cat:'bible', text:'내가 산을 향하여 눈을 들리라\n나의 도움은 여호와에게서로다.', ref:'— 시편 121:1-2'},
+  {cat:'bible', text:'수고하고 무거운 짐 진 자들아\n다 내게로 오라, 내가 너희를 쉬게 하리라.', ref:'— 마태복음 11:28'},
+  {cat:'bible', text:'내게 능력 주시는 자 안에서\n내가 모든 것을 할 수 있느니라.', ref:'— 빌립보서 4:13'},
+  {cat:'bible', text:'너의 길을 여호와께 맡기라\n그를 의지하면 그가 이루시고.', ref:'— 시편 37:5'},
+  {cat:'bible', text:'여호와가 너를 지키시리로다\n해가 낮에 너를 상하지 못하리로다.', ref:'— 시편 121:6'},
+  {cat:'bible', text:'하나님이 우리에게 주신 것은\n능력과 사랑과 절제하는 마음이니.', ref:'— 디모데후서 1:7'},
+  {cat:'bible', text:'범사에 감사하라\n이것이 너희를 향하신 하나님의 뜻이니라.', ref:'— 데살로니가전서 5:18'},
+  {cat:'bible', text:'손이 부지런한 자는 부요하게 되느니라.', ref:'— 잠언 10:4'},
+  {cat:'bible', text:'그가 너를 위하여 천사들을 명령하사\n네 모든 길에서 너를 지키게 하심이라.', ref:'— 시편 91:11'},
+  {cat:'bible', text:'여호와는 나의 빛이요 나의 구원이시니\n내가 누구를 두려워하리요.', ref:'— 시편 27:1'},
+  {cat:'bible', text:'주는 나의 힘과 방패시라\n내 마음이 그를 의지하여 도움을 얻었도다.', ref:'— 시편 28:7'},
+  // 명언
+  {cat:'quote', text:'성공은 매일 반복되는\n작은 노력들의 합산이다.', ref:'— 로버트 콜리어'},
+  {cat:'quote', text:'오늘 할 수 있는 일을\n내일로 미루지 마라.', ref:'— 벤자민 프랭클린'},
+  {cat:'quote', text:'땀 흘린 만큼\n결과는 반드시 따라온다.', ref:'— 에이브러햄 링컨'},
+  {cat:'quote', text:'천 리 길도 한 걸음부터.', ref:'— 노자'},
+  {cat:'quote', text:'가장 위대한 영광은\n쓰러질 때마다 다시 일어나는 것이다.', ref:'— 넬슨 만델라'},
+  {cat:'quote', text:'성공한 사람들은\n남들이 하기 싫어하는 일을 한다.', ref:'— E.M. 그레이'},
+  {cat:'quote', text:'빛나는 보석도 닦지 않으면\n빛을 잃는다.', ref:'— 서양 속담'},
+  {cat:'quote', text:'오늘의 행동이\n내일의 나를 만든다.', ref:'— 스티브 잡스'},
+  {cat:'quote', text:'인내는 쓰나 그 열매는 달다.', ref:'— 장 자크 루소'},
+  {cat:'quote', text:'길을 잃은 것이 아니다.\n새로운 길을 발견하는 중이다.', ref:'— J.R.R. 톨킨'},
+];
+
+const SP_CAT = {
+  cheer: {label:'응원', cls:'sp-cat-cheer'},
+  bible: {label:'성경 축복', cls:'sp-cat-bible'},
+  quote: {label:'명언', cls:'sp-cat-quote'},
+};
+
+let _spIdx = Math.floor(Math.random() * SPLASH_MSGS.length);
+let _spTimer = null;
+
+function _spRender() {
+  const m   = SPLASH_MSGS[_spIdx];
+  const cat = SP_CAT[m.cat];
+
+  const textEl = document.getElementById('spCheerText');
+  const refEl  = document.getElementById('spCheerRef');
+  const catEl  = document.getElementById('spCatLabel');
+  const dotsEl = document.getElementById('spDots');
+
+  if (textEl) {
+    textEl.classList.add('fading');
+    setTimeout(() => {
+      textEl.innerHTML = m.text.replace(/\n/g, '<br>');
+      textEl.classList.remove('fading');
+    }, 200);
+  }
+  if (refEl) refEl.textContent = m.ref;
+  if (catEl) {
+    catEl.textContent = cat.label;
+    catEl.className = 'sp-cat-label ' + cat.cls;
+  }
+  const total = Math.min(SPLASH_MSGS.length, 10);
+  if (dotsEl) {
+    dotsEl.innerHTML = Array.from({length: total}, (_, i) =>
+      `<div class="sp-dot${i === _spIdx % total ? ' on' : ''}"></div>`
+    ).join('');
+  }
+}
+
+function _spNext() {
+  _spIdx = (_spIdx + 1) % SPLASH_MSGS.length;
+  _spRender();
+}
+
+function _spStartAuto() {
+  _spTimer = setInterval(_spNext, 4000);
+}
+
+function dismissSplash() {
+  clearInterval(_spTimer);
+  const el = document.getElementById('splashOverlay');
+  if (!el) return;
+  el.classList.add('hiding');
+  setTimeout(() => { el.style.display = 'none'; }, 620);
+}
+
+function initSplash() {
+  const el = document.getElementById('splashOverlay');
+  if (!el) return;
+  // Pro/Free 버전 표시
+  const verEl = document.getElementById('spVersion');
+  if (verEl) verEl.textContent = '택시 매출 관리 v1.0';
+  _spRender();
+  _spStartAuto();
+  // 8초 후 자동으로 다음 화면으로
+  setTimeout(dismissSplash, 8000);
+}
+window.dismissSplash = dismissSplash;
+
 const COL = 'taxiData'; // legacy (미사용)
 const ADMIN_EMAIL = 'artist4rhythm@gmail.com'; // 관리자 이메일
 let auth = null; // Firebase Auth 인스턴스
@@ -1783,6 +2056,7 @@ function refreshActiveStats() {
 // ─── 앱 시작 (잠금 해제 후 호출) ───
 
 window.onload = async function() {
+  initSplash(); // 스플래시 시작
   initFirebase();
   if (!auth) {
     // Firebase 미연결 (프리뷰 환경) → 바로 앱 진입
