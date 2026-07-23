@@ -2159,10 +2159,15 @@
   <div id="tab-admin" class="tab-panel">
     <div class="card">
       <div class="card-title">🔧 관리자 대시보드</div>
+      <div class="section-title" style="margin-top:2px">👤 관리자 이름</div>
+      <div class="coupon-create-row" style="margin-bottom:14px">
+        <input id="adminNameInput" type="text" placeholder="표시할 이름" maxlength="20" style="flex:1">
+        <button class="settings-btn primary" style="padding:8px 14px" onclick="updateAdminName()">이름 변경</button>
+      </div>
       <div class="admin-stat-grid" id="adminStats"></div>
       <div class="section-title">🎫 쿠폰 관리</div>
       <div class="coupon-create-row">
-        <input id="newCouponCode" type="text" placeholder="쿠폰 코드 (예: PRO2026)" style="flex:1;text-transform:uppercase">
+        <input id="newCouponCode" type="text" placeholder="쿠폰 코드 (비워두면 자동 생성)" style="flex:1;text-transform:uppercase">
         <select id="newCouponPlan">
           <option value="pro">Pro</option>
           <option value="enterprise">Enterprise</option>
@@ -2620,7 +2625,11 @@ function switchTab(id, btnEl) {
   if (id === 'monthly') { renderMonthly(); renderTrend(); renderCompare(); calcFuelEff(); renderWeekdayPattern(); applyProLocksMonthly(); }
   if (id === 'calendar') renderCalendar();
   if (id === 'profit') renderProfit();
-  if (id === 'admin' && isAdmin(currentUser)) { renderAdminDashboard(); renderAdminMemberList(); renderAdminCouponList(); }
+  if (id === 'admin' && isAdmin(currentUser)) {
+    renderAdminDashboard(); renderAdminMemberList(); renderAdminCouponList();
+    const ani = document.getElementById('adminNameInput');
+    if (ani && !ani.value) ani.value = currentUser.displayName || '';
+  }
   if (id === 'settings') { recalcSalary(); loadSalaryHistory(); renderPlanStatus(); }
   if (id === 'message' && currentUser && !isAdmin(currentUser)) { loadChatMessages('chatMessages', currentUser.uid); markMessagesRead(); refreshMsgAlertUI(); }
   if (id === 'message') renderBackupStat();
@@ -2948,6 +2957,21 @@ async function updateProfile() {
     showToast('✅ 이름이 변경되었습니다');
   } catch(e) { showToast('❌ 변경 실패: ' + e.message); }
 }
+
+// 관리자 탭에서 이름 변경 (설정 탭이 숨겨져 있어 별도 제공)
+async function updateAdminName() {
+  const name = document.getElementById('adminNameInput')?.value.trim();
+  if (!name) return showToast('❌ 이름을 입력하세요');
+  if (!currentUser) return;
+  try {
+    await currentUser.updateProfile({ displayName: name });
+    if (firestore) await firestore.collection('users').doc(currentUser.uid)
+      .set({ name }, { merge: true });
+    applyPlanUI(); // 헤더 이름 갱신
+    showToast('✅ 이름이 변경되었습니다: ' + name);
+  } catch(e) { showToast('❌ 변경 실패: ' + e.message); }
+}
+window.updateAdminName = updateAdminName;
 
 async function updateEmail() {
   const newEmail = document.getElementById('settingsEmail')?.value.trim();
@@ -3798,14 +3822,30 @@ async function redeemCoupon() {
 window.redeemCoupon = redeemCoupon;
 
 // ─── 관리자: 쿠폰 발급 ───
+function genCouponCode(plan) {
+  // 헷갈리는 문자(0,O,1,I,L) 제외
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let rand = '';
+  for (let i = 0; i < 5; i++) rand += chars[Math.floor(Math.random() * chars.length)];
+  return (plan === 'enterprise' ? 'ENT-' : 'PRO-') + rand;
+}
+
 async function createCoupon() {
   if (!firestore) return;
-  const code = document.getElementById('newCouponCode')?.value.trim().toUpperCase();
+  let code = document.getElementById('newCouponCode')?.value.trim().toUpperCase();
   const plan = document.getElementById('newCouponPlan')?.value || 'pro';
   const duration = +document.getElementById('newCouponDuration')?.value || 0;
-  if (!code) return showToast('❌ 쿠폰 코드를 입력하세요');
+  const autoGen = !code;
+  if (autoGen) code = genCouponCode(plan); // 비워두면 자동 생성
   try {
-    const existing = await firestore.collection('coupons').doc(code).get();
+    let existing = await firestore.collection('coupons').doc(code).get();
+    // 자동 생성 코드가 우연히 겹치면 최대 5회 재시도
+    let tries = 0;
+    while (autoGen && existing.exists && tries < 5) {
+      code = genCouponCode(plan);
+      existing = await firestore.collection('coupons').doc(code).get();
+      tries++;
+    }
     if (existing.exists) return showToast('❌ 이미 존재하는 코드입니다');
     await firestore.collection('coupons').doc(code).set({
       code, plan, duration,
