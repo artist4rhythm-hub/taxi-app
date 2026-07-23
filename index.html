@@ -122,7 +122,46 @@
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
+    position: relative;
   }
+
+  /* ─── 문의 알림 배지 / 토글 ─── */
+  .tab-badge {
+    display: none; align-items: center; justify-content: center;
+    min-width: 17px; height: 17px; padding: 0 5px; margin-left: 5px;
+    border-radius: 999px; background: var(--accent2); color: #fff;
+    font-size: 11px; font-weight: 800; line-height: 1; vertical-align: middle;
+  }
+  .msg-alert-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .msg-alert-btn {
+    padding: 7px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 600; transition: all .15s;
+  }
+  .msg-alert-btn:hover { border-color: var(--accent); }
+  .msg-alert-btn.on { background: rgba(46,204,113,.15); border-color: var(--green); color: var(--green); }
+  .msg-alert-hint { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
+
+  /* ─── 백업 / 복원 ─── */
+  .backup-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px; }
+  .backup-stat {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .backup-chip {
+    padding: 5px 11px; border-radius: 999px; background: var(--surface2);
+    border: 1px solid var(--border); font-size: 12px; color: var(--text-dim);
+  }
+  .backup-chip b { color: var(--text); font-weight: 700; }
+  .restore-warn {
+    margin-top: 14px; padding: 11px 13px; border-radius: 9px;
+    background: rgba(232,68,90,.08); border: 1px solid rgba(232,68,90,.3);
+    font-size: 12px; color: var(--text-dim); line-height: 1.6;
+  }
+  .restore-warn b { color: #e8445a; }
+  body.large-mode  .backup-desc, body.large-mode  .restore-warn { font-size: 15px; }
+  body.xlarge-mode .backup-desc, body.xlarge-mode .restore-warn { font-size: 18px; }
+  body.large-mode .msg-alert-btn { font-size: 15px; }
+  body.xlarge-mode .msg-alert-btn { font-size: 17px; }
 
   .tab-btn.active {
     background: var(--accent);
@@ -1415,17 +1454,6 @@
   .memo-del { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; width:26px; height:26px; cursor:pointer; font-size:12px; flex-shrink:0; }
   .memo-del:hover { border-color:var(--accent2); color:var(--accent2); }
 
-  /* ─── 요일별 패턴 ─── */
-  .weekday-grid { display:flex; flex-direction:column; gap:6px; }
-  .weekday-row { display:flex; align-items:center; gap:10px; }
-  .weekday-label { font-size:13px; font-weight:700; width:32px; flex-shrink:0; }
-  .weekday-label.sun { color:var(--accent2); }
-  .weekday-label.sat { color:#4db8ff; }
-  .weekday-track { flex:1; background:var(--surface2); border-radius:6px; height:26px; overflow:hidden; position:relative; }
-  .weekday-fill { height:100%; background:linear-gradient(90deg, var(--accent), #f7b84b); border-radius:6px; transition:width .5s; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
-  .weekday-val { font-size:11px; font-weight:700; color:#000; white-space:nowrap; }
-  .weekday-empty { font-size:11px; color:var(--text-dim); padding-left:8px; line-height:26px; }
-
 </style>
 </head>
 <body>
@@ -1528,7 +1556,7 @@
       <button class="tab-btn" onclick="switchTab('calendar',this)">🗓️ 달력</button>
       <button class="tab-btn" onclick="switchTab('profit',this)">💵 소득</button>
     </span>
-    <button class="tab-btn" onclick="switchTab('message',this)">💬 문의</button>
+    <button class="tab-btn" onclick="switchTab('message',this)">💬 문의<span class="tab-badge" id="msgBadge">0</span></button>
     <button class="tab-btn" onclick="switchTab('settings',this)">⚙️ 설정</button>
     <button class="tab-btn" id="adminTabBtn" style="display:none" onclick="switchTab('admin',this)">🔧 관리자</button>
   </div>
@@ -1732,6 +1760,11 @@
         <div class="chart-wrap"><canvas id="trendChart" height="240"></canvas></div>
         <div class="trend-insight" id="trendInsight"></div>
         <p style="font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.5">막대는 월 매출, 보라색 선은 월 순익(매출−주유)입니다</p>
+        <div style="border-top:1px solid var(--border);margin:16px 0 12px"></div>
+        <div class="card-title" id="compareTitle" style="font-size:0.95rem">📊 전월 대비</div>
+        <div id="compareContent">
+          <div class="compare-grid" id="compareGrid"></div>
+        </div>
       </div>
     </div>
 
@@ -1749,21 +1782,6 @@
         <div class="chart-wrap"><canvas id="weekdayChart" height="220"></canvas></div>
         <div class="weekday-insight" id="weekdayInsight"></div>
         <p style="font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.5">요일별 평균 매출·순익입니다. 👑 표시가 순익이 가장 높은 요일이에요</p>
-      </div>
-    </div>
-
-    <!-- 전월 비교 (Pro) -->
-    <div class="card" id="compareCard">
-      <div class="card-title">📊 전월 대비</div>
-      <div class="pro-lock-banner" id="compareLockBanner" style="display:none">
-        <div class="plb-icon">🔒</div>
-        <div class="plb-text">
-          <div class="plb-title">Pro 기능</div>
-          <div class="plb-desc">전월 비교는 Pro 플랜에서 사용할 수 있어요</div>
-        </div>
-      </div>
-      <div id="compareContent">
-        <div class="compare-grid" id="compareGrid"></div>
       </div>
     </div>
 
@@ -1914,6 +1932,10 @@
     <div class="card">
       <div class="card-title">💬 관리자에게 문의</div>
       <div id="msgUserView">
+        <div class="msg-alert-row">
+          <button class="msg-alert-btn" id="msgAlertBtn" onclick="toggleMsgAlerts()">🔔 답장 알림 켜기</button>
+          <span class="msg-alert-hint" id="msgAlertHint"></span>
+        </div>
         <div class="chat-wrap" id="chatMessages">
           <div class="chat-empty">메시지를 보내보세요</div>
         </div>
@@ -1943,6 +1965,27 @@
             <i class="ti ti-clipboard-text" aria-hidden="true"></i> 요약 복사
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- 전체 백업 / 복원 -->
+    <div class="card" id="backupCard">
+      <div class="card-title">💾 전체 백업 / 복원</div>
+      <div class="backup-desc">
+        전체 매출 기록을 파일 하나로 저장해 두면, 기기를 바꾸거나 데이터가 사라져도 그대로 되살릴 수 있어요.
+      </div>
+      <div class="backup-stat" id="backupStat"></div>
+      <div class="export-btn-row">
+        <button class="export-btn" onclick="backupAll()">
+          <i class="ti ti-download" aria-hidden="true"></i> 전체 백업 저장
+        </button>
+        <button class="export-btn" onclick="document.getElementById('restoreFile').click()">
+          <i class="ti ti-upload" aria-hidden="true"></i> 백업 파일 복원
+        </button>
+      </div>
+      <input type="file" id="restoreFile" accept=".json,application/json" style="display:none" onchange="handleRestoreFile(this)">
+      <div class="restore-warn">
+        <b>복원 안내</b> · 백업 파일의 날짜 기록을 현재 데이터에 덮어씁니다. 백업에 없는 날짜는 그대로 유지돼요. 복원 전 한 번 더 확인 창이 떠요.
       </div>
     </div>
   </div>
@@ -2580,7 +2623,8 @@ function switchTab(id, btnEl) {
   if (id === 'profit') renderProfit();
   if (id === 'admin' && isAdmin(currentUser)) { renderAdminDashboard(); renderAdminMemberList(); renderAdminCouponList(); }
   if (id === 'settings') { recalcSalary(); loadSalaryHistory(); renderPlanStatus(); }
-  if (id === 'message' && currentUser && !isAdmin(currentUser)) loadChatMessages('chatMessages', currentUser.uid);
+  if (id === 'message' && currentUser && !isAdmin(currentUser)) { loadChatMessages('chatMessages', currentUser.uid); markMessagesRead(); refreshMsgAlertUI(); }
+  if (id === 'message') renderBackupStat();
 }
 
 function refreshActiveStats() {
@@ -2637,10 +2681,16 @@ window.onload = async function() {
       loadSettings();
       loadFontSize();
       // 사용자 채팅 로드
-      if (!isAdmin(user)) loadChatMessages('chatMessages', user.uid);
+      if (!isAdmin(user)) {
+        loadChatMessages('chatMessages', user.uid);
+        startMsgWatch(user.uid);
+        refreshMsgAlertUI();
+      }
     } else {
       currentUser = null;
       db = {};
+      stopMsgWatch();
+      updateMsgBadge(0);
       overlay.style.display = 'flex';
       // 관리자 탭 숨김
       const adminBtn = document.getElementById('adminTabBtn');
@@ -2756,6 +2806,127 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 window.sendMessage = sendMessage;
+
+// ════════════════════════════════════════
+// ─── 문의 답장 알림 (안읽음 배지 + 브라우저 알림) ───
+// ════════════════════════════════════════
+const MSG_EPOCH = '1970-01-01T00:00:00.000Z';
+function msgReadKey(uid) { return 'msgRead_' + uid; }
+function getLastRead(uid) {
+  try { return localStorage.getItem(msgReadKey(uid)) || MSG_EPOCH; } catch(e) { return MSG_EPOCH; }
+}
+function setLastRead(uid, iso) { try { localStorage.setItem(msgReadKey(uid), iso); } catch(e) {} }
+
+function updateMsgBadge(count) {
+  const b = document.getElementById('msgBadge');
+  if (!b) return;
+  if (count > 0) { b.textContent = count > 99 ? '99+' : count; b.style.display = 'inline-flex'; }
+  else b.style.display = 'none';
+}
+
+function markMessagesRead() {
+  if (currentUser && !isAdmin(currentUser)) {
+    setLastRead(currentUser.uid, new Date().toISOString());
+    updateMsgBadge(0);
+  }
+}
+
+function recomputeBadge(snap, uid) {
+  const last = getLastRead(uid);
+  let c = 0;
+  snap.forEach(d => { const m = d.data(); if (m.sender === 'admin' && (m.time || '') > last) c++; });
+  updateMsgBadge(c);
+}
+
+// 알림 권한 UI
+function refreshMsgAlertUI() {
+  const btn = document.getElementById('msgAlertBtn');
+  const hint = document.getElementById('msgAlertHint');
+  if (!btn) return;
+  if (!('Notification' in window)) {
+    btn.style.display = 'none';
+    if (hint) hint.textContent = '이 브라우저는 알림을 지원하지 않아요';
+    return;
+  }
+  btn.style.display = '';
+  const p = Notification.permission;
+  if (p === 'granted') {
+    btn.textContent = '🔔 답장 알림 켜짐'; btn.classList.add('on');
+    if (hint) hint.textContent = '';
+  } else if (p === 'denied') {
+    btn.textContent = '🔕 알림 차단됨'; btn.classList.remove('on');
+    if (hint) hint.textContent = '브라우저 설정에서 이 사이트 알림을 허용해주세요';
+  } else {
+    btn.textContent = '🔔 답장 알림 켜기'; btn.classList.remove('on');
+    if (hint) hint.textContent = '관리자 답장이 오면 알려드려요';
+  }
+}
+function toggleMsgAlerts() {
+  if (!('Notification' in window)) { showToast('알림을 지원하지 않는 브라우저예요'); return; }
+  if (Notification.permission === 'granted') { showToast('이미 알림이 켜져 있어요'); return; }
+  if (Notification.permission === 'denied') { showToast('브라우저 설정에서 알림을 허용해주세요'); return; }
+  Notification.requestPermission().then(p => {
+    refreshMsgAlertUI();
+    if (p === 'granted') showToast('🔔 답장 알림이 켜졌어요');
+  });
+}
+window.toggleMsgAlerts = toggleMsgAlerts;
+
+function showMsgNotification(m) {
+  showToast('💬 관리자 답장이 도착했어요');
+  try {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      const n = new Notification('관리자 답장', {
+        body: (m.text || '').slice(0, 80),
+        tag: 'admin-reply', renotify: true
+      });
+      n.onclick = () => {
+        window.focus();
+        const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.textContent.includes('문의'));
+        switchTab('message', btn);
+        n.close();
+      };
+    }
+  } catch(e) {}
+}
+
+// 실시간 감시
+let _msgUnsub = null;
+let _msgWatchInit = false;
+function startMsgWatch(uid) {
+  stopMsgWatch();
+  if (!firestore || !uid) return;
+  _msgWatchInit = false;
+  _msgUnsub = firestore.collection('messages').doc(uid).collection('chats')
+    .orderBy('time', 'asc')
+    .onSnapshot(snap => {
+      const uidNow = currentUser?.uid;
+      if (!uidNow) return;
+      let newAdmin = null;
+      snap.docChanges().forEach(ch => {
+        if (ch.type === 'added') {
+          const m = ch.doc.data();
+          if (m.sender === 'admin') newAdmin = m;
+        }
+      });
+      if (!_msgWatchInit) { _msgWatchInit = true; recomputeBadge(snap, uidNow); return; }
+      if (newAdmin) {
+        if (_activeTab === 'message') {
+          loadChatMessages('chatMessages', uidNow);
+          markMessagesRead();
+        } else {
+          showMsgNotification(newAdmin);
+          recomputeBadge(snap, uidNow);
+        }
+      } else {
+        recomputeBadge(snap, uidNow);
+      }
+    }, err => {});
+}
+function stopMsgWatch() {
+  if (_msgUnsub) { try { _msgUnsub(); } catch(e) {} _msgUnsub = null; }
+  _msgWatchInit = false;
+}
 
 // ─── 계정 설정 ───
 async function loadSettings() {
@@ -3222,15 +3393,8 @@ function loadFontSize() {
 // ─── 전월 비교 ───
 // ════════════════════════════════════════
 function renderCompare() {
-  const banner  = document.getElementById('compareLockBanner');
-  const content = document.getElementById('compareContent');
-  if (userPlan === 'free') {
-    if (banner) banner.style.display = 'flex';
-    if (content) content.style.display = 'none';
-    return;
-  }
-  if (banner) banner.style.display = 'none';
-  if (content) content.style.display = 'block';
+  // Pro 잠금은 월별 추이 카드(trend)에서 함께 처리됨
+  if (userPlan === 'free') return;
 
   const sel = document.getElementById('monthSelect');
   if (!sel || !sel.value) return;
@@ -3287,7 +3451,7 @@ function renderCompare() {
       ${changeHtml(cur.gas, prev.gas, true)}
     </div>
   `;
-  const label = document.querySelector('#compareCard .card-title');
+  const label = document.getElementById('compareTitle');
   if (label) label.textContent = `📊 전월 대비 (${pm}월 → ${m}월)`;
 }
 
@@ -3328,6 +3492,145 @@ function calcFuelEff() {
   }
 }
 window.calcFuelEff = calcFuelEff;
+
+// ════════════════════════════════════════
+// ─── 전체 백업 / 복원 ───
+// ════════════════════════════════════════
+const BACKUP_VER = 1;
+
+function renderBackupStat() {
+  const el = document.getElementById('backupStat');
+  if (!el) return;
+  const days = Object.keys(db).filter(k => /^\d{4}-\d{2}-\d{2}$/.test(k));
+  const withData = days.filter(k => (db[k]?.revenue || db[k]?.fuel || db[k]?.gas));
+  const months = new Set(withData.map(k => k.substring(0,7)));
+  let totalRev = 0;
+  withData.forEach(k => totalRev += (db[k]?.revenue || 0));
+  el.innerHTML = `
+    <span class="backup-chip">기록된 날짜 <b>${withData.length}일</b></span>
+    <span class="backup-chip">기간 <b>${months.size}개월</b></span>
+    <span class="backup-chip">누적 매출 <b>${fmt(totalRev)}</b></span>`;
+}
+window.renderBackupStat = renderBackupStat;
+
+async function backupAll() {
+  try {
+    const days = {};
+    Object.keys(db).forEach(k => {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(k)) return;
+      const r = db[k] || {};
+      if (!r.revenue && !r.fuel && !r.gas && !r.memo) return;
+      days[k] = {
+        revenue: r.revenue || 0, fuel: r.fuel || 0, gas: r.gas || 0,
+        memo: r.memo || '', logs: r.logs || []
+      };
+    });
+
+    // 급여 이력도 함께 백업 (있으면)
+    let salaryHistory = [];
+    try {
+      const uid = currentUser?.uid;
+      if (uid && firestore) {
+        const s = await firestore.collection('users').doc(uid)
+          .collection('salaryHistory').get();
+        s.forEach(d => salaryHistory.push({ month: d.id, ...d.data() }));
+      }
+    } catch(e) {}
+
+    const payload = {
+      app: 'taxi-revenue',
+      version: BACKUP_VER,
+      exportedAt: new Date().toISOString(),
+      user: currentUser?.email || '',
+      dayCount: Object.keys(days).length,
+      days,
+      salaryHistory
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const now = new Date();
+    const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `택시매출_백업_${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`✅ ${Object.keys(days).length}일 백업 저장 완료`);
+  } catch(e) {
+    showToast('❌ 백업 저장 실패');
+  }
+}
+window.backupAll = backupAll;
+
+function handleRestoreFile(input) {
+  const file = input?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data || data.app !== 'taxi-revenue' || !data.days) {
+        showToast('❌ 이 앱의 백업 파일이 아니에요');
+        input.value = '';
+        return;
+      }
+      const keys = Object.keys(data.days).filter(k => /^\d{4}-\d{2}-\d{2}$/.test(k));
+      if (!keys.length) {
+        showToast('❌ 백업 파일에 기록이 없어요');
+        input.value = '';
+        return;
+      }
+      const when = data.exportedAt ? new Date(data.exportedAt).toLocaleDateString('ko-KR') : '알 수 없음';
+      const overlap = keys.filter(k => db[k] && (db[k].revenue || db[k].fuel || db[k].gas)).length;
+      let msg = `백업 파일을 복원할까요?\n\n· 백업 날짜: ${when}\n· 복원할 기록: ${keys.length}일`;
+      if (overlap > 0) msg += `\n· 이 중 ${overlap}일은 현재 데이터를 덮어씁니다`;
+      msg += `\n\n계속하시겠습니까?`;
+      if (!confirm(msg)) { input.value = ''; return; }
+
+      await restoreFromBackup(data.days, keys);
+    } catch(e) {
+      showToast('❌ 파일을 읽을 수 없어요');
+    }
+    input.value = '';
+  };
+  reader.onerror = () => { showToast('❌ 파일 읽기 실패'); input.value = ''; };
+  reader.readAsText(file);
+}
+window.handleRestoreFile = handleRestoreFile;
+
+async function restoreFromBackup(days, keys) {
+  showLoading('💾 복원하는 중...');
+  let ok = 0, fail = 0;
+  try {
+    for (const k of keys) {
+      const r = days[k] || {};
+      db[k] = {
+        revenue: r.revenue || 0,
+        fuel: r.fuel || 0,
+        gas: r.gas || 0,
+        memo: r.memo || '',
+        logs: Array.isArray(r.logs) ? r.logs : []
+      };
+      try { await saveToFirestore(k); ok++; }
+      catch(e) { fail++; }
+    }
+    // 로컬 백업 갱신
+    try { localStorage.setItem(`taxiDB_${currentUser?.uid||'local'}`, JSON.stringify(db)); } catch(e) {}
+
+    populateMonthSelects();
+    renderRecentLog();
+    refreshActiveStats();
+    renderBackupStat();
+    hideLoading();
+    showToast(fail > 0 ? `⚠️ ${ok}일 복원 (${fail}일 실패)` : `✅ ${ok}일 복원 완료`);
+  } catch(e) {
+    hideLoading();
+    showToast('❌ 복원 중 오류가 발생했어요');
+  }
+}
 
 // ════════════════════════════════════════
 // ─── CSV 내보내기 ───
@@ -3401,7 +3704,7 @@ window.exportMonthSummary = exportMonthSummary;
 
 // Pro 잠금 UI를 월간 탭 요소에도 적용
 function applyProLocksMonthly() {
-  ['trend','compare','fuelEff','export','weekday'].forEach(name => {
+  ['trend','fuelEff','export','weekday'].forEach(name => {
     const banner  = document.getElementById(name+'LockBanner');
     const content = document.getElementById(name+'Content');
     if (userPlan === 'free') {
