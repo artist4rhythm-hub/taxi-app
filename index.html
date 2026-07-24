@@ -152,6 +152,36 @@
     border: 1px solid var(--border); font-size: 12px; color: var(--text-dim);
   }
   .backup-chip b { color: var(--text); font-weight: 700; }
+
+  /* ─── 급여 적용 월 / 프리셋 ─── */
+  .apply-month-box {
+    padding: 12px 14px; border-radius: 10px; margin-bottom: 14px;
+    background: rgba(245,166,35,.07); border: 1px solid rgba(245,166,35,.3);
+  }
+  .apply-month-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .apply-month-row select {
+    padding: 8px 10px; border-radius: 8px; background: var(--surface2);
+    color: var(--text); border: 1px solid var(--border);
+    font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 600;
+  }
+  .apply-month-hint { font-size: 12px; color: var(--text-dim); margin-top: 8px; line-height: 1.6; }
+  .apply-month-hint b { color: var(--accent); }
+  .preset-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .preset-item {
+    display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 9px;
+  }
+  .preset-month { font-weight: 700; font-size: 13px; color: var(--accent); min-width: 62px; }
+  .preset-type { font-size: 12px; color: var(--text-dim); flex: 1; }
+  .preset-btn {
+    padding: 5px 11px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 600;
+    background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .preset-btn.del:hover { border-color: var(--accent2); color: var(--accent2); }
+  body.large-mode  .apply-month-hint, body.large-mode  .preset-type { font-size: 15px; }
+  body.xlarge-mode .apply-month-hint, body.xlarge-mode .preset-type { font-size: 17px; }
   .restore-warn {
     margin-top: 14px; padding: 11px 13px; border-radius: 9px;
     background: rgba(232,68,90,.08); border: 1px solid rgba(232,68,90,.3);
@@ -2040,6 +2070,17 @@
       </div>
 
       <div id="salarySettingsContent">
+        <!-- 적용 월 선택 -->
+        <div class="apply-month-box">
+          <div class="apply-month-row">
+            <span style="font-weight:700">📅 적용 시작</span>
+            <select id="salaryApplyYear" onchange="onApplyMonthChange()"></select>
+            <select id="salaryApplyMonth" onchange="onApplyMonthChange()"></select>
+            <span style="font-weight:700">부터</span>
+          </div>
+          <div class="apply-month-hint" id="applyMonthHint"></div>
+        </div>
+
         <!-- 급여 유형 선택 -->
         <div class="section-title" style="font-size:1.3rem;margin-bottom:10px">급여 유형 선택</div>
         <div class="salary-type-grid">
@@ -2113,6 +2154,9 @@
         </div>
 
         <button class="settings-btn primary" onclick="saveSalarySettings()" style="width:100%;margin-bottom:8px">이 설정으로 저장</button>
+        <div class="section-title" style="font-size:1.15rem;margin-top:14px;margin-bottom:4px">💾 저장된 급여 조건</div>
+        <div class="apply-month-hint" style="margin-top:0">월별로 저장된 조건이에요. <b>불러오기</b>를 누르면 그 조건이 입력칸에 채워져요.</div>
+        <div class="preset-list" id="salaryPresetList"></div>
       </div>
     </div>
 
@@ -2684,6 +2728,8 @@ window.onload = async function() {
       await loadUserPlan();
       // 급여 설정 로드
       loadSalarySettings();
+      populateApplyMonth();
+      await loadSalaryRules();
       loadSalaryHistory();
       // 계정 설정 초기값
       loadSettings();
@@ -3953,9 +3999,121 @@ function recalcSalary() {
   set('sprTotal',   fmt(total), 'var(--accent)');
 }
 
+// ─── 적용 월 UI ───
+function populateApplyMonth() {
+  const ySel = document.getElementById('salaryApplyYear');
+  const mSel = document.getElementById('salaryApplyMonth');
+  if (!ySel || !mSel) return;
+  const now = new Date();
+  const curY = now.getFullYear();
+  if (!ySel.options.length) {
+    for (let y = curY - 2; y <= curY + 1; y++) {
+      ySel.insertAdjacentHTML('beforeend', `<option value="${y}">${y}년</option>`);
+    }
+    for (let m = 1; m <= 12; m++) {
+      mSel.insertAdjacentHTML('beforeend', `<option value="${m}">${m}월</option>`);
+    }
+    ySel.value = curY;
+    mSel.value = now.getMonth() + 1;
+  }
+  onApplyMonthChange();
+}
+
+function getApplyMonthKey() {
+  const y = document.getElementById('salaryApplyYear')?.value;
+  const m = document.getElementById('salaryApplyMonth')?.value;
+  if (!y || !m) return new Date().toISOString().substring(0, 7);
+  return `${y}-${String(m).padStart(2, '0')}`;
+}
+
+function onApplyMonthChange() {
+  const ym = getApplyMonthKey();
+  const hint = document.getElementById('applyMonthHint');
+  if (!hint) return;
+  const exists = salaryRules[ym];
+  hint.innerHTML = exists
+    ? `<b>${ym}</b> 에 저장된 조건이 있어요. 저장하면 덮어쓰기 됩니다. 이 조건은 다음 변경 전까지 계속 적용돼요.`
+    : `<b>${ym}</b> 부터 이 조건이 적용돼요. 다음에 조건을 바꾸기 전까지 계속 유지됩니다.`;
+}
+window.onApplyMonthChange = onApplyMonthChange;
+
+// ─── 저장된 월별 조건 불러오기 ───
+async function loadSalaryRules() {
+  if (!firestore || !currentUser) return;
+  try {
+    const snap = await firestore.collection('users').doc(currentUser.uid)
+      .collection('salaryRules').get();
+    salaryRules = {};
+    snap.forEach(d => { salaryRules[d.id] = d.data(); });
+    renderSalaryPresets();
+    onApplyMonthChange();
+  } catch(e) { console.warn('[salaryRules]', e.message); }
+}
+
+function renderSalaryPresets() {
+  const el = document.getElementById('salaryPresetList');
+  if (!el) return;
+  const keys = Object.keys(salaryRules).sort().reverse();
+  if (!keys.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:10px">저장된 조건이 없어요</div>';
+    return;
+  }
+  const typeLabel = {A:'전액관리',B:'사납금형',C:'성과급형',D:'개인택시'};
+  el.innerHTML = keys.map(k => {
+    const r = salaryRules[k];
+    return `<div class="preset-item">
+      <span class="preset-month">${k}~</span>
+      <span class="preset-type">${typeLabel[r.salaryType] || r.salaryType || '-'} · 기준 ${fmt(r.monthlyBase||0)} · ${r.overRate||0}%</span>
+      <button class="preset-btn" onclick="loadSalaryPreset('${k}')">불러오기</button>
+      <button class="preset-btn del" onclick="deleteSalaryPreset('${k}')">삭제</button>
+    </div>`;
+  }).join('');
+}
+
+function loadSalaryPreset(ym) {
+  const r = salaryRules[ym];
+  if (!r) return;
+  if (r.salaryType) selectSalaryType(r.salaryType);
+  const fields = {
+    sfMonthlyBase: r.monthlyBase, sfBaseProfit: r.baseProfit,
+    sfOverRate: r.overRate, sfWorkDays: r.workDays,
+    sfGasLimit: r.gasLimit, sfGasDaily: r.gasDaily,
+  };
+  Object.entries(fields).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el && val !== undefined) el.value = val;
+  });
+  const [y, m] = ym.split('-');
+  const ySel = document.getElementById('salaryApplyYear');
+  const mSel = document.getElementById('salaryApplyMonth');
+  if (ySel) ySel.value = +y;
+  if (mSel) mSel.value = +m;
+  onApplyMonthChange();
+  recalcSalary();
+  showToast(`📂 ${ym} 조건을 불러왔어요`);
+}
+window.loadSalaryPreset = loadSalaryPreset;
+
+async function deleteSalaryPreset(ym) {
+  if (!confirm(`${ym}부터 적용되던 급여 조건을 삭제할까요?\n\n매출·주유 기록은 그대로 유지되고, 통계 계산만 이전 조건으로 되돌아갑니다.`)) return;
+  try {
+    await firestore.collection('users').doc(currentUser.uid)
+      .collection('salaryRules').doc(ym).delete();
+    delete salaryRules[ym];
+    renderSalaryPresets();
+    onApplyMonthChange();
+    refreshActiveStats();
+    renderProfit();
+    showToast('🗑️ 삭제되었습니다');
+  } catch(e) { showToast('❌ 삭제 실패: ' + e.message); }
+}
+window.deleteSalaryPreset = deleteSalaryPreset;
+
 async function saveSalarySettings() {
   if (!firestore || !currentUser) return showToast('❌ 로그인 상태를 확인하세요');
   if (userPlan === 'free') return showToast('🔒 Pro 플랜에서 사용 가능합니다');
+
+  const applyMonth = getApplyMonthKey();
   const settings = {
     salaryType:   currentSalaryType,
     monthlyBase:  +document.getElementById('sfMonthlyBase')?.value || 0,
@@ -3964,36 +4122,45 @@ async function saveSalarySettings() {
     workDays:     +document.getElementById('sfWorkDays')?.value    || 0,
     gasLimit:     +document.getElementById('sfGasLimit')?.value    || 0,
     gasDaily:     +document.getElementById('sfGasDaily')?.value    || 0,
+    applyFrom:    applyMonth,
     updatedAt:    new Date().toISOString(),
   };
-  // 현재 설정 저장
+
   showLoading('💾 저장 중...');
   try {
+    // 1) 적용 월 조건으로 저장 (통계 계산의 기준)
+    await firestore.collection('users').doc(currentUser.uid)
+      .collection('salaryRules').doc(applyMonth).set(settings);
+    salaryRules[applyMonth] = settings;
+
+    // 2) 최신 설정도 함께 보관 (기본 표시용)
     await firestore.collection('users').doc(currentUser.uid).set({ settings }, { merge: true });
-    // 이달 이력도 저장
-    const now = new Date();
-    const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-    // 이달 실적 계산
-    const sel = document.getElementById('profitMonthSelect');
+
+    // 3) 적용 월 실적으로 이력 기록
+    const [y2, m2] = applyMonth.split('-').map(Number);
     let totalRev = 0, totalFuel = 0;
-    const m2use = sel?.value || monthKey;
-    const [y2, m2] = m2use.split('-').map(Number);
-    for (let d = 1; d <= new Date(y2,m2,0).getDate(); d++) {
+    for (let d = 1; d <= new Date(y2, m2, 0).getDate(); d++) {
       const key = `${y2}-${String(m2).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       totalRev  += db[key]?.revenue || 0;
       totalFuel += db[key]?.fuel    || 0;
     }
-    const netRev = totalRev - totalFuel;
-    const over   = Math.max(0, netRev - settings.monthlyBase);
-    const estPay = settings.baseProfit + Math.round(over * settings.overRate / 100);
+    const estPay = calcProfitFor(applyMonth, totalRev, totalFuel);
     await firestore.collection('users').doc(currentUser.uid)
-      .collection('salaryHistory').doc(monthKey).set({
-        ...settings, month: monthKey,
+      .collection('salaryHistory').doc(applyMonth).set({
+        ...settings, month: applyMonth,
         totalRevenue: totalRev, totalFuel, estimatedPay: estPay,
         savedAt: new Date().toISOString(),
       });
+
+    // 4) 통계 즉시 반영 (원본 매출·주유 데이터는 그대로)
+    renderSalaryPresets();
+    onApplyMonthChange();
+    recalcSalary();
+    renderProfit();
+    refreshActiveStats();
+
     hideLoading();
-    showToast('✅ 급여 설정이 저장되었습니다');
+    showToast(`✅ ${applyMonth}부터 적용되도록 저장했어요`);
     loadSalaryHistory();
   } catch(e) { hideLoading(); showToast('❌ 저장 실패: ' + e.message); }
 }
@@ -5014,16 +5181,46 @@ function renderCalendar() {
 }
 
 // ─── 순이익 계산 ───
+// 기본값 (저장된 급여 조건이 없을 때 사용)
 const BASE_GOAL = 5500000;
 const BASE_PROFIT = 1600000;
 const OVER_RATE = 0.9;
 
+// 월별 급여 조건 저장소: { '2026-07': {monthlyBase, baseProfit, overRate, salaryType, ...}, ... }
+let salaryRules = {};
+
+// 해당 월(YYYY-MM)에 적용될 조건 반환.
+// 그 달에 설정이 없으면 그 이전 가장 가까운 설정을 이어서 사용 (조건 변경 전까지 유지)
+function getSalaryRule(ym) {
+  const fallback = { monthlyBase: BASE_GOAL, baseProfit: BASE_PROFIT, overRate: OVER_RATE * 100, salaryType: 'A' };
+  if (!ym || !salaryRules || !Object.keys(salaryRules).length) return fallback;
+  if (salaryRules[ym]) return salaryRules[ym];
+  const prior = Object.keys(salaryRules).filter(k => k <= ym).sort();
+  if (!prior.length) return fallback;
+  return salaryRules[prior[prior.length - 1]];
+}
+
+// 날짜(YYYY-MM-DD) 또는 월(YYYY-MM) 기준 조건
+function getRuleForDate(dateStr) {
+  return getSalaryRule((dateStr || '').substring(0, 7));
+}
+
+// 순매출 → 예상 소득 (해당 월 조건 적용)
+function calcProfitFor(ym, revenue, fuel) {
+  const r = getSalaryRule(ym);
+  const net = revenue - (fuel || 0);
+  const base = r.monthlyBase || 0;
+  const bp   = r.baseProfit  || 0;
+  const rate = (r.overRate || 0) / 100;
+  if (net < base) return 0;
+  return bp + Math.round(Math.max(0, net - base) * rate);
+}
+
+// 기존 호출부 호환 (현재 선택 월 기준)
 function calcProfit(revenue, fuel) {
-  const net = revenue - (fuel || 0);                         // 주유비 차감 후 순매출
-  if (net < BASE_GOAL) return 0;                             // 550만 미달 → 0원
-  if (net === BASE_GOAL) return BASE_PROFIT;                 // 550만 정확히 → 160만원
-  const over = net - BASE_GOAL;
-  return BASE_PROFIT + Math.round(over * OVER_RATE);         // 초과분 × 90% 추가
+  const sel = document.getElementById('profitMonthSelect');
+  const ym = sel?.value || new Date().toISOString().substring(0,7);
+  return calcProfitFor(ym, revenue, fuel);
 }
 
 function renderProfit() {
@@ -5041,14 +5238,17 @@ function renderProfit() {
     totalFuel += db[key]?.fuel    || 0;
     totalGas  += db[key]?.gas     || 0;
   }
+  const _rule      = getSalaryRule(month);          // 이 달에 적용되는 급여 조건
+  const RULE_GOAL  = _rule.monthlyBase || 0;
+  const RULE_RATE  = (_rule.overRate || 0) / 100;
   const netRev     = totalRev - totalFuel;          // 주유비 차감 순매출
-  const profit     = calcProfit(totalRev, totalFuel); // 순매출 기준 예상 소득
-  const isOver     = netRev > BASE_GOAL;
-  const isAtGoal   = netRev >= BASE_GOAL;
-  const isUnder    = netRev < BASE_GOAL * 0.5;
-  const overAmt    = Math.max(0, netRev - BASE_GOAL);
-  const overProfit = isOver ? Math.round(overAmt * OVER_RATE) : 0;
-  const pct        = Math.min(100, Math.round(netRev / BASE_GOAL * 100));
+  const profit     = calcProfitFor(month, totalRev, totalFuel); // 이 달 조건 기준 예상 소득
+  const isOver     = netRev > RULE_GOAL;
+  const isAtGoal   = netRev >= RULE_GOAL;
+  const isUnder    = netRev < RULE_GOAL * 0.5;
+  const overAmt    = Math.max(0, netRev - RULE_GOAL);
+  const overProfit = isOver ? Math.round(overAmt * RULE_RATE) : 0;
+  const pct        = RULE_GOAL > 0 ? Math.min(100, Math.round(netRev / RULE_GOAL * 100)) : 0;
   const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
 
   const box = document.getElementById('profitResultBox');
@@ -5123,11 +5323,11 @@ function renderProfit() {
         = 총 <strong>${fmt(profit)}</strong>
       </div>` : isAtGoal ? `
       <div style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:1.3rem;color:#2ecc71;text-align:center">
-        ✅ 목표 달성! 예상 소득 <strong>160만원</strong> 확정
+        ✅ 목표 달성! 예상 소득 <strong>${fmt(_rule.baseProfit||0)}</strong> 확정
       </div>` : `
       <div style="background:rgba(245,166,35,0.07);border:1px dashed rgba(245,166,35,0.25);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:1.2rem;color:var(--text-dim);line-height:1.7;text-align:center">
-        순매출 550만원 달성 시 예상 소득 <strong style="color:var(--accent)">160만원</strong> 확정<br>
-        잔여 순매출 <strong style="color:#e8445a">${fmt(Math.max(0, BASE_GOAL - netRev))}</strong> 더 필요
+        순매출 ${fmt(RULE_GOAL)} 달성 시 예상 소득 <strong style="color:var(--accent)">${fmt(_rule.baseProfit||0)}</strong> 확정<br>
+        잔여 순매출 <strong style="color:#e8445a">${fmt(Math.max(0, RULE_GOAL - netRev))}</strong> 더 필요
       </div>`}
     </div>
   `;
@@ -5151,6 +5351,9 @@ function renderProfitTable(currentRev, currentFuel) {
   const el = document.getElementById('profitTable');
   if (!el) return;
   const fuel = currentFuel || 0;
+  const _selM = document.getElementById('profitMonthSelect')?.value || '';
+  const _r = getSalaryRule(_selM);
+  const T_GOAL = _r.monthlyBase || 0;
   let h = '';
   // 헤더 안내
   h += `<div style="font-size:1rem;color:var(--text-dim);padding:8px 12px;background:var(--surface2);border-radius:6px 6px 0 0;border:1px solid var(--border);border-bottom:none">
@@ -5159,8 +5362,8 @@ function renderProfitTable(currentRev, currentFuel) {
   samples.forEach(rev => {
     const netSample = Math.max(0, rev - fuel);
     const p = calcProfit(rev, fuel);
-    const isGoal = netSample === BASE_GOAL || (fuel === 0 && rev === BASE_GOAL);
-    const isOver = netSample > BASE_GOAL;
+    const isGoal = netSample === T_GOAL || (fuel === 0 && rev === T_GOAL);
+    const isOver = netSample > T_GOAL;
     let cls = 'profit-table-row';
     if (isGoal) cls += ' highlight';
     else if (isOver) cls += ' over';
@@ -5202,9 +5405,13 @@ function calcSimulator() {
   }
   const netVal   = val - simFuel;
   const profit   = calcProfit(val, simFuel);
-  const isOver   = netVal > BASE_GOAL;
-  const isAtGoal = netVal >= BASE_GOAL;
-  const overAmt  = Math.max(0, netVal - BASE_GOAL);
+  const _simM    = document.getElementById('profitMonthSelect')?.value || '';
+  const _sr      = getSalaryRule(_simM);
+  const S_GOAL   = _sr.monthlyBase || 0;
+  const S_RATE   = (_sr.overRate || 0) / 100;
+  const isOver   = netVal > S_GOAL;
+  const isAtGoal = netVal >= S_GOAL;
+  const overAmt  = Math.max(0, netVal - S_GOAL);
   const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
 
   box.style.display = 'block';
@@ -5220,13 +5427,13 @@ function calcSimulator() {
     ${isOver ? `
     <div style="margin-top:10px;font-size:1.3rem;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:10px">
       기본 예상 소득 &nbsp;<strong style="color:#2ecc71">${fmt(BASE_PROFIT)}</strong><br>
-      초과 ${fmt(overAmt)} × 90% = <strong style="color:#a78bfa">+${fmt(Math.round(overAmt * OVER_RATE))}</strong>
+      초과 ${fmt(overAmt)} × ${_sr.overRate||0}% = <strong style="color:#a78bfa">+${fmt(Math.round(overAmt * S_RATE))}</strong>
     </div>` : isAtGoal ? `
     <div style="margin-top:8px;font-size:1.3rem;color:#2ecc71">✅ 목표 달성 — 예상 소득 160만원 확정</div>
     ` : `
     <div style="margin-top:8px;font-size:1.3rem;color:var(--text-dim)">
-      순매출 기준 목표 550만원의 <strong style="color:var(--accent)">${Math.round(Math.max(0,netVal) / BASE_GOAL * 100)}%</strong> 달성<br>
-      잔여 순매출 <strong style="color:var(--accent2)">${fmt(Math.max(0, BASE_GOAL - netVal))}</strong> 더 필요<br>
+      순매출 기준 목표 ${fmt(S_GOAL)}의 <strong style="color:var(--accent)">${S_GOAL>0?Math.round(Math.max(0,netVal) / S_GOAL * 100):0}%</strong> 달성<br>
+      잔여 순매출 <strong style="color:var(--accent2)">${fmt(Math.max(0, S_GOAL - netVal))}</strong> 더 필요<br>
       <span style="color:var(--accent2);margin-top:4px;display:inline-block">550만원 달성 전까지 예상 소득 <strong>0원</strong></span>
     </div>`}
   `;
