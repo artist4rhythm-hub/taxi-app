@@ -36,7 +36,7 @@
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 15px;
     min-height: 100vh;
-    padding: 0 16px 40px;
+    padding: 0 0 40px;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -59,6 +59,8 @@
     gap: 12px;
     max-width: 860px;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
   }
   .app-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .app-brand-icon { font-size: 1.8rem; flex-shrink: 0; }
@@ -91,7 +93,10 @@
   }
   .app-logout-btn:hover { border-color: var(--accent2); color: var(--accent2); }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 0 4px; }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 20px; width: 100%; box-sizing: border-box; }
+  @media (max-width: 600px) {
+    .container { padding: 0 14px; }
+  }
 
   /* Tabs */
   .tabs {
@@ -1685,7 +1690,7 @@
 
     <!-- 가스 현황 카드 -->
     <div class="card" id="gasCard">
-      <div class="card-title">🔵 이달 가스 현황 <span style="font-size:0.85rem;color:var(--text-dim);font-weight:400">(월 한도: 1,000L)</span></div>
+      <div class="card-title">🔵 이달 가스 현황 <span id="gasLimitLabel" style="font-size:0.85rem;color:var(--text-dim);font-weight:400">(월 한도: 1,000L)</span></div>
       <div class="gas-progress-wrap">
         <div class="gas-bar-bg">
           <div class="gas-bar-fill" id="gasBarFill"></div>
@@ -1896,18 +1901,18 @@
         <div class="profit-rule-title">📌 예상 소득 계산 구조</div>
         <div class="profit-rule-row">
           <span class="rule-label">기본 목표 매출</span>
-          <span class="rule-val">550만원</span>
+          <span class="rule-val" id="ruleGoalVal">550만원</span>
         </div>
         <div class="profit-rule-row">
           <span class="rule-label">목표 달성 시 예상 소득</span>
-          <span class="rule-val gold">160만원 고정</span>
+          <span class="rule-val gold" id="ruleBaseVal">160만원 고정</span>
         </div>
         <div class="profit-rule-row">
-          <span class="rule-label">550만원 초과분 처리</span>
-          <span class="rule-val green">초과금액 × 90%</span>
+          <span class="rule-label" id="ruleOverLabel">초과분 처리</span>
+          <span class="rule-val green" id="ruleOverVal">초과금액 × 90%</span>
         </div>
-        <div class="profit-rule-desc">
-          매출이 550만원을 넘으면, 초과된 금액의 90%가 추가 예상 소득으로 발생합니다.
+        <div class="profit-rule-desc" id="ruleDesc">
+          목표 매출을 넘으면, 초과된 금액의 일정 비율이 추가 예상 소득으로 발생합니다.
         </div>
       </div>
 
@@ -2685,6 +2690,21 @@ function refreshActiveStats() {
   if (_activeTab === 'calendar') renderCalendar();
   if (_activeTab === 'profit') renderProfit();
 }
+
+// 급여 조건 변경 시: 모든 통계 화면을 한 번에 다시 계산
+function renderAllStats() {
+  const safe = fn => { try { fn(); } catch(e) {} };
+  safe(renderWeekly);
+  safe(renderMonthly);
+  safe(renderTrend);
+  safe(renderCompare);
+  safe(calcFuelEff);
+  safe(renderWeekdayPattern);
+  safe(renderCalendar);
+  safe(renderProfit);
+  safe(renderRecentLog);
+}
+window.renderAllStats = renderAllStats;
 
 // ─── 초기화 ───
 // ─── 앱 시작 (잠금 해제 후 호출) ───
@@ -4047,6 +4067,7 @@ async function loadSalaryRules() {
     snap.forEach(d => { salaryRules[d.id] = d.data(); });
     renderSalaryPresets();
     onApplyMonthChange();
+    renderAllStats();
   } catch(e) { console.warn('[salaryRules]', e.message); }
 }
 
@@ -4102,8 +4123,7 @@ async function deleteSalaryPreset(ym) {
     delete salaryRules[ym];
     renderSalaryPresets();
     onApplyMonthChange();
-    refreshActiveStats();
-    renderProfit();
+    renderAllStats();
     showToast('🗑️ 삭제되었습니다');
   } catch(e) { showToast('❌ 삭제 실패: ' + e.message); }
 }
@@ -4156,8 +4176,7 @@ async function saveSalarySettings() {
     renderSalaryPresets();
     onApplyMonthChange();
     recalcSalary();
-    renderProfit();
-    refreshActiveStats();
+    renderAllStats();
 
     hideLoading();
     showToast(`✅ ${applyMonth}부터 적용되도록 저장했어요`);
@@ -4803,7 +4822,18 @@ function renderWeekly() {
 
 // ─── 월간 통계 ───
 let monthChartInst = null;
-const MONTHLY_GOAL = 5500000;
+const MONTHLY_GOAL = 5500000; // 기본값 (급여 조건 미설정 시)
+
+// 해당 월의 목표 매출 (급여 설정의 '월 기준운송수입')
+function getMonthGoal(ym) {
+  const r = getSalaryRule(ym);
+  return (r && r.monthlyBase > 0) ? r.monthlyBase : MONTHLY_GOAL;
+}
+// 해당 월의 가스 한도
+function getMonthGasLimit(ym) {
+  const r = getSalaryRule(ym);
+  return (r && r.gasLimit > 0) ? r.gasLimit : 1000;
+}
 
 function renderMonthly() {
   const month = document.getElementById('monthSelect').value;
@@ -4832,9 +4862,12 @@ function renderMonthly() {
   document.getElementById('monthAvgRevenue').textContent = fmt(avgRev);
   document.getElementById('monthNet').textContent = fmt(totalRev - totalFuel);
 
-  // ─── 목표 달성 배너 ───
-  const remaining = Math.max(0, MONTHLY_GOAL - totalRev);
-  const pct = Math.min(100, Math.round(totalRev / MONTHLY_GOAL * 100));
+  // ─── 목표 달성 배너 (해당 월 급여 조건 반영) ───
+  const M_GOAL = getMonthGoal(month);
+  const goalTargetEl = document.querySelector('#goalBanner .goal-target span');
+  if (goalTargetEl) goalTargetEl.textContent = fmt(M_GOAL);
+  const remaining = Math.max(0, M_GOAL - totalRev);
+  const pct = M_GOAL > 0 ? Math.min(100, Math.round(totalRev / M_GOAL * 100)) : 0;
   const bar = document.getElementById('goalBar');
   const pctEl = document.getElementById('goalPct');
   const chip = document.getElementById('goalChip');
@@ -4858,14 +4891,14 @@ function renderMonthly() {
   const neededEl = document.getElementById('goalNeededAvg');
   const neededLbl = document.getElementById('goalNeededLabel');
 
-  if (totalRev >= MONTHLY_GOAL) {
+  if (totalRev >= M_GOAL) {
     // 목표 달성!
     bar.className = 'goal-progress-fill complete';
     chip.textContent = '🎉 목표 달성!';
     chip.className = 'status-chip chip-purple';
     neededEl.textContent = '달성 완료!';
     neededEl.style.color = '#a78bfa';
-    neededLbl.textContent = `목표 초과: +${fmt(totalRev - MONTHLY_GOAL)}`;
+    neededLbl.textContent = `목표 초과: +${fmt(totalRev - M_GOAL)}`;
   } else if (!isCurrentMonth) {
     // 지난달
     bar.className = 'goal-progress-fill danger';
@@ -4957,7 +4990,9 @@ function renderMonthly() {
 
 
   // ─── 가스 현황 업데이트 ───
-  const GAS_LIMIT = 1000; // 월 한도 1000L
+  const GAS_LIMIT = getMonthGasLimit(month); // 급여 설정의 월 가스 한도
+  const gasTitleEl = document.getElementById('gasLimitLabel');
+  if (gasTitleEl) gasTitleEl.textContent = `(월 한도: ${GAS_LIMIT.toLocaleString()}L)`;
   const gasArr = [];
   for (let d = 1; d <= daysInMonth; d++) {
     const key = `${String(y).padStart(2,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
@@ -5142,10 +5177,11 @@ function renderCalendar() {
   const monthTotalRev = Object.entries(db)
     .filter(([k]) => k.startsWith(month))
     .reduce((sum, [,v]) => sum + (v.revenue || 0), 0);
-  const calRemaining    = Math.max(0, MONTHLY_GOAL - monthTotalRev);
+  const C_GOAL          = getMonthGoal(month);
+  const calRemaining    = Math.max(0, C_GOAL - monthTotalRev);
   const calNeededPerDay = (isCurrentMonth && remainingDays > 0)
     ? Math.ceil(calRemaining / remainingDays) : null;
-  const calPct = Math.min(100, Math.round(monthTotalRev / MONTHLY_GOAL * 100));
+  const calPct = C_GOAL > 0 ? Math.min(100, Math.round(monthTotalRev / C_GOAL * 100)) : 0;
 
   const goalSummaryEl = document.getElementById('calGoalSummary');
   if (goalSummaryEl) {
@@ -5153,7 +5189,7 @@ function renderCalendar() {
     goalSummaryEl.innerHTML = `
       <div style="margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:1.3rem;color:var(--text-dim);font-weight:700">🎯 월 목표 550만원</span>
+          <span style="font-size:1.3rem;color:var(--text-dim);font-weight:700">🎯 월 목표 ${fmt(C_GOAL)}</span>
           <span style="font-size:2rem;font-weight:700;color:${pctColor}">${calPct}%</span>
         </div>
         <div class="goal-progress-bar" style="height:8px">
@@ -5251,6 +5287,14 @@ function renderProfit() {
   const pct        = RULE_GOAL > 0 ? Math.min(100, Math.round(netRev / RULE_GOAL * 100)) : 0;
   const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
 
+  // 계산 구조 안내를 이 달 조건으로 갱신
+  const _setTxt = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
+  _setTxt('ruleGoalVal', fmt(RULE_GOAL));
+  _setTxt('ruleBaseVal', fmt(_rule.baseProfit || 0) + ' 고정');
+  _setTxt('ruleOverLabel', fmt(RULE_GOAL) + ' 초과분 처리');
+  _setTxt('ruleOverVal', '초과금액 × ' + (_rule.overRate || 0) + '%');
+  _setTxt('ruleDesc', `순매출이 ${fmt(RULE_GOAL)}을 넘으면, 초과된 금액의 ${_rule.overRate || 0}%가 추가 예상 소득으로 발생합니다.`);
+
   const box = document.getElementById('profitResultBox');
   if (!box) return;
 
@@ -5279,7 +5323,7 @@ function renderProfit() {
     <div style="background:rgba(245,166,35,0.06);border:1px dashed rgba(245,166,35,0.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:1.1rem;color:var(--text-dim);line-height:1.9">
       📌 <strong style="color:var(--text)">예상 소득 계산 기준</strong><br>
       순매출 <strong style="color:#2ecc71">${fmt(totalRev)} − ${fmt(totalFuel)} = ${fmt(netRev)}</strong> 기준으로 계산<br>
-      순매출 550만원 달성 시 기본 <strong style="color:var(--accent)">160만원</strong>
+      순매출 ${fmt(RULE_GOAL)} 달성 시 기본 <strong style="color:var(--accent)">${fmt(_rule.baseProfit||0)}</strong>
       + 초과분 × <strong style="color:#a78bfa">90%</strong>
     </div>
 
