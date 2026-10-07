@@ -1,19 +1,26 @@
-/* 택시 매출 관리 - Service Worker */
-const CACHE = 'taxi-app-v1';
+/* 황금기사 (Gold Knight) - Service Worker */
+const CACHE = 'gold-knight-v4';
 
 /* 앱 셸 (상대경로 + 외부 CDN 스크립트) */
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './app-config.js',
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png',
   'https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js',
+  './terms.html',
+  './privacy.html',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'
 ];
 
 /* 절대 캐시하면 안 되는 실시간 데이터/인증 엔드포인트 */
-const NO_CACHE = /(firestore\.googleapis\.com|identitytoolkit\.googleapis\.com|securetoken\.googleapis\.com|firebaseinstallations\.googleapis\.com|firebaseio\.com|google-analytics\.com|googletagmanager\.com|www\.googleapis\.com)/i;
+const NO_CACHE = /(firebaseappcheck\.googleapis\.com|recaptcha|www\.google\.com|firestore\.googleapis\.com|identitytoolkit\.googleapis\.com|securetoken\.googleapis\.com|firebaseinstallations\.googleapis\.com|firebaseio\.com|google-analytics\.com|googletagmanager\.com|www\.googleapis\.com)/i;
 
 self.addEventListener('install', (e) => {
   e.waitUntil((async () => {
@@ -47,11 +54,28 @@ self.addEventListener('fetch', (e) => {
       try {
         const fresh = await fetch(req);
         const cache = await caches.open(CACHE);
-        cache.put('./index.html', fresh.clone());
+        // 앱 첫 화면만 index.html로 저장 (약관 등 다른 페이지가 덮어쓰지 않도록)
+        const isApp = /\/(index\.html)?$/.test(url.pathname);
+        if (fresh.ok) cache.put(isApp ? './index.html' : req, fresh.clone());
         return fresh;
       } catch (err) {
         const cache = await caches.open(CACHE);
-        return (await cache.match('./index.html')) || (await cache.match('./')) || Response.error();
+        return (await cache.match(req)) || (await cache.match('./index.html')) || (await cache.match('./')) || Response.error();
+      }
+    })());
+    return;
+  }
+
+  // 설정 파일은 항상 최신으로 (네트워크 우선 → 실패 시 캐시)
+  if (url.origin === location.origin && /app-config\.js$/.test(url.pathname)) {
+    e.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      try {
+        const fresh = await fetch(req, { cache: 'no-store' });
+        if (fresh.ok) cache.put(req, fresh.clone());
+        return fresh;
+      } catch (err) {
+        return (await cache.match(req)) || Response.error();
       }
     })());
     return;

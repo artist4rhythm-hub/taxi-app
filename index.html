@@ -3,28 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚕 택시 매출 관리</title>
+<title>황금기사 · Gold Knight</title>
+  <meta name="description" content="대한민국 황금기사단에 오신 것을 환영합니다. 택시 기사님의 하루 목표와 예상 월급을 한눈에.">
   <!-- ─── PWA ─── -->
-  <meta name="theme-color" content="#0d0f14">
+  <meta name="theme-color" content="#0e0f12">
+  <script>
+  /* 화면 밝기·글자 크기를 그리기 전에 먼저 적용 (깜빡임 방지) */
+  (function(){
+    var mode='auto', fs='large';
+    try { mode = localStorage.getItem('themeMode') || 'auto'; fs = localStorage.getItem('fontSize') || 'normal'; } catch(e){}
+    var h = new Date().getHours();
+    var t = (mode==='day'||mode==='night') ? mode : ((h>=6 && h<19) ? 'day' : 'night');
+    document.documentElement.setAttribute('data-theme', t);
+    var px = {small:14, normal:16, large:18, xlarge:20, xxlarge:22}[fs] || 16;
+    document.documentElement.style.fontSize = px + 'px';
+    try {
+      var d = JSON.parse(localStorage.getItem('fsDetail') || '{}');
+      ['num','title','ui','sub'].forEach(function(k){ if (d[k]) document.documentElement.style.setProperty('--' + k + '-scale', d[k]); });
+      var bf = localStorage.getItem('brandFont'); if (bf) document.documentElement.setAttribute('data-brand-font', bf);
+    } catch(e){}
+  })();
+  </script>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="택시매출">
-  <link rel="apple-touch-icon" href="data:image/png;base64,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">
+  <meta name="apple-mobile-web-app-title" content="황금기사">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icon-192.png">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Oswald:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Oswald:wght@400;700&family=Outfit:wght@400;500;600&display=swap');
 
   :root {
-    --bg: #0d0f14;
-    --surface: #161923;
-    --surface2: #1e2333;
-    --border: #2a3045;
-    --accent: #f5a623;
+    --bg: #0e0f12;
+    --surface: #17191e;
+    --surface2: #1f2228;
+    --border: #2a2d34;
+    --accent: #f2b33d;
     --accent2: #e8445a;
     --green: #2ecc71;
-    --text: #e8eaf0;
-    --text-dim: #7a8099;
+    --text: #f2f0ea;
+    --text-dim: #a3a5ab;
     --radius: 12px;
     /* 고급감을 위한 깊이/광택 토큰 */
     --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
@@ -32,7 +51,55 @@
     --shadow-lg: 0 12px 36px rgba(0,0,0,.42);
     --hairline: rgba(255,255,255,.06);
     --accent-soft: rgba(245,166,35,.12);
+    --accent-ink: #f2b33d;      /* 노란색 글씨 (배경 위에서 읽히는 색) */
+    --on-accent: #16120a;       /* 노란 버튼 위 글씨 */
+    --blue: #4db8ff;
+    --purple: #a78bfa;
+    --header-bg: rgba(14,15,18,.94);
+    --line: #272a31;
+    --ok: #3dd68c;
+    --ok-soft: rgba(61,214,140,.16);
+    --warn: #f2b33d;
+    --warn-soft: rgba(242,179,61,.16);
+    --bad: #ff6b6b;
+    --bad-soft: rgba(255,107,107,.16);
+    --num: 'Outfit', 'Noto Sans KR', sans-serif;
+    --light-off: #3a3f4c;
+    --ring-track: #232838;
   }
+
+  /* ─── 주간 모드 (밝은 화면) ─── */
+  html[data-theme="day"] {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --surface2: #efece4;
+    --border: #e2ded3;
+    --line: #e2ded3;
+    --accent: #f2b33d;
+    --accent-ink: #94570a;
+    --ok: #13804a;
+    --ok-soft: rgba(19,128,74,.14);
+    --warn: #b7791f;
+    --warn-soft: rgba(242,179,61,.2);
+    --bad: #c42f47;
+    --bad-soft: rgba(196,47,71,.12);
+    --accent2: #c42f47;
+    --green: #17834a;
+    --text: #16181d;
+    --text-dim: #555b66;
+    --blue: #1767b0;
+    --purple: #6b46c9;
+    --hairline: rgba(0,0,0,.07);
+    --accent-soft: rgba(245,166,35,.18);
+    --shadow-sm: 0 1px 2px rgba(30,25,10,.08);
+    --shadow-md: 0 4px 14px rgba(30,25,10,.08);
+    --shadow-lg: 0 10px 30px rgba(30,25,10,.12);
+    --header-bg: rgba(246,244,239,.94);
+    --light-off: #c9c4b6;
+    --ring-track: #e7e2d5;
+  }
+  html[data-theme="day"] input, html[data-theme="day"] select, html[data-theme="day"] textarea { color-scheme: light; }
+  html[data-theme="night"] input, html[data-theme="night"] select, html[data-theme="night"] textarea { color-scheme: dark; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,7 +107,7 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 15px;
+    font-size: .95rem;
     min-height: 100vh;
     padding: 0 0 40px;
     -webkit-font-smoothing: antialiased;
@@ -52,7 +119,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(13,15,20,.92);
+    background: var(--header-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
@@ -72,7 +139,7 @@
   .app-brand-icon { font-size: 1.8rem; flex-shrink: 0; }
   .app-brand-text { min-width: 0; }
   .app-brand-title {
-    font-size: 1.35rem; font-weight: 900; color: var(--accent);
+    font-size: 1.35rem; font-weight: 900; color: var(--accent-ink);
     letter-spacing: -.3px; line-height: 1.2; white-space: nowrap;
   }
   .app-brand-sub {
@@ -108,7 +175,7 @@
   .tabs {
     display: flex;
     gap: 3px;
-    background: linear-gradient(180deg, #1a1e2b, var(--surface));
+    background: linear-gradient(180deg, var(--surface2), var(--surface));
     border-radius: 14px;
     padding: 5px;
     margin-bottom: 18px;
@@ -177,20 +244,20 @@
     font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 600;
   }
   .apply-month-hint { font-size: 12px; color: var(--text-dim); margin-top: 8px; line-height: 1.6; }
-  .apply-month-hint b { color: var(--accent); }
+  .apply-month-hint b { color: var(--accent-ink); }
   .preset-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
   .preset-item {
     display: flex; align-items: center; gap: 8px; padding: 9px 12px;
     background: var(--surface2); border: 1px solid var(--border); border-radius: 9px;
   }
-  .preset-month { font-weight: 700; font-size: 13px; color: var(--accent); min-width: 62px; }
+  .preset-month { font-weight: 700; font-size: 13px; color: var(--accent-ink); min-width: 62px; }
   .preset-type { font-size: 12px; color: var(--text-dim); flex: 1; }
   .preset-btn {
     padding: 5px 11px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 600;
     background: transparent; border: 1px solid var(--border); color: var(--text-dim);
     font-family: 'Noto Sans KR', sans-serif;
   }
-  .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .preset-btn:hover { border-color: var(--accent); color: var(--accent-ink); }
   .preset-btn.del:hover { border-color: var(--accent2); color: var(--accent2); }
   body.large-mode  .apply-month-hint, body.large-mode  .preset-type { font-size: 15px; }
   body.xlarge-mode .apply-month-hint, body.xlarge-mode .preset-type { font-size: 17px; }
@@ -223,7 +290,7 @@
   /* Cards */
   .card {
     position: relative;
-    background: linear-gradient(180deg, #1a1e2b 0%, var(--surface) 46%);
+    background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 46%);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 20px;
@@ -337,7 +404,7 @@
 
   .log-date { font-size: 1.22rem; color: var(--text-dim); }
   .log-amount { font-weight: 700; font-size: 1.5rem; }
-  .log-amount.revenue-val { color: var(--accent); }
+  .log-amount.revenue-val { color: var(--accent-ink); }
   .log-amount.fuel-val { color: var(--accent2); }
 
   .log-right { display: flex; align-items: center; gap: 12px; }
@@ -378,7 +445,7 @@
     letter-spacing: -.5px;
     font-variant-numeric: tabular-nums;
   }
-  .stat-value.gold { color: var(--accent); }
+  .stat-value.gold { color: var(--accent-ink); }
   .stat-value.red { color: var(--accent2); }
   .stat-value.green { color: var(--green); }
 
@@ -411,7 +478,7 @@
   }
   .ti-up   { background: rgba(46,204,113,.15); color: #2ecc71; }
   .ti-down { background: rgba(232,68,90,.15);  color: #e8445a; }
-  .ti-flat { background: rgba(122,128,153,.15); color: #7a8099; }
+  .ti-flat { background: rgba(122,128,153,.15); color: var(--text-dim); }
   .ti-key  { color: var(--text-dim); }
   .ti-val  { font-weight: 700; }
   body.large-mode  .trend-insight, body.large-mode  .weekday-insight { font-size: 16px; }
@@ -477,11 +544,11 @@
     align-self: flex-end;
   }
 
-  .cal-past  { background: rgba(42,48,69,0.5); color: var(--text-dim); }
+  .cal-past  { background: var(--surface2); color: var(--text-dim); }
   .cal-past .cal-day-num { color: var(--text-dim); }
 
   .cal-today { background: rgba(245,166,35,0.18); border-color: var(--accent) !important; }
-  .cal-today .cal-day-num { color: var(--accent); }
+  .cal-today .cal-day-num { color: var(--accent-ink); }
 
   .cal-future { background: var(--surface2); color: var(--text); border-color: var(--border); }
   .cal-future .cal-day-num { color: var(--text); }
@@ -489,9 +556,9 @@
   .cal-has-data { border-color: rgba(245,166,35,0.4) !important; }
 
   /* 셀 안 데이터 라인 */
-  .cal-rev  { color: #f5a623; font-weight: 700; font-size: 0.88rem; line-height: 1.3; width: 100%; }
+  .cal-rev  { color: var(--accent-ink); font-weight: 700; font-size: 0.88rem; line-height: 1.3; width: 100%; }
   .cal-fuel { color: #e8445a; font-size: 0.82rem; line-height: 1.3; width: 100%; }
-  .cal-gas  { color: #4db8ff; font-size: 0.82rem; line-height: 1.3; width: 100%; }
+  .cal-gas  { color: var(--blue); font-size: 0.82rem; line-height: 1.3; width: 100%; }
 
   .remaining-info {
     display: flex;
@@ -509,7 +576,7 @@
     text-align: center;
   }
 
-  .badge-num { font-family: 'Oswald', sans-serif; font-size: 2.7rem; color: var(--accent); }
+  .badge-num { font-family: 'Oswald', sans-serif; font-size: 2.7rem; color: var(--accent-ink); }
   .badge-label { font-size: 1.12rem; color: var(--text-dim); margin-top: 2px; }
 
   /* Week selector */
@@ -531,7 +598,7 @@
     transition: all 0.2s;
   }
 
-  .week-nav button:hover { border-color: var(--accent); color: var(--accent); }
+  .week-nav button:hover { border-color: var(--accent); color: var(--accent-ink); }
   .week-nav span { font-weight: 700; font-size: 1.36rem; }
 
   .empty-state {
@@ -545,19 +612,20 @@
     position: fixed;
     bottom: 24px;
     left: 50%;
-    transform: translateX(-50%) translateY(80px);
+    transform: translateX(-50%) translateY(calc(100% + 40px));
+    visibility: hidden;
     background: var(--green);
     color: #000;
     font-weight: 700;
     padding: 12px 24px;
     border-radius: 999px;
     font-size: 1.32rem;
-    transition: transform 0.3s;
+    transition: transform 0.3s, visibility 0.3s;
     z-index: 999;
     white-space: nowrap;
   }
 
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.show { transform: translateX(-50%) translateY(0); visibility: visible; }
 
   .section-title {
     font-size: 1.25rem;
@@ -573,7 +641,7 @@
   /* Goal tracker */
   .goal-banner {
     box-shadow: var(--shadow-md);
-    background: linear-gradient(135deg, #1a1f2e 0%, #1e2333 100%);
+    background: linear-gradient(135deg, var(--surface2) 0%, var(--surface2) 100%);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 20px 24px;
@@ -603,7 +671,7 @@
     font-size: 1.08rem;
     font-weight: 700;
     letter-spacing: 2px;
-    color: var(--accent);
+    color: var(--accent-ink);
     text-transform: uppercase;
   }
 
@@ -614,7 +682,7 @@
   }
 
   .goal-target span {
-    color: var(--accent);
+    color: var(--accent-ink);
     font-size: 1.66rem;
   }
 
@@ -647,7 +715,7 @@
   }
 
   .goal-progress-fill.complete {
-    background: linear-gradient(90deg, #a78bfa, #7c3aed);
+    background: linear-gradient(90deg, var(--purple), #7c3aed);
   }
 
   .goal-stats-row {
@@ -660,7 +728,7 @@
     .goal-stats-row { grid-template-columns: repeat(3, 1fr); }
   }
 
-  .goal-stat {
+  .goal-stat { min-width: 0; overflow-wrap: anywhere; word-break: keep-all;
     background: var(--bg);
     border-radius: 8px;
     padding: 12px;
@@ -685,7 +753,7 @@
     font-family: 'Oswald', sans-serif;
     font-size: 3.0rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--accent-ink);
   }
 
   .status-chip {
@@ -699,9 +767,9 @@
   }
 
   .chip-green { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
-  .chip-orange { background: rgba(245,166,35,0.15); color: var(--accent); border: 1px solid rgba(245,166,35,0.3); }
+  .chip-orange { background: rgba(245,166,35,0.15); color: var(--accent-ink); border: 1px solid rgba(245,166,35,0.3); }
   .chip-red { background: rgba(232,68,90,0.15); color: var(--accent2); border: 1px solid rgba(232,68,90,0.3); }
-  .chip-purple { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+  .chip-purple { background: rgba(167,139,250,0.15); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
 
   .needed-avg-box {
     background: var(--bg);
@@ -715,7 +783,7 @@
   .needed-avg-box .big {
     font-family: 'Oswald', sans-serif;
     font-size: 3.0rem;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-weight: 700;
   }
 
@@ -757,7 +825,7 @@
 
   .rule-label { color: var(--text-dim); }
   .rule-val { font-weight: 700; color: var(--text); }
-  .rule-val.gold { color: var(--accent); }
+  .rule-val.gold { color: var(--accent-ink); }
   .rule-val.green { color: var(--green); }
 
   .profit-rule-desc {
@@ -771,7 +839,7 @@
 
   /* 결과 박스 */
   .profit-result-main {
-    background: linear-gradient(135deg, #1a1f2e, #1e2333);
+    background: linear-gradient(135deg, var(--surface2), var(--surface2));
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 20px;
@@ -788,7 +856,7 @@
   }
 
   .profit-result-main.over-goal::before {
-    background: linear-gradient(90deg, #a78bfa, #7c3aed);
+    background: linear-gradient(90deg, var(--purple), #7c3aed);
   }
 
   .profit-result-main.under-goal::before {
@@ -831,7 +899,7 @@
     padding: 12px 16px;
     margin-top: 12px;
     font-size: 1.26rem;
-    color: #a78bfa;
+    color: var(--purple);
     text-align: center;
     line-height: 1.5;
   }
@@ -873,7 +941,7 @@
   }
 
   .profit-table-row.over {
-    border-left-color: #a78bfa;
+    border-left-color: var(--purple);
     background: rgba(167,139,250,0.06);
   }
 
@@ -885,7 +953,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(13,15,20,0.85);
+    background: var(--header-bg);
     z-index: 9999;
     align-items: center;
     justify-content: center;
@@ -929,23 +997,23 @@
 
 
   /* ─── 인증 화면 ─── */
-  #authOverlay { position:fixed; inset:0; background:#0d0f14; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; overflow-y:auto; }
+  #authOverlay { position:fixed; inset:0; background:var(--bg); z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; overflow-y:auto; }
   .auth-icon { font-size:5rem; margin-bottom:12px; animation:lkbob 2.5s ease-in-out infinite; }
   @keyframes lkbob { 0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-9px) rotate(4deg);} }
   .auth-title { font-size:2.2rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
-  .auth-sub   { font-size:1.1rem; color:#7a8099; margin-bottom:28px; letter-spacing:1px; }
-  .auth-card  { background:#161923; border:1px solid #2a3045; border-radius:18px; padding:28px 24px 22px; width:100%; max-width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
-  .auth-tabs  { display:flex; gap:0; margin-bottom:22px; border-radius:10px; overflow:hidden; border:1px solid #2a3045; }
-  .auth-tab   { flex:1; padding:11px; text-align:center; font-size:1.3rem; font-weight:700; cursor:pointer; background:#1e2333; color:#7a8099; transition:all 0.2s; border:none; font-family:'Noto Sans KR',sans-serif; }
+  .auth-sub   { font-size:1.1rem; color:var(--text-dim); margin-bottom:28px; letter-spacing:1px; }
+  .auth-card  { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:28px 24px 22px; width:100%; max-width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+  .auth-tabs  { display:flex; gap:0; margin-bottom:22px; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+  .auth-tab   { flex:1; padding:11px; text-align:center; font-size:1.3rem; font-weight:700; cursor:pointer; background:var(--surface2); color:var(--text-dim); transition:all 0.2s; border:none; font-family:'Noto Sans KR',sans-serif; }
   .auth-tab.active { background:#f5a623; color:#000; }
-  .auth-label { font-size:1.1rem; color:#7a8099; margin-bottom:6px; font-weight:700; }
-  .auth-input { width:100%; background:#1e2333; border:2px solid #2a3045; border-radius:10px; padding:13px 16px; font-size:1.5rem; color:#e8eaf0; font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; box-sizing:border-box; margin-bottom:12px; }
+  .auth-label { font-size:1.1rem; color:var(--text-dim); margin-bottom:6px; font-weight:700; }
+  .auth-input { width:100%; background:var(--surface2); border:2px solid var(--border); border-radius:10px; padding:13px 16px; font-size:1.5rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s; box-sizing:border-box; margin-bottom:12px; }
   .auth-input:focus { border-color:#f5a623; }
   .auth-btn   { width:100%; padding:14px; background:#f5a623; border:none; border-radius:10px; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:1.5rem; font-weight:900; cursor:pointer; transition:all 0.2s; margin-top:4px; }
   .auth-btn:hover { background:#f7b84b; transform:translateY(-1px); }
   .auth-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
   .auth-err   { text-align:center; color:#e8445a; font-size:1.2rem; margin-top:12px; min-height:20px; font-weight:700; display:none; }
-  .auth-footer{ text-align:center; color:#7a8099; font-size:1rem; margin-top:20px; }
+  .auth-footer{ text-align:center; color:var(--text-dim); font-size:1rem; margin-top:20px; }
   @keyframes lkshake { 0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);} }
   .auth-shake { animation:lkshake 0.4s ease; }
   .user-bar   { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:2px; }
@@ -986,7 +1054,7 @@
 
 
   /* ─── 가스 현황 ─── */
-  .stat-value.blue { color: #4db8ff; }
+  .stat-value.blue { color: var(--blue); }
   .gas-progress-wrap {
     display: flex; align-items: center; gap: 10px; margin-top: 8px;
   }
@@ -996,12 +1064,12 @@
   }
   .gas-bar-fill {
     height: 100%; width: 0%; border-radius: 7px;
-    background: linear-gradient(90deg, #4db8ff, #a78bfa);
+    background: linear-gradient(90deg, var(--blue), var(--purple));
     transition: width 0.5s ease;
   }
   .gas-bar-fill.warn { background: linear-gradient(90deg, #f5a623, #e8445a); }
   .gas-pct {
-    font-size: 1rem; font-weight: 900; color: #4db8ff; min-width: 48px; text-align: right;
+    font-size: 1rem; font-weight: 900; color: var(--blue); min-width: 48px; text-align: right;
   }
   .gas-pct.warn { color: var(--accent2); }
 
@@ -1043,9 +1111,9 @@
   }
   .daily-table tbody tr:hover { background: var(--surface2); }
   .daily-table tbody tr.today-row { background: rgba(245,166,35,0.08); }
-  .daily-table .val-rev  { color: var(--accent); font-weight: 700; }
+  .daily-table .val-rev  { color: var(--accent-ink); font-weight: 700; }
   .daily-table .val-fuel { color: var(--accent2); }
-  .daily-table .val-gas  { color: #4db8ff; }
+  .daily-table .val-gas  { color: var(--blue); }
   .daily-table .val-net.positive { color: var(--green); }
   .daily-table .val-net.negative { color: var(--accent2); }
   .daily-table .val-empty { color: var(--border); }
@@ -1093,9 +1161,9 @@
     align-items: center;
   }
 
-  .lds-rev  { font-size: 1.05rem; color: var(--accent);  font-weight: 700; }
+  .lds-rev  { font-size: 1.05rem; color: var(--accent-ink);  font-weight: 700; }
   .lds-fuel { font-size: 1.05rem; color: var(--accent2); font-weight: 700; }
-  .lds-gas  { font-size: 1.05rem; color: #4db8ff;        font-weight: 700; }
+  .lds-gas  { font-size: 1.05rem; color: var(--blue);        font-weight: 700; }
 
   .log-entry {
     display: flex;
@@ -1110,7 +1178,7 @@
 
   .log-entry-rev  { border-left: 3px solid var(--accent); }
   .log-entry-fuel { border-left: 3px solid var(--accent2); }
-  .log-entry-gas  { border-left: 3px solid #4db8ff; }
+  .log-entry-gas  { border-left: 3px solid var(--blue); }
 
   .log-entry-left {
     display: flex;
@@ -1143,9 +1211,9 @@
     font-size: 1.3rem;
     font-weight: 700;
   }
-  .log-entry-rev  .log-entry-val { color: var(--accent); }
+  .log-entry-rev  .log-entry-val { color: var(--accent-ink); }
   .log-entry-fuel .log-entry-val { color: var(--accent2); }
-  .log-entry-gas  .log-entry-val { color: #4db8ff; }
+  .log-entry-gas  .log-entry-val { color: var(--blue); }
 
   .btn-log-del {
     background: transparent;
@@ -1194,10 +1262,10 @@
   .admin-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
   .admin-stat { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; }
   .admin-stat .as-label { font-size:1.05rem; color:var(--text-dim); margin-bottom:4px; }
-  .admin-stat .as-value { font-size:1.9rem; font-weight:800; color:var(--accent); }
+  .admin-stat .as-value { font-size:1.9rem; font-weight:800; color: var(--accent-ink); }
 
   .admin-stat-box { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
-  .admin-stat-num { font-size:2rem; font-weight:900; color:var(--accent); }
+  .admin-stat-num { font-size:2rem; font-weight:900; color: var(--accent-ink); }
   .admin-stat-lbl { font-size:1.1rem; color:var(--text-dim); margin-top:2px; }
   .admin-log-item { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
   .admin-log-item:last-child { border-bottom:none; }
@@ -1277,12 +1345,12 @@
     50%{opacity:.35; transform:translate(-50%,-50%) scale(1.07)}
   }
   .sp-title {
-    font-size:26px; font-weight:900; color:var(--accent);
+    font-size:26px; font-weight:900; color: var(--accent-ink);
     letter-spacing:-1px; text-align:center; margin-bottom:4px;
     animation:spUp .7s ease both; animation-delay:.15s; z-index:1;
   }
   .sp-sub {
-    font-size:10px; font-weight:500; color:#7a8099;
+    font-size:10px; font-weight:500; color:var(--text-dim);
     letter-spacing:3px; text-align:center; margin-bottom:28px;
     animation:spUp .7s ease both; animation-delay:.3s; z-index:1;
   }
@@ -1302,15 +1370,15 @@
   }
   .sp-quote-mark {
     position:absolute; top:-2px; left:14px;
-    font-size:32px; color:var(--accent); opacity:.4;
+    font-size:32px; color: var(--accent-ink); opacity:.4;
     font-family:serif; line-height:1;
   }
   .sp-cat-label {
     font-size:9px; font-weight:700; letter-spacing:1.5px;
     text-transform:uppercase; margin-bottom:7px;
   }
-  .sp-cat-cheer { color:#c4841b; }
-  .sp-cat-bible { color:#4db8ff; }
+  .sp-cat-cheer { color:var(--accent-ink); }
+  .sp-cat-bible { color:var(--blue); }
   .sp-cat-quote { color:#2ecc71; }
   .sp-cheer-text {
     font-size:15px; font-weight:700; color:var(--text);
@@ -1319,7 +1387,7 @@
   }
   .sp-cheer-text.fading { opacity:0; transform:translateY(6px); }
   .sp-cheer-ref {
-    font-size:10px; color:#7a8099;
+    font-size:10px; color:var(--text-dim);
     text-align:right; margin-top:8px;
   }
   .sp-dots {
@@ -1347,7 +1415,7 @@
   .sp-start-btn:hover { background:#f7b84b; transform:scale(1.02); }
   .sp-start-btn:active { transform:scale(.97); }
   .sp-version {
-    font-size:9px; color:#7a8099; letter-spacing:1px;
+    font-size:9px; color:var(--text-dim); letter-spacing:1px;
     margin-top:14px; animation:spUp .7s ease both;
     animation-delay:.75s; z-index:1;
   }
@@ -1392,16 +1460,16 @@
   .sp-row .sp-val { font-weight:700; }
   .sp-row.total { border-top:1px solid var(--border); margin-top:6px; padding-top:10px; }
   .sp-row.total .sp-lbl { font-size:1.3rem; font-weight:700; color:var(--text); }
-  .sp-row.total .sp-val { font-size:1.8rem; color:var(--accent); }
+  .sp-row.total .sp-val { font-size:1.8rem; color: var(--accent-ink); }
 
   /* ─── 설정 이력 ─── */
   .history-item { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:1.2rem; }
   .history-item:last-child { border-bottom:none; }
   .history-month { font-weight:700; color:var(--text); min-width:58px; }
   .history-type-pill { font-size:1rem; padding:2px 7px; border-radius:99px; background:var(--surface); color:var(--text-dim); }
-  .history-pay { font-weight:700; color:var(--accent); }
+  .history-pay { font-weight:700; color: var(--accent-ink); }
   .history-copy-btn { font-size:1rem; padding:3px 10px; border:1px solid var(--border); border-radius:6px; background:transparent; color:var(--text-dim); cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
-  .history-copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .history-copy-btn:hover { border-color:var(--accent); color: var(--accent-ink); }
 
   /* ─── 플랜 잠금 배너 ─── */
   .pro-lock-banner {
@@ -1412,7 +1480,7 @@
   }
   .pro-lock-banner .plb-icon { font-size:1.8rem; }
   .pro-lock-banner .plb-text { flex:1; }
-  .pro-lock-banner .plb-title { font-size:1.2rem; font-weight:700; color:var(--accent); }
+  .pro-lock-banner .plb-title { font-size:1.2rem; font-weight:700; color: var(--accent-ink); }
   .pro-lock-banner .plb-desc { font-size:1.05rem; color:var(--text-dim); margin-top:2px; }
   .pro-lock-banner .plb-btn { background:var(--accent); border:none; border-radius:8px; padding:7px 14px; font-size:1.1rem; font-weight:700; color:#000; cursor:pointer; white-space:nowrap; font-family:'Noto Sans KR',sans-serif; }
 
@@ -1420,12 +1488,12 @@
   .plan-badge { font-size:1rem; font-weight:700; padding:2px 8px; border-radius:99px; margin-left:6px; }
   .plan-badge.free { background:var(--surface2); color:var(--text-dim); }
   .plan-badge.pro  { background:var(--accent); color:#000; }
-  .plan-badge.ent  { background:#a78bfa; color:#fff; }
+  .plan-badge.ent  { background:var(--purple); color:#fff; }
 
   /* ─── 관리자 회원 목록 ─── */
   .member-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
   .member-item:last-child { border-bottom:none; }
-  .member-avatar { width:36px; height:36px; border-radius:50%; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:700; color:var(--accent); flex-shrink:0; border:1px solid var(--border); }
+  .member-avatar { width:36px; height:36px; border-radius:50%; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:700; color: var(--accent-ink); flex-shrink:0; border:1px solid var(--border); }
   .member-info { flex:1; }
   .member-name { font-size:1.2rem; font-weight:700; color:var(--text); }
   .member-email { font-size:1rem; color:var(--text-dim); }
@@ -1441,32 +1509,32 @@
   /* ─── 체험/구독 상태 카드 ─── */
   .plan-status-card { background:linear-gradient(135deg, rgba(245,166,35,.12), rgba(245,166,35,.04)); border:1.5px solid rgba(245,166,35,.25); border-radius:12px; padding:16px; margin-bottom:14px; }
   .psc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-  .psc-plan { font-size:1.6rem; font-weight:900; color:var(--accent); }
+  .psc-plan { font-size:1.6rem; font-weight:900; color: var(--accent-ink); }
   .psc-badge { font-size:1rem; padding:3px 10px; border-radius:99px; font-weight:700; }
-  .psc-badge.trial { background:#a78bfa; color:#fff; }
+  .psc-badge.trial { background:var(--purple); color:#fff; }
   .psc-badge.active { background:var(--green); color:#fff; }
   .psc-badge.free { background:var(--surface2); color:var(--text-dim); }
   .psc-desc { font-size:1.15rem; color:var(--text-dim); line-height:1.5; }
-  .psc-days { font-size:1.3rem; font-weight:700; color:var(--accent); }
+  .psc-days { font-size:1.3rem; font-weight:700; color: var(--accent-ink); }
 
   /* ─── 관리자 쿠폰 관리 ─── */
   .coupon-create-row { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
   .coupon-create-row input, .coupon-create-row select { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-size:1.1rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; }
   .coupon-item { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
   .coupon-item:last-child { border-bottom:none; }
-  .coupon-code { font-family:monospace; font-size:1.3rem; font-weight:700; color:var(--accent); letter-spacing:1px; }
+  .coupon-code { font-family:monospace; font-size:1.3rem; font-weight:700; color: var(--accent-ink); letter-spacing:1px; }
   .coupon-meta { font-size:1rem; color:var(--text-dim); }
   .coupon-del-btn { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; width:26px; height:26px; cursor:pointer; font-size:0.9rem; }
 
 
   /* ─── 돋보기 모드 (글자 확대) ─── */
-  body.large-mode { font-size:17px; }
+  body.large-mode { font-size:1rem; }
   body.large-mode .tab-btn { padding:12px 6px; }
   body.large-mode .card-title { font-size:1.7rem; }
   body.large-mode .stat-value { font-size:2.2rem; }
   body.large-mode .settings-btn { padding:14px 20px; font-size:1.5rem; }
   body.large-mode .save-btn, body.large-mode .btn-save { min-height:52px; }
-  body.xlarge-mode { font-size:19px; }
+  body.xlarge-mode { font-size:1rem; }
   body.xlarge-mode .tab-btn { padding:14px 6px; }
 
   /* ─── 표시 설정 토글 ─── */
@@ -1476,7 +1544,7 @@
   .dor-desc { font-size:1.05rem; color:var(--text-dim); margin-top:2px; }
   .font-size-btns { display:flex; gap:6px; }
   .fsb { padding:7px 14px; border:1.5px solid var(--border); border-radius:8px; background:var(--surface2); color:var(--text-dim); cursor:pointer; font-size:1.2rem; font-weight:700; font-family:'Noto Sans KR',sans-serif; transition:all .15s; }
-  .fsb.active { border-color:var(--accent); background:rgba(245,166,35,.1); color:var(--accent); }
+  .fsb.active { border-color:var(--accent); background:rgba(245,166,35,.1); color: var(--accent-ink); }
 
   /* ─── 전월 비교 ─── */
   .compare-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
@@ -1490,12 +1558,12 @@
 
   /* ─── 연비 트래킹 ─── */
   .fuel-eff-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:12px; }
-  .fuel-eff-big { font-size:2.4rem; font-weight:900; color:#4db8ff; text-align:center; }
+  .fuel-eff-big { font-size:2.4rem; font-weight:900; color:var(--blue); text-align:center; }
   .fuel-eff-unit { font-size:1.2rem; color:var(--text-dim); text-align:center; margin-bottom:8px; }
   .fuel-eff-fields { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .fuel-eff-field label { font-size:1.05rem; color:var(--text-dim); font-weight:700; display:block; margin-bottom:4px; }
   .fuel-eff-field input { width:100%; background:var(--surface); border:1.5px solid var(--border); border-radius:8px; padding:9px 12px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; box-sizing:border-box; }
-  .fuel-eff-field input:focus { border-color:#4db8ff; }
+  .fuel-eff-field input:focus { border-color:var(--blue); }
 
   /* ─── 내보내기 버튼 ─── */
   .export-btn-row { display:flex; gap:8px; margin-top:8px; }
@@ -1517,11 +1585,199 @@
     border-bottom:1px solid var(--border);
   }
   .memo-item:last-child { border-bottom:none; }
-  .memo-date { font-size:12px; font-weight:700; color:var(--accent); min-width:56px; flex-shrink:0; padding-top:2px; }
+  .memo-date { font-size:12px; font-weight:700; color: var(--accent-ink); min-width:56px; flex-shrink:0; padding-top:2px; }
   .memo-text { flex:1; font-size:14px; color:var(--text); line-height:1.5; word-break:break-word; }
   .memo-del { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; width:26px; height:26px; cursor:pointer; font-size:12px; flex-shrink:0; }
   .memo-del:hover { border-color:var(--accent2); color:var(--accent2); }
 
+
+  /* ═══════════ 홈 (D 원 넘버 · E 계기판 · F 근무일 도트) ═══════════ */
+  body.user-mode .app-header, body.user-mode .tabs, body.user-mode .legal-foot { display: none; }
+  body.user-mode.on-more .legal-foot { display: block; }
+  body.user-mode .container { padding-top: 6px; padding-bottom: 104px; }
+  .h-top { display:flex; justify-content:space-between; align-items:center; gap: 10px; margin: 10px 2px 0; }
+  .h-date { min-height: 44px; border: none; background: transparent; color: var(--text-dim); font-family: inherit; font-size: 1rem; padding: 0; cursor: pointer; text-align: left; }
+  .h-date b { color: var(--text); font-weight: 600; }
+  .h-icon { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--text); display:flex; align-items:center; justify-content:center; cursor: pointer; flex-shrink: 0; }
+  .h-layout { display: none; }
+  .h-layout.on { display: block; }
+  .h-core { position: relative; }
+  .h-core.veiled > .h-veilable { filter: blur(8px); pointer-events: none; user-select: none; }
+  .h-veil { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; font-size: 1.05rem; font-weight: 600; }
+  .h-core.veiled > .h-veil { display:flex; }
+  .h-veil button { min-height: 48px; padding: 0 20px; border-radius: 14px; border: none; background: var(--accent); color: #17130a; font-family: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; }
+  .h-num { font-family: var(--num); font-variant-numeric: tabular-nums; }
+  .h-pill { display:inline-flex; align-items:center; gap: 10px; min-height: 46px; padding: 0 18px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-family: inherit; font-size: 1.05rem; font-weight: 600; cursor: pointer; }
+  .h-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px var(--ok-soft); flex-shrink:0; }
+  .h-dot.warn { background: var(--warn); box-shadow: 0 0 0 4px var(--warn-soft); }
+  .h-dot.bad  { background: var(--bad);  box-shadow: 0 0 0 4px var(--bad-soft); }
+  .h-dot.done { background: var(--purple); box-shadow: 0 0 0 4px rgba(167,139,250,.18); }
+  .h-dot.none { background: var(--text-dim); box-shadow: none; }
+  .h-info { width: 44px; height: 44px; border: none; background: transparent; color: var(--text-dim); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; margin: -12px -10px -12px -6px; vertical-align: middle; }
+  .h-sub { font-size: 1rem; color: var(--text-dim); }
+  .h-sub b { font-weight: 600; }
+  .t-ok { color: var(--ok); } .t-warn { color: var(--accent-ink); } .t-bad { color: var(--bad); }
+  .h-bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .h-bar > div { height: 100%; border-radius: 3px; background: var(--accent); }
+  .h-barlbl { display:flex; justify-content:space-between; font-size: .95rem; color: var(--text-dim); margin-top: 10px; }
+  .h-barlbl b { color: var(--text); font-weight: 600; }
+  .h-rows { border-top: 1px solid var(--line); margin-top: 28px; }
+  .h-rows.card { border: 1px solid var(--line); border-radius: 22px; background: var(--surface); overflow: hidden; margin-top: 12px; }
+  .h-row { width: 100%; min-height: 62px; display:flex; justify-content:space-between; align-items:center; gap: 10px; border: none; border-bottom: 1px solid var(--line); background: transparent; color: var(--text); font-family: inherit; padding: 0 4px; cursor: pointer; text-align: left; }
+  .h-rows.card .h-row { padding: 0 18px; }
+  .h-rows.card .h-row:last-child { border-bottom: none; }
+  .h-row > span { font-size: 1rem; color: var(--text-dim); }
+  .h-row > b { display:flex; align-items:center; gap: 8px; font-size: 1.15rem; font-weight: 600; white-space: nowrap; }
+  .h-row > b svg { color: var(--text-dim); }
+  .h-cta { width: 100%; height: 3.6rem; margin-top: 24px; border: none; border-radius: 18px; background: var(--accent); color: #17130a; font-family: inherit; font-size: 1.15rem; font-weight: 700; display:flex; align-items:center; justify-content:center; gap: 8px; cursor: pointer; }
+  .h-cta.ink { background: var(--text); color: var(--bg); }
+  .h-cta.ink svg { color: var(--accent); }
+  .h-note { text-align: center; font-size: .82rem; color: var(--text-dim); margin: 14px 0 6px; }
+  /* D · 원 넘버 */
+  .d-wrap { display:flex; flex-direction:column; align-items:center; text-align:center; padding-top: 26px; }
+  .d-lbl { margin-top: 36px; font-size: 1rem; color: var(--text-dim); }
+  .d-big { margin-top: 4px; font-size: 3.7rem; font-weight: 500; letter-spacing: -2px; line-height: 1.05; }
+  .d-big small { font-family: 'Noto Sans KR', sans-serif; font-size: 1.2rem; font-weight: 600; letter-spacing: 0; margin-left: 4px; }
+  .d-sub { margin-top: 12px; }
+  .d-prog { width: 100%; margin-top: 32px; text-align: left; }
+  /* E · 계기판 */
+  .e-gauge { position: relative; width: 100%; max-width: 330px; margin: 18px auto 0; aspect-ratio: 320 / 190; }
+  .e-gauge svg { width: 100%; height: 100%; display:block; }
+  .e-center { position:absolute; left:0; right:0; top: 39%; display:flex; flex-direction:column; align-items:center; }
+  .e-pct { font-size: 3.2rem; font-weight: 500; letter-spacing: -1.5px; line-height: 1; }
+  .e-pct small { font-size: 1.5rem; }
+  .e-cap { font-size: .9rem; color: var(--text-dim); margin-top: 6px; }
+  .e-lights { display:flex; gap: 5px; }
+  .e-lights i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display:block; }
+  .e-lights i.on-bad { background: var(--bad); } .e-lights i.on-warn { background: var(--warn); } .e-lights i.on-ok { background: var(--ok); }
+  .e-tiles { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin-top: 22px; }
+  .e-tile { text-align:left; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 20px; padding: 14px 14px 16px; display:flex; flex-direction:column; gap: 4px; font-family: inherit; cursor: pointer; min-width: 0; }
+  .e-tile .k { display:flex; justify-content:space-between; align-items:center; font-size: .9rem; color: var(--text-dim); }
+  .e-tile .v { font-size: 1.75rem; font-weight: 500; letter-spacing: -.5px; overflow-wrap: anywhere; }
+  .e-tile .c { font-size: .85rem; color: var(--text-dim); }
+  /* F · 근무일 도트 */
+  .f-head { display:flex; align-items:center; gap: 12px; min-height: 48px; border: none; background: transparent; color: var(--text); font-family: inherit; padding: 0; margin-top: 22px; cursor: pointer; }
+  .f-head .h-dot { width: 13px; height: 13px; }
+  .f-head span:last-child { font-size: 1.9rem; font-weight: 700; letter-spacing: -.5px; }
+  .f-sent { margin: 8px 0 0; font-size: 1.2rem; line-height: 1.55; word-break: keep-all; }
+  .f-sent b { color: var(--accent-ink); }
+  .f-card { margin-top: 22px; padding: 18px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); }
+  .f-card-h { display:flex; justify-content:space-between; align-items:baseline; gap: 8px; margin-bottom: 14px; }
+  .f-card-h b { font-size: 1.02rem; } .f-card-h span { font-size: .9rem; color: var(--text-dim); }
+  .f-dots { display:grid; grid-template-columns: repeat(9, minmax(0,1fr)); gap: 9px; justify-items:center; }
+  .f-dots i { width: 1.25rem; height: 1.25rem; box-sizing: border-box; border-radius: 50%; border: 2px solid var(--text-dim); opacity: .55; display:block; }
+  .f-dots i.w { background: var(--accent); border-color: var(--accent); opacity: 1; }
+  .f-dots i.t { border-color: var(--accent); opacity: 1; }
+  .f-sep { height: 1px; background: var(--line); margin: 16px 0 14px; }
+  /* 아래에서 올라오는 설명창 */
+  .sheet { position: fixed; inset: 0; z-index: 9000; display: none; }
+  .sheet.on { display: block; }
+  .sheet-bg { position:absolute; inset:0; border: none; background: rgba(0,0,0,.5); cursor: pointer; width: 100%; }
+  .sheet-panel { position:absolute; left:0; right:0; bottom:0; max-width: 560px; margin: 0 auto; background: var(--surface); color: var(--text); border-radius: 26px 26px 0 0; padding: 12px 22px calc(24px + env(safe-area-inset-bottom)); max-height: 86vh; overflow-y: auto; animation: sheetUp .22s ease-out; }
+  @keyframes sheetUp { from { transform: translateY(40px); } to { transform: none; } }
+  .sheet-grab { width: 40px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 14px; }
+  .sheet-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; word-break: keep-all; }
+  .sheet-body { font-size: 1.02rem; line-height: 1.7; color: var(--text-dim); word-break: keep-all; }
+  .sheet-body b { color: var(--text); }
+  .sheet-calc { margin: 12px 0 0; padding: 14px 16px; border-radius: 14px; background: var(--surface2); color: var(--text); font-family: var(--num); font-size: 1.02rem; line-height: 1.8; }
+  .sheet-input { width: 100%; height: 3.8rem; box-sizing: border-box; margin-top: 6px; padding: 0 16px; border-radius: 16px; border: 2px solid var(--line); background: var(--surface2); color: var(--text); font-family: var(--num); font-size: 1.8rem; font-weight: 500; }
+  .sheet-input:focus { outline: none; border-color: var(--accent); }
+  .sheet-actions { display:flex; flex-direction:column; gap: 8px; margin-top: 18px; }
+  .sheet-btn { min-height: 3.4rem; border-radius: 16px; border: none; font-family: inherit; font-size: 1.08rem; font-weight: 700; cursor: pointer; }
+  .sheet-btn.main { background: var(--accent); color: #17130a; }
+  .sheet-btn.dark { background: var(--text); color: var(--bg); }
+  .sheet-btn.ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--line); }
+  /* 아래 메뉴 */
+  .bnav { display: none; }
+  body.user-mode .bnav { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); position: fixed; left: 0; right: 0; bottom: 0; z-index: 800; background: var(--header-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); padding: 6px 8px calc(10px + env(safe-area-inset-bottom)); }
+  .bnav button { position: relative; min-height: 56px; border: none; background: transparent; color: var(--text-dim); font-family: inherit; font-size: .8rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 4px; cursor: pointer; }
+  .bnav button.on { color: var(--text); font-weight: 700; }
+  .bnav button.on svg { color: var(--accent-ink); }
+  .bnav .nb { position:absolute; top: 6px; left: 54%; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--bad); color: #fff; font-size: 11px; font-weight: 700; display:none; align-items:center; justify-content:center; }
+  .subnav { display: none; }
+  body.user-mode .subnav.on { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; padding: 4px; border-radius: 16px; background: var(--surface2); margin: 10px 0 16px; }
+  .subnav button { min-height: 46px; border: none; border-radius: 12px; background: transparent; color: var(--text-dim); font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
+  .subnav button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+  .more-head { display:flex; align-items:center; justify-content:space-between; gap: 10px; margin: 14px 2px 16px; }
+  .more-head b { font-size: 1.3rem; } .more-head span { font-size: .9rem; color: var(--text-dim); }
+  .more-list { border: 1px solid var(--line); border-radius: 22px; background: var(--surface); overflow: hidden; margin-bottom: 14px; }
+  .more-item { width: 100%; min-height: 64px; display:flex; align-items:center; gap: 14px; padding: 0 18px; border: none; border-bottom: 1px solid var(--line); background: transparent; color: var(--text); font-family: inherit; font-size: 1.05rem; cursor: pointer; text-align: left; }
+  .more-item:last-child { border-bottom: none; }
+  .more-item .mi-ic { width: 38px; height: 38px; border-radius: 12px; background: var(--surface2); display:flex; align-items:center; justify-content:center; color: var(--text); flex-shrink: 0; }
+  .more-item .mi-t { flex: 1; } .more-item .mi-t small { display:block; font-size: .85rem; color: var(--text-dim); margin-top: 2px; }
+  .more-item .mi-b { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--bad); color:#fff; font-size: 12px; font-weight: 700; display:none; align-items:center; justify-content:center; }
+  .layout-pick { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-bottom: 6px; }
+  .layout-pick button { min-height: 92px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--surface2); color: var(--text); font-family: inherit; cursor: pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 6px; padding: 8px 4px; }
+  .layout-pick button b { font-size: .98rem; } .layout-pick button span { font-size: .78rem; color: var(--text-dim); line-height: 1.3; }
+  .layout-pick button.on { border-color: var(--accent); background: var(--warn-soft); }
+  .lp-ic { height: 26px; display:flex; align-items:center; justify-content:center; color: var(--accent-ink); font-family: var(--num); font-weight: 600; font-size: 1.1rem; }
+
+  /* ═══════════ 근무일 설정 ═══════════ */
+  .wd-modes { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-bottom: 12px; }
+  .wd-mode, .wd-day, .seg-btn { min-height: 48px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); font-family: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; }
+  .wd-mode.on, .wd-day.off, .seg-btn.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .wd-days { display:grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 6px; margin-bottom: 8px; }
+  .wd-help { font-size: 1rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 10px; }
+  .wd-row { display:flex; gap: 8px; align-items:center; flex-wrap: wrap; margin-bottom: 10px; }
+  .wd-row input[type=date] { min-height: 48px; padding: 0 10px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); font-family: inherit; font-size: 1.05rem; }
+  .wd-chips { display:flex; flex-wrap:wrap; gap: 6px; }
+  .wd-chip { display:inline-flex; align-items:center; gap: 6px; padding: 6px 6px 6px 12px; border-radius: 99px; background: var(--surface2); border: 1px solid var(--border); font-size: .95rem; }
+  .wd-chip button { width: 32px; height: 32px; border-radius: 50%; border: none; background: transparent; color: var(--text-dim); font-size: 1rem; cursor: pointer; }
+  .wd-summary { font-size: 1.1rem; font-weight: 700; padding: 10px 12px; border-radius: 12px; background: var(--accent-soft); margin-top: 6px; }
+  .cal-off { opacity: .55; }
+  .cal-off .cal-day-num::after { content: ' 휴'; font-size: .75em; color: var(--text-dim); font-weight: 700; }
+  .cal-clickable { cursor: pointer; }
+  .seg { display:grid; gap: 6px; }
+  .seg-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .seg-5 { grid-template-columns: repeat(5, minmax(0,1fr)); }
+  .seg-btn.fs-s { font-size: .85rem; } .seg-btn.fs-l { font-size: 1.15rem; } .seg-btn.fs-xl { font-size: 1.3rem; } .seg-btn.fs-xxl { font-size: 1.45rem; }
+  .preset-pick { width:100%; min-height: 48px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); font-family: inherit; font-size: 1.05rem; padding: 0 10px; margin-bottom: 10px; }
+  .legal-foot { text-align:center; font-size: .9rem; color: var(--text-dim); line-height: 1.7; margin: 18px 0 8px; }
+  .legal-foot a { color: var(--text-dim); }
+
+  /* ═══════════ 황금기사 제목 글씨 (카페24 무료 글꼴, OFL · 상업적 사용 가능) ═══════════ */
+  @font-face { font-family: 'Cafe24ClassicType'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Cafe24ClassicType-Regular.woff2') format('woff2'); font-weight: normal; font-display: swap; }
+  @font-face { font-family: 'Cafe24Danjeonghae'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Danjunghae.woff') format('woff'); font-weight: normal; font-display: swap; }
+  @font-face { font-family: 'Cafe24SuperMagic'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/Cafe24Supermagic-Bold-v1.0.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Cafe24Ssurround'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff'); font-weight: normal; font-display: swap; }
+  :root { --brand-font: 'Cafe24Danjeonghae', 'Noto Sans KR', sans-serif; --brand-weight: normal;
+          --num-scale: 1; --title-scale: 1; --ui-scale: 1; --sub-scale: 1; }
+  html[data-brand-font="classic"]  { --brand-font: 'Cafe24ClassicType', 'Noto Sans KR', serif; --brand-weight: normal; }
+  html[data-brand-font="danjung"]  { --brand-font: 'Cafe24Danjeonghae', 'Noto Sans KR', sans-serif; --brand-weight: normal; }
+  html[data-brand-font="magic"]    { --brand-font: 'Cafe24SuperMagic', 'Noto Sans KR', sans-serif; --brand-weight: 700; }
+  html[data-brand-font="surround"] { --brand-font: 'Cafe24Ssurround', 'Noto Sans KR', sans-serif; --brand-weight: normal; }
+  /* 브랜드 이름 */
+  .sp-title, .auth-title, .app-brand-title, .brand-ko { font-family: var(--brand-font) !important; font-weight: var(--brand-weight) !important; letter-spacing: 1px; }
+  .sp-title, .auth-title { color: var(--accent) !important; }
+  html[data-theme="day"] .auth-title { color: var(--accent-ink) !important; }
+  .sp-sub, .auth-sub, .brand-en { font-family: var(--brand-font) !important; letter-spacing: .38em !important; text-transform: uppercase; }
+  .brand-rule { width: 56px; height: 1px; background: var(--accent); opacity: .65; margin: 8px auto 6px; }
+  /* 제목류에도 같은 글씨체 (본문·숫자는 읽기 쉬운 고딕 그대로) */
+  .card-title, .sheet-title, .more-head b, .h-pill [data-status], .f-head span:last-child, .gp-title, .dor-label { font-family: var(--brand-font); font-weight: var(--brand-weight); }
+
+  /* ═══════════ 글자 크기 세부 조정 (설정 › 화면 설정) ═══════════ */
+  .d-big { font-size: calc(3.4rem * var(--num-scale)); }
+  .e-pct { font-size: calc(3rem * var(--num-scale)); }
+  .e-tile .v { font-size: calc(1.6rem * var(--num-scale)); }
+  .h-row > b { font-size: calc(1.08rem * var(--num-scale)); }
+  .f-head span:last-child { font-size: calc(1.75rem * var(--title-scale)); }
+  .h-pill { font-size: calc(1rem * var(--title-scale)); }
+  .sheet-title { font-size: calc(1.25rem * var(--title-scale)); }
+  .card-title { font-size: calc(1.25rem * var(--title-scale)) !important; }
+  .f-sent { font-size: calc(1.12rem * var(--title-scale)); }
+  .bnav button { font-size: calc(.8rem * var(--ui-scale)); }
+  .bnav button svg { width: calc(22px * var(--ui-scale)); height: calc(22px * var(--ui-scale)); }
+  .subnav button, .more-item, .h-cta, .sheet-btn { font-size: calc(1rem * var(--ui-scale)); }
+  .h-cta { height: calc(3.4rem * var(--ui-scale)); }
+  .h-sub, .h-barlbl, .sheet-body, .h-note, .wd-help, .e-tile .c, .e-tile .k, .h-row > span, .more-item small { font-size: calc(.95rem * var(--sub-scale)) !important; }
+  .h-note { font-size: calc(.8rem * var(--sub-scale)) !important; }
+  .fs-detail { display:grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; margin-top: 14px; }
+  .fs-detail > span { font-size: .95rem; color: var(--text-dim); }
+  .fs-detail .seg { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .font-pick { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-bottom: 6px; }
+  .font-pick button { min-height: 64px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface2); color: var(--accent-ink); cursor: pointer; font-size: 1.35rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 2px; }
+  .font-pick button small { font-family: 'Noto Sans KR', sans-serif; font-size: .75rem; color: var(--text-dim); }
+  .font-pick button.on { border-color: var(--accent); background: var(--warn-soft); }
 </style>
 </head>
 <body>
@@ -1533,11 +1789,12 @@
   <div class="sp-icon-wrap">
     <div class="sp-ring sp-ring-1"></div>
     <div class="sp-ring sp-ring-2"></div>
-    <span class="sp-icon">🚕</span>
+    <span class="sp-icon"><img src="icon-192.png" alt="" style="width:1em;height:1em;border-radius:22%;vertical-align:middle"></span>
   </div>
 
-  <div class="sp-title">택시 매출 관리</div>
-  <div class="sp-sub">TAXI REVENUE TRACKER</div>
+  <div class="sp-title">황금기사</div>
+  <div class="brand-rule"></div>
+  <div class="sp-sub">GOLD KNIGHT</div>
 
   <div class="sp-cheer-box">
     <span class="sp-quote-mark">"</span>
@@ -1552,14 +1809,16 @@
     <i class="ti ti-arrow-right" style="font-size:20px" aria-hidden="true"></i>
     시작하기
   </button>
-  <div class="sp-version" id="spVersion">택시 매출 관리 v1.0</div>
+  <div class="sp-version" id="spVersion">황금기사 v1.0</div>
 </div>
 
 <!-- ═══ 로그인/회원가입 ═══ -->
 <div id="authOverlay">
-  <div class="auth-icon">🚕</div>
-  <div class="auth-title">택시 매출 관리</div>
-  <div class="auth-sub">TAXI REVENUE TRACKER</div>
+  <div class="auth-icon"><img src="icon-192.png" alt="" style="width:1em;height:1em;border-radius:22%;vertical-align:middle"></div>
+  <div class="auth-title">황금기사</div>
+  <div class="brand-rule"></div>
+  <div class="auth-sub">GOLD KNIGHT</div>
+  <p style="margin:-14px 0 22px;font-size:1.05rem;color:var(--text);text-align:center;word-break:keep-all">대한민국 황금기사단에 오신 것을 환영합니다.</p>
   <div class="auth-card">
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabLogin"  onclick="switchAuthTab('login')">로그인</button>
@@ -1585,22 +1844,48 @@
       <input class="auth-input" id="signupEmail" type="email" placeholder="example@email.com">
       <div class="auth-label">비밀번호 (6자 이상)</div>
       <input class="auth-input" id="signupPw" type="password" placeholder="비밀번호 입력">
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:1rem;line-height:1.5;margin:4px 0 14px;cursor:pointer">
+        <input type="checkbox" id="signupAgree" style="width:22px;height:22px;margin-top:2px;flex-shrink:0">
+        <span><a href="terms.html" target="_blank" style="color:var(--accent-ink)">이용약관</a>과
+        <a href="privacy.html" target="_blank" style="color:var(--accent-ink)">개인정보 처리방침</a>에 동의합니다 (필수)</span>
+      </label>
       <button class="auth-btn" id="signupBtn" onclick="doSignup()">가입하기 →</button>
       <div class="auth-err" id="signupErr"></div>
     </div>
   </div>
-  <div class="auth-footer">🚕 택시 기사님들을 위한 매출 관리 앱</div>
+  <div class="auth-footer">택시 기사님의 하루 목표와 월급을 한눈에<br>
+    <a href="terms.html" target="_blank" style="color:var(--text-dim)">이용약관</a> ·
+    <a href="privacy.html" target="_blank" style="color:var(--text-dim)"><b>개인정보 처리방침</b></a></div>
 </div>
 
 
+
+<!-- 아래 메뉴 (일반 사용자) -->
+<nav class="bnav" id="bottomNav" aria-label="주 메뉴">
+  <button data-nav="home" onclick="goNav('home')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>홈</button>
+  <button data-nav="calendar" onclick="goNav('calendar')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>달력</button>
+  <button data-nav="stats" onclick="goNav('stats')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>통계</button>
+  <button data-nav="more" onclick="goNav('more')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg>더보기<span class="nb" id="navMoreBadge">0</span></button>
+</nav>
+
+<!-- 설명·입력 창 -->
+<div class="sheet" id="sheet" aria-hidden="true">
+  <button class="sheet-bg" aria-label="닫기" onclick="closeSheet()"></button>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-grab"></div>
+    <div class="sheet-title" id="sheetTitle"></div>
+    <div class="sheet-body" id="sheetBody"></div>
+    <div class="sheet-actions" id="sheetActions"></div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 <div class="container">
   <header class="app-header">
     <div class="app-header-top">
       <div class="app-brand">
-        <span class="app-brand-icon">🚕</span>
+        <span class="app-brand-icon"><img src="icon-192.png" alt="" style="width:1em;height:1em;border-radius:22%;vertical-align:middle"></span>
         <div class="app-brand-text">
-          <div class="app-brand-title">택시 매출 관리</div>
+          <div class="app-brand-title">황금기사</div>
           <div class="app-brand-sub" id="syncText">연결 중...</div>
         </div>
       </div>
@@ -1618,7 +1903,8 @@
 
   <div class="tabs">
     <span id="revenueTabs" style="display:contents">
-      <button class="tab-btn active" onclick="switchTab('input',this)">📅 입력</button>
+      <button class="tab-btn active" onclick="switchTab('home',this)">🚦 홈</button>
+      <button class="tab-btn" onclick="switchTab('input',this)">📅 입력</button>
       <button class="tab-btn" onclick="switchTab('weekly',this)">📊 주간</button>
       <button class="tab-btn" onclick="switchTab('monthly',this)">📈 월간</button>
       <button class="tab-btn" onclick="switchTab('calendar',this)">🗓️ 달력</button>
@@ -1629,8 +1915,115 @@
     <button class="tab-btn" id="adminTabBtn" style="display:none" onclick="switchTab('admin',this)">🔧 관리자</button>
   </div>
 
+  <!-- 통계 안의 작은 메뉴 -->
+  <div class="subnav" id="statsSubnav" role="tablist" aria-label="통계">
+    <button data-sub="weekly"  onclick="switchTab('weekly')">주간</button>
+    <button data-sub="monthly" onclick="switchTab('monthly')">월간</button>
+    <button data-sub="profit"  onclick="switchTab('profit')">월급</button>
+  </div>
+
   <!-- 데이터 입력 탭 -->
-  <div id="tab-input" class="tab-panel active">
+  <!-- 홈: 원 넘버(D) · 계기판(E) · 근무일 도트(F) 중 설정에서 선택 -->
+  <div id="tab-home" class="tab-panel active">
+    <div class="h-top">
+      <button class="h-date" id="hDate" onclick="openTodaySheet()">-</button>
+      <button class="h-icon" id="hTheme" onclick="toggleThemeQuick()" aria-label="화면 밝기 바꾸기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    </div>
+
+    <!-- D · 원 넘버 -->
+    <section class="h-layout" id="hlOne">
+      <div class="h-core" data-core>
+        <div class="h-veilable d-wrap">
+          <button class="h-pill" onclick="openHelp('status')"><span class="h-dot" data-dot></span><span data-status>-</span></button>
+          <div class="d-lbl"><span data-need-lbl>오늘 하루 목표</span> <button class="h-info" onclick="openHelp('need')" aria-label="계산 방법 보기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button></div>
+          <div class="d-big h-num" data-need-big>-</div>
+          <div class="h-sub d-sub" data-gap>-</div>
+          <div class="d-prog">
+            <div class="h-bar"><div data-bar style="width:0"></div></div>
+            <div class="h-barlbl"><span>기준금 <b data-pct>0%</b></span><span data-remain-wrap>남은 근무 <b data-remain>-</b></span></div>
+          </div>
+        </div>
+        <div class="h-veil"><span>🔒 하루 목표 금액은 Pro에서 볼 수 있어요</span><button onclick="goNav('more')">Pro 알아보기</button></div>
+      </div>
+      <div class="h-rows">
+        <button class="h-row" onclick="openHelp('pay')"><span>예상 월급</span><b><span data-pay>-</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></b></button>
+        <button class="h-row" onclick="openGoalSheet()"><span data-goal-lbl>목표 월급</span><b><span data-goal>정하기</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></b></button>
+      </div>
+    </section>
+
+    <!-- E · 계기판 -->
+    <section class="h-layout" id="hlCluster">
+      <div class="h-core" data-core>
+        <div class="h-veilable">
+          <div class="e-gauge">
+            <svg viewBox="0 0 320 190" fill="none" aria-hidden="true">
+              <path d="M30 170 A130 130 0 0 1 290 170" stroke="var(--line)" stroke-width="14" stroke-linecap="round"/>
+              <path data-arc d="M30 170 A130 130 0 0 1 290 170" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
+              <path d="M50 170 A110 110 0 0 1 270 170" stroke="var(--line)" stroke-width="1" stroke-dasharray="1.5 9"/>
+            </svg>
+            <div class="e-center"><span class="e-pct h-num" data-pct-big>0<small>%</small></span><span class="e-cap" data-cap>-</span></div>
+          </div>
+          <div style="text-align:center;margin-top:10px">
+            <button class="h-pill" onclick="openHelp('status')"><span class="e-lights" data-lights><i></i><i></i><i></i></span><span data-status>-</span></button>
+          </div>
+          <div class="e-tiles">
+            <button class="e-tile" onclick="openHelp('need')"><span class="k">필요한 하루 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span><span class="v h-num t-warn" data-need>-</span><span class="c" data-remain-cap>-</span></button>
+            <button class="e-tile" onclick="openHelp('avg')"><span class="k">내 하루 평균 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span><span class="v h-num" data-avg>-</span><span class="c" data-gap-short>-</span></button>
+          </div>
+        </div>
+        <div class="h-veil"><span>🔒 하루 목표 금액은 Pro에서 볼 수 있어요</span><button onclick="goNav('more')">Pro 알아보기</button></div>
+      </div>
+      <div class="h-rows card">
+        <button class="h-row" onclick="openHelp('pay')"><span>예상 월급</span><b><span data-pay>-</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></b></button>
+        <button class="h-row" onclick="openGoalSheet()"><span data-goal-lbl>목표 월급</span><b><span data-goal>정하기</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></b></button>
+      </div>
+    </section>
+
+    <!-- F · 근무일 도트 -->
+    <section class="h-layout" id="hlDays">
+      <div class="h-core" data-core>
+        <div class="h-veilable">
+          <button class="f-head" onclick="openHelp('status')"><span class="h-dot" data-dot></span><span data-status>-</span></button>
+          <p class="f-sent" data-sentence>-</p>
+        </div>
+        <div class="h-veil"><span>🔒 하루 목표 금액은 Pro에서 볼 수 있어요</span><button onclick="goNav('more')">Pro 알아보기</button></div>
+      </div>
+      <div class="f-card">
+        <div class="f-card-h"><b data-month-lbl>이번 달 근무</b><span data-days-cap>-</span></div>
+        <div class="f-dots" data-dots></div>
+        <div class="f-sep"></div>
+        <div class="h-barlbl" style="margin:0 0 8px"><span>순매출 <b data-net>-</b></span><span data-base>-</span></div>
+        <div class="h-bar"><div data-bar style="width:0"></div></div>
+      </div>
+      <div class="h-rows card">
+        <button class="h-row" onclick="openHelp('pay')"><span>예상 월급</span><b><span data-pay>-</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></b></button>
+        <button class="h-row" onclick="openGoalSheet()"><span data-goal-lbl>목표 월급</span><b><span data-goal>정하기</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></b></button>
+      </div>
+    </section>
+
+    <button class="h-cta" id="hCta" onclick="openRevenueSheet()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>오늘 매출 입력</button>
+    <p class="h-note">참고용 계산이에요 · 실제 급여는 회사 정산 기준</p>
+  </div>
+
+  <!-- 더보기 -->
+  <div id="tab-more" class="tab-panel">
+    <div class="more-head"><b>더보기</b><span id="moreSync">-</span></div>
+    <div style="display:flex;align-items:center;gap:12px;margin:0 2px 16px"><img src="icon-192.png" alt="" style="width:44px;height:44px;border-radius:12px"><div><b class="brand-ko" style="font-size:1.2rem">황금기사</b> <span class="brand-en" style="color:var(--text-dim);font-size:.7rem">Gold Knight</span><div style="font-size:.9rem;color:var(--text-dim);word-break:keep-all">대한민국 황금기사단에 오신 것을 환영합니다.</div></div></div>
+    <div class="more-list">
+      <button class="more-item" onclick="switchTab('input')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="mi-t">매출·주유 입력<small>다른 날짜, 주유비·가스, 메모</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="more-item" onclick="openSettings('salary')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/></svg></span><span class="mi-t">급여 조건<small>회사 선택, 기준금·배분율</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="more-item" onclick="openSettings('workDayCard')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="mi-t">근무일<small>쉬는 요일, 격일, 휴무일</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="more-item" onclick="openSettings('displayCard')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="mi-t">화면 설정<small>홈 모양, 밝기, 글자 크기</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="more-list">
+      <button class="more-item" onclick="openSettings('planCard')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .8-5.2 4.7 1.5 7L12 17.5 5.7 21l1.5-7L2 9.3l7-.8z"/></svg></span><span class="mi-t">내 플랜 <b id="morePlan" style="color:var(--accent-ink)">-</b><small>쿠폰 입력</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="more-item" onclick="switchTab('message')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><span class="mi-t">문의하기 · 백업</span><span class="mi-b" id="moreMsgBadge">0</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="more-item" onclick="openSettings('accountCard')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="mi-t">계정<small id="moreUser">-</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="more-item" onclick="doLogout()"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></span><span class="mi-t">로그아웃</span></button>
+    </div>
+  </div>
+
+  <div id="tab-input" class="tab-panel">
     <div class="card">
       <div class="card-title">📅 날짜 선택</div>
       <div class="form-group">
@@ -1773,7 +2166,7 @@
       <div class="goal-stats-row" id="goalStatsRow">
         <div class="goal-stat">
           <div class="goal-stat-val gold" id="goalCurrent">-</div>
-          <div class="goal-stat-lbl">현재 누적 매출</div>
+          <div class="goal-stat-lbl">현재 누적 순매출</div>
         </div>
         <div class="goal-stat">
           <div class="goal-stat-val red" id="goalRemain">-</div>
@@ -1781,7 +2174,7 @@
         </div>
         <div class="goal-stat">
           <div class="goal-stat-val" id="goalNeededAvg" style="color:#a78bfa">-</div>
-          <div class="goal-stat-lbl" id="goalNeededLabel">남은 일수 기준<br>필요 일 평균 매출</div>
+          <div class="goal-stat-lbl" id="goalNeededLabel">남은 근무일 기준<br>필요 일 평균 순매출</div>
         </div>
       </div>
     </div>
@@ -2065,7 +2458,7 @@
   <!-- 계정 설정 탭 -->
   <div id="tab-settings" class="tab-panel">
     <!-- 플랜 상태 카드 -->
-    <div class="card">
+    <div class="card" id="planCard">
       <div class="card-title">🎫 내 플랜</div>
       <div class="plan-status-card" id="planStatusCard">
         <div class="psc-top">
@@ -2083,22 +2476,79 @@
     </div>
 
     <!-- 표시 설정 -->
-    <div class="card">
+    <div class="card" id="displayCard">
       <div class="card-title">🔍 화면 표시 설정</div>
-      <div class="display-option-row">
-        <div>
-          <div class="dor-label">글자 크기</div>
-          <div class="dor-desc">눈이 편한 크기로 조절하세요</div>
-        </div>
-        <div class="font-size-btns">
-          <button class="fsb active" id="fsBtn-normal" onclick="setFontSize('normal')">보통</button>
-          <button class="fsb" id="fsBtn-large" onclick="setFontSize('large')">크게</button>
-          <button class="fsb" id="fsBtn-xlarge" onclick="setFontSize('xlarge')">아주크게</button>
-        </div>
+      <div class="dor-label" style="margin-bottom:8px">홈 화면 모양</div>
+      <div class="layout-pick" role="group" aria-label="홈 화면 모양">
+        <button id="lpBtn-one" onclick="setHomeLayout('one')"><span class="lp-ic">203,500</span><b>숫자 하나</b><span>오늘 목표만 크게</span></button>
+        <button id="lpBtn-cluster" onclick="setHomeLayout('cluster')"><span class="lp-ic"><svg width="34" height="22" viewBox="0 0 34 22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M3 19a14 14 0 0 1 28 0"/></svg></span><b>계기판</b><span>달성률 게이지</span></button>
+        <button id="lpBtn-days" onclick="setHomeLayout('days')"><span class="lp-ic"><svg width="34" height="14" viewBox="0 0 34 14"><circle cx="5" cy="7" r="4" fill="currentColor"/><circle cx="17" cy="7" r="4" fill="currentColor"/><circle cx="29" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><b>근무일</b><span>남은 날 한눈에</span></button>
       </div>
+      <div class="wd-help">언제든 바꿀 수 있어요. 계산 내용은 모두 같아요.</div>
+      <div class="dor-label" style="margin-bottom:8px">화면 밝기</div>
+      <div class="seg seg-3" role="group" aria-label="화면 밝기" style="margin-bottom:6px">
+        <button class="seg-btn" id="thBtn-auto"  onclick="setThemeMode('auto')">자동</button>
+        <button class="seg-btn" id="thBtn-day"   onclick="setThemeMode('day')">☀️ 주간</button>
+        <button class="seg-btn" id="thBtn-night" onclick="setThemeMode('night')">🌙 야간</button>
+      </div>
+      <div class="wd-help">자동: 오전 6시~오후 7시는 밝게, 밤에는 어둡게 바뀌어요.</div>
+      <div class="dor-label" style="margin-bottom:8px">글자 크기</div>
+      <div class="seg seg-5" role="group" aria-label="글자 크기">
+        <button class="seg-btn fs-s"   id="fsBtn-small"   onclick="setFontSize('small')">가</button>
+        <button class="seg-btn"        id="fsBtn-normal"  onclick="setFontSize('normal')">가</button>
+        <button class="seg-btn fs-l"   id="fsBtn-large"   onclick="setFontSize('large')">가</button>
+        <button class="seg-btn fs-xl"  id="fsBtn-xlarge"  onclick="setFontSize('xlarge')">가</button>
+        <button class="seg-btn fs-xxl" id="fsBtn-xxlarge" onclick="setFontSize('xxlarge')">가</button>
+      </div>
+      <div class="dor-label" style="margin:16px 0 4px">부분별 글자 크기</div>
+      <div class="wd-help" style="margin-bottom:0">전체 크기는 그대로 두고, 필요한 부분만 키우거나 줄일 수 있어요.</div>
+      <div class="fs-detail">
+        <span>큰 숫자</span><div class="seg" data-fsd="num"></div>
+        <span>제목·상태</span><div class="seg" data-fsd="title"></div>
+        <span>메뉴·버튼</span><div class="seg" data-fsd="ui"></div>
+        <span>설명 글</span><div class="seg" data-fsd="sub"></div>
+      </div>
+      <div class="dor-label" style="margin:18px 0 8px">제목 글씨체</div>
+      <div class="font-pick" role="group" aria-label="제목 글씨체">
+        <button id="bfBtn-danjung"  onclick="setBrandFont('danjung')"  style="font-family:'Cafe24Danjeonghae'">황금기사<small>단정해 (기본)</small></button>
+        <button id="bfBtn-classic"  onclick="setBrandFont('classic')"  style="font-family:'Cafe24ClassicType'">황금기사<small>클래식타입</small></button>
+        <button id="bfBtn-magic"    onclick="setBrandFont('magic')"    style="font-family:'Cafe24SuperMagic';font-weight:700">황금기사<small>슈퍼매직</small></button>
+        <button id="bfBtn-surround" onclick="setBrandFont('surround')" style="font-family:'Cafe24Ssurround'">황금기사<small>써라운드</small></button>
+      </div>
+      <div class="wd-help">모두 카페24 무료 글꼴(상업적 사용 가능)이에요.</div>
     </div>
 
-    <div class="card">
+    <!-- 근무일 설정 -->
+    <div class="card" id="workDayCard">
+      <div class="card-title">🗓️ 근무일 설정</div>
+      <div class="wd-help">"하루 필요 금액"은 <b>남은 근무일</b>로 나눠서 계산해요. 내 근무 방식을 골라주세요.</div>
+      <div class="wd-modes" role="group" aria-label="근무 방식">
+        <button class="wd-mode" id="wdMode-weekly"    onclick="setWorkMode('weekly')">요일로 정하기</button>
+        <button class="wd-mode" id="wdMode-alternate" onclick="setWorkMode('alternate')">격일 근무</button>
+      </div>
+      <div id="wdWeeklyBox">
+        <div class="wd-help" style="margin-bottom:6px">쉬는 요일을 눌러주세요 (노란색 = 휴무)</div>
+        <div class="wd-days" id="wdDays"></div>
+      </div>
+      <div id="wdAltBox" style="display:none">
+        <div class="wd-row">
+          <label for="wdAnchor" style="font-size:1.05rem">최근 근무한 날</label>
+          <input type="date" id="wdAnchor" onchange="setAltAnchor(this.value)">
+        </div>
+        <div class="wd-help">이 날부터 하루 걸러 근무로 계산해요.</div>
+      </div>
+      <div class="dor-label" style="margin:10px 0 6px">따로 쉬는 날 · 따로 일하는 날</div>
+      <div class="wd-row">
+        <input type="date" id="wdExceptDate" aria-label="날짜">
+        <button class="seg-btn" style="padding:0 12px" onclick="addWorkException('off')">쉬는 날 추가</button>
+        <button class="seg-btn" style="padding:0 12px" onclick="addWorkException('work')">일하는 날 추가</button>
+      </div>
+      <div class="wd-help" style="margin-bottom:6px">달력 탭에서 날짜를 눌러도 쉬는 날을 바꿀 수 있어요.</div>
+      <div class="wd-chips" id="wdChips"></div>
+      <div class="wd-summary" id="wdSummary">-</div>
+    </div>
+
+    <div class="card" id="salary">
       <div class="card-title">💰 급여 설정</div>
 
       <!-- 플랜 잠금 배너 (Free 사용자에게만 표시) -->
@@ -2121,6 +2571,19 @@
             <span style="font-weight:700">부터</span>
           </div>
           <div class="apply-month-hint" id="applyMonthHint"></div>
+        </div>
+
+        <!-- 회사 조건 불러오기 -->
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:8px">🏢 우리 회사 조건 불러오기</div>
+        <select class="preset-pick" id="companyPresetSelect" onchange="applyCompanyPreset(this.value)">
+          <option value="">회사를 선택하세요 (없으면 직접 입력)</option>
+        </select>
+        <div class="apply-month-hint" style="margin-top:0;margin-bottom:12px">회사가 목록에 없으면 [문의] 탭으로 회사 이름과 조건을 보내주세요. 확인 후 추가해 드려요.</div>
+        <div id="adminPresetBox" style="display:none;margin-bottom:14px">
+          <div class="settings-label">관리자: 지금 입력값을 회사 프리셋으로 저장</div>
+          <input class="settings-input" id="adminPresetName" type="text" placeholder="회사 이름 (예: ○○운수)">
+          <button class="settings-btn primary" onclick="saveCompanyPreset()">회사 프리셋 저장</button>
+          <button class="settings-btn secondary" onclick="deleteCompanyPreset()">선택한 프리셋 삭제</button>
         </div>
 
         <!-- 급여 유형 선택 -->
@@ -2209,7 +2672,7 @@
     </div>
 
     <!-- 계정 설정 -->
-    <div class="card">
+    <div class="card" id="accountCard">
       <div class="card-title">⚙️ 계정 설정</div>
       <div class="settings-section">
         <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">👤 프로필</div>
@@ -2241,6 +2704,13 @@
     </div>
   </div>
 
+  <!-- 사업자 정보 (전자상거래법 표시 의무) -->
+  <footer class="legal-foot" id="legalFoot">
+    <a href="terms.html" target="_blank">이용약관</a> · <a href="privacy.html" target="_blank"><b>개인정보 처리방침</b></a><br>
+    <span id="bizInfo"></span><br>
+    © <span id="bizYear"></span> <span id="bizNameCopy"></span>. 무단 복제·배포를 금합니다.
+  </footer>
+
   <!-- 관리자 대시보드 탭 -->
   <div id="tab-admin" class="tab-panel">
     <div class="card">
@@ -2263,6 +2733,12 @@
           <option value="30">30일</option>
           <option value="90">90일</option>
           <option value="365">1년</option>
+        </select>
+        <select id="newCouponMaxUses" title="최대 사용 인원">
+          <option value="1">1명</option>
+          <option value="10">10명</option>
+          <option value="50">50명</option>
+          <option value="0">제한 없음</option>
         </select>
         <button class="settings-btn primary" style="padding:8px 14px" onclick="createCoupon()">발급</button>
       </div>
@@ -2297,9 +2773,11 @@
 </div>
 
 <!-- Firebase -->
+<script src="app-config.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
@@ -2311,25 +2789,41 @@ var firebaseApp, firestore;
 
 let currentUser = null; // 현재 로그인 사용자
 
+// reCAPTCHA v3 사이트 키 (비워두면 App Check 꺼짐)
+const APP_CFG = window.APP_CONFIG || {};
+const APP_CHECK_SITE_KEY = APP_CFG.appCheckSiteKey || '';
+
+// ─── 사업자 정보 (통신판매업 신고 후 채워 넣으세요) ───
+const BIZ = Object.assign({ name: '[상호]', owner: '[대표자]', regNo: '[사업자등록번호]', mailNo: '[통신판매업 신고번호]',
+  addr: '[사업장 주소]', tel: '[고객센터 전화]', email: '[고객센터 이메일]' }, APP_CFG.biz || {});
+document.addEventListener('DOMContentLoaded', () => {
+  const bi = document.getElementById('bizInfo');
+  if (bi) bi.textContent = `상호 ${BIZ.name} · 대표 ${BIZ.owner} · 사업자등록번호 ${BIZ.regNo} · 통신판매업 ${BIZ.mailNo} · ${BIZ.addr} · ${BIZ.tel} · ${BIZ.email}`;
+  const y = document.getElementById('bizYear'); if (y) y.textContent = new Date().getFullYear();
+  const n = document.getElementById('bizNameCopy'); if (n) n.textContent = BIZ.name;
+});
 function initFirebase() {
   if (firestore) return;
   if (typeof firebase === 'undefined') {
     console.warn('[Firebase] SDK 미로드 - 로컬 전용 모드');
     return;
   }
-  var cfg = {
-    apiKey: "AIzaSyCG5PqWKzsJQADzebyPbDxN2IPsfazGDv0",
-    authDomain: "driver-leemoojong.firebaseapp.com",
-    projectId: "driver-leemoojong",
-    storageBucket: "driver-leemoojong.firebasestorage.app",
-    messagingSenderId: "670178767270",
-    appId: "1:670178767270:web:567f8ad68848deb2a69f67"
-  };
+  var cfg = APP_CFG.firebase;
+  if (!cfg || !cfg.apiKey || /여기에/.test(cfg.apiKey)) {
+    console.warn('[Firebase] app-config.js 에 Firebase 설정이 없어요 - 로컬 전용 모드');
+    return;
+  }
   try {
     if (!firebase.apps.length) {
       firebaseApp = firebase.initializeApp(cfg);
     } else {
       firebaseApp = firebase.apps[0];
+    }
+    // ─── 앱 체크: 복제된 사이트가 우리 데이터베이스를 쓰지 못하게 막음 ───
+    // Firebase 콘솔 > App Check 에서 reCAPTCHA v3 사이트 키를 발급받아 아래에 넣으면 켜집니다.
+    if (APP_CHECK_SITE_KEY && firebase.appCheck) {
+      try { firebase.appCheck().activate(APP_CHECK_SITE_KEY, true); }
+      catch(e) { console.warn('[AppCheck]', e.message); }
     }
     firestore = firebase.firestore();
     auth = firebase.auth();
@@ -2388,6 +2882,7 @@ async function doSignup() {
   if (!name)  return showAuthErr('signup', '❌ 이름을 입력하세요');
   if (!email) return showAuthErr('signup', '❌ 이메일을 입력하세요');
   if (pw.length < 6) return showAuthErr('signup', '❌ 비밀번호는 6자 이상이어야 합니다');
+  if (!document.getElementById('signupAgree')?.checked) return showAuthErr('signup', '❌ 이용약관·개인정보 처리방침에 동의해 주세요');
   const btn = document.getElementById('signupBtn');
   btn.disabled = true; btn.textContent = '가입 중...';
   try {
@@ -2398,9 +2893,12 @@ async function doSignup() {
     trialUntil.setDate(trialUntil.getDate() + 30);
     await firestore.collection('users').doc(cred.user.uid).set({
       name, email, createdAt: new Date().toISOString(),
-      plan: 'pro', trialUntil: trialUntil.toISOString(),
+      plan: 'pro', trialUntil: firebase.firestore.Timestamp.fromDate(trialUntil),
+      agreedTermsAt: new Date().toISOString(),
     });
-    // onAuthStateChanged가 처리
+    // 가입 직후 화면이 먼저 그려졌을 수 있으므로 요금제를 다시 읽음
+    await loadUserPlan();
+    try { renderHome(); } catch(e) {}
   } catch(e) {
     const msgs = {
       'auth/email-already-in-use': '❌ 이미 사용 중인 이메일입니다',
@@ -2442,46 +2940,46 @@ window.doSignup = doSignup;
 // ─── 스플래시 멘트 데이터 ───
 const SPLASH_MSGS = [
   // 응원
-  {cat:'cheer', text:'오늘도 핸들을 잡는 당신,\n대한민국 도로의 진짜 주인공입니다.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'비가 오든 눈이 오든\n오늘 하루도 수고 많으십니다.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'기사님의 하루하루가\n가족의 내일을 만듭니다.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'천 번을 달려도\n처음처럼 안전하게.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'새벽을 여는 사람,\n기사님이 있어 도시가 움직입니다.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'기사님의 땀이\n가장 정직한 매출입니다.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'심야를 달리는 기사님께\n경의를 표합니다.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'오늘 하루\n단 한 번의 사고 없이 마치시길.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'목표를 향해 달리는 오늘,\n내일의 여유가 됩니다.', ref:'— 택시 매출 관리'},
-  {cat:'cheer', text:'오늘도 응원합니다.\n좋은 하루 되십시오.', ref:'— 택시 매출 관리'},
-  // 성경
-  {cat:'bible', text:'여호와는 나의 목자시니\n내게 부족함이 없으리로다.', ref:'— 시편 23:1'},
-  {cat:'bible', text:'내가 산을 향하여 눈을 들리라\n나의 도움은 여호와에게서로다.', ref:'— 시편 121:1-2'},
-  {cat:'bible', text:'수고하고 무거운 짐 진 자들아\n다 내게로 오라, 내가 너희를 쉬게 하리라.', ref:'— 마태복음 11:28'},
-  {cat:'bible', text:'내게 능력 주시는 자 안에서\n내가 모든 것을 할 수 있느니라.', ref:'— 빌립보서 4:13'},
-  {cat:'bible', text:'너의 길을 여호와께 맡기라\n그를 의지하면 그가 이루시고.', ref:'— 시편 37:5'},
-  {cat:'bible', text:'여호와가 너를 지키시리로다\n해가 낮에 너를 상하지 못하리로다.', ref:'— 시편 121:6'},
-  {cat:'bible', text:'하나님이 우리에게 주신 것은\n능력과 사랑과 절제하는 마음이니.', ref:'— 디모데후서 1:7'},
-  {cat:'bible', text:'범사에 감사하라\n이것이 너희를 향하신 하나님의 뜻이니라.', ref:'— 데살로니가전서 5:18'},
-  {cat:'bible', text:'손이 부지런한 자는 부요하게 되느니라.', ref:'— 잠언 10:4'},
-  {cat:'bible', text:'그가 너를 위하여 천사들을 명령하사\n네 모든 길에서 너를 지키게 하심이라.', ref:'— 시편 91:11'},
-  {cat:'bible', text:'여호와는 나의 빛이요 나의 구원이시니\n내가 누구를 두려워하리요.', ref:'— 시편 27:1'},
-  {cat:'bible', text:'주는 나의 힘과 방패시라\n내 마음이 그를 의지하여 도움을 얻었도다.', ref:'— 시편 28:7'},
-  // 명언
-  {cat:'quote', text:'성공은 매일 반복되는\n작은 노력들의 합산이다.', ref:'— 로버트 콜리어'},
-  {cat:'quote', text:'오늘 할 수 있는 일을\n내일로 미루지 마라.', ref:'— 벤자민 프랭클린'},
-  {cat:'quote', text:'땀 흘린 만큼\n결과는 반드시 따라온다.', ref:'— 에이브러햄 링컨'},
-  {cat:'quote', text:'천 리 길도 한 걸음부터.', ref:'— 노자'},
-  {cat:'quote', text:'가장 위대한 영광은\n쓰러질 때마다 다시 일어나는 것이다.', ref:'— 넬슨 만델라'},
-  {cat:'quote', text:'성공한 사람들은\n남들이 하기 싫어하는 일을 한다.', ref:'— E.M. 그레이'},
-  {cat:'quote', text:'빛나는 보석도 닦지 않으면\n빛을 잃는다.', ref:'— 서양 속담'},
-  {cat:'quote', text:'오늘의 행동이\n내일의 나를 만든다.', ref:'— 스티브 잡스'},
-  {cat:'quote', text:'인내는 쓰나 그 열매는 달다.', ref:'— 장 자크 루소'},
-  {cat:'quote', text:'길을 잃은 것이 아니다.\n새로운 길을 발견하는 중이다.', ref:'— J.R.R. 톨킨'},
+  {cat:'cheer', text:'오늘도 핸들을 잡는 당신,\n대한민국 도로의 진짜 주인공입니다.', ref:'— 황금기사'},
+  {cat:'cheer', text:'비가 오든 눈이 오든\n오늘 하루도 수고 많으십니다.', ref:'— 황금기사'},
+  {cat:'cheer', text:'기사님의 하루하루가\n가족의 내일을 만듭니다.', ref:'— 황금기사'},
+  {cat:'cheer', text:'천 번을 달려도\n처음처럼 안전하게.', ref:'— 황금기사'},
+  {cat:'cheer', text:'새벽을 여는 사람,\n기사님이 있어 도시가 움직입니다.', ref:'— 황금기사'},
+  {cat:'cheer', text:'기사님의 땀이\n가장 정직한 매출입니다.', ref:'— 황금기사'},
+  {cat:'cheer', text:'심야를 달리는 기사님께\n경의를 표합니다.', ref:'— 황금기사'},
+  {cat:'cheer', text:'오늘 하루\n단 한 번의 사고 없이 마치시길.', ref:'— 황금기사'},
+  {cat:'cheer', text:'목표를 향해 달리는 오늘,\n내일의 여유가 됩니다.', ref:'— 황금기사'},
+  {cat:'cheer', text:'오늘도 응원합니다.\n좋은 하루 되십시오.', ref:'— 황금기사'},
+  // 쉼표 (종교와 무관한 위로)
+  {cat:'rest', text:'오늘 달린 길만큼\n내일은 조금 더 가벼워질 거예요.', ref:'— 황금기사'},
+  {cat:'rest', text:'잠깐 쉬어 가도 괜찮아요.\n멈춘 게 아니라 숨 고르는 중이니까요.', ref:'— 황금기사'},
+  {cat:'rest', text:'힘든 손님도 지나가고\n좋은 손님은 또 옵니다.', ref:'— 황금기사'},
+  {cat:'rest', text:'오늘 하루를 버틴 것만으로도\n충분히 잘하셨습니다.', ref:'— 황금기사'},
+  {cat:'rest', text:'빨간불은 잠시 쉬어 가라는 신호.\n물 한 잔 드시고 가세요.', ref:'— 황금기사'},
+  {cat:'rest', text:'늦은 밤 불 켜진 창마다\n기사님 덕에 집에 온 사람이 있습니다.', ref:'— 황금기사'},
+  {cat:'rest', text:'매출이 적은 날도 있어요.\n그런 날이 있어 좋은 날이 빛납니다.', ref:'— 황금기사'},
+  {cat:'rest', text:'오늘의 피로는 오늘 두고 가세요.\n내일은 새로 시작하면 됩니다.', ref:'— 황금기사'},
+  {cat:'rest', text:'어깨 한 번 쭉 펴고\n깊게 숨 한 번 쉬어 볼까요?', ref:'— 황금기사'},
+  {cat:'rest', text:'기사님이 건강해야\n가족도 웃습니다. 무리하지 마세요.', ref:'— 황금기사'},
+  {cat:'rest', text:'천천히 가도\n안전하게 도착하면 이긴 겁니다.', ref:'— 황금기사'},
+  {cat:'rest', text:'고마운 손님 한 분이\n하루를 바꾸기도 하죠. 좋은 만남 되세요.', ref:'— 황금기사'},
+  // 옛말 (우리 속담)
+  {cat:'saying', text:'천 리 길도 한 걸음부터.', ref:'— 우리 속담'},
+  {cat:'saying', text:'티끌 모아 태산.', ref:'— 우리 속담'},
+  {cat:'saying', text:'낙숫물이 댓돌을 뚫는다.', ref:'— 우리 속담'},
+  {cat:'saying', text:'비 온 뒤에 땅이 굳어진다.', ref:'— 우리 속담'},
+  {cat:'saying', text:'고생 끝에 낙이 온다.', ref:'— 우리 속담'},
+  {cat:'saying', text:'구슬이 서 말이라도\n꿰어야 보배.', ref:'— 우리 속담'},
+  {cat:'saying', text:'시작이 반이다.', ref:'— 우리 속담'},
+  {cat:'saying', text:'급할수록 돌아가라.', ref:'— 우리 속담'},
+  {cat:'saying', text:'하늘이 무너져도\n솟아날 구멍이 있다.', ref:'— 우리 속담'},
+  {cat:'saying', text:'웃는 얼굴에\n복이 온다.', ref:'— 우리 속담'},
 ];
 
 const SP_CAT = {
   cheer: {label:'응원', cls:'sp-cat-cheer'},
-  bible: {label:'성경 축복', cls:'sp-cat-bible'},
-  quote: {label:'명언', cls:'sp-cat-quote'},
+  rest:   {label:'쉼표', cls:'sp-cat-bible'},
+  saying: {label:'옛말', cls:'sp-cat-quote'},
 };
 
 let _spIdx = Math.floor(Math.random() * SPLASH_MSGS.length);
@@ -2543,7 +3041,7 @@ function initSplash() {
   if (!el) return;
   // Pro/Free 버전 표시
   const verEl = document.getElementById('spVersion');
-  if (verEl) verEl.textContent = '택시 매출 관리 v1.0';
+  if (verEl) verEl.textContent = '황금기사 v1.0';
   _spRender();
   _spStartAuto();
   // 8초 후 자동으로 다음 화면으로
@@ -2552,12 +3050,27 @@ function initSplash() {
 window.dismissSplash = dismissSplash;
 
 const COL = 'taxiData'; // legacy (미사용)
-const ADMIN_EMAIL = 'artist4rhythm@gmail.com'; // 관리자 이메일
+const ADMIN_EMAIL = (window.APP_CONFIG && window.APP_CONFIG.adminEmail) || 'artist4rhythm@gmail.com'; // 관리자 이메일
 let auth = null; // Firebase Auth 인스턴스
 let adminChatTargetUid = null; // 관리자가 현재 보는 채팅방 uid
 
 function isAdmin(user) {
   return user && user.email === ADMIN_EMAIL;
+}
+// ─── 화면에 넣기 전 사용자 입력 글자 안전 처리 (XSS 방지) ───
+function esc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+window.esc = esc;
+// Firestore Timestamp / ISO 문자열 / Date → Date
+function toDate(v) {
+  if (!v) return null;
+  if (v instanceof Date) return v;
+  if (typeof v.toDate === 'function') return v.toDate();
+  const d = new Date(v);
+  return isNaN(d) ? null : d;
 }
 // ─── 사용자별 Firestore 경로 헬퍼 ───
 function getUserCol() {
@@ -2606,18 +3119,8 @@ async function loadFromFirestore() {
     });
     localStorage.setItem(lsKey, JSON.stringify(db));
     console.log('[Firestore] 로드 성공:', Object.keys(db).length, '항목');
-    // 신규 사용자이면 기존 taxiData 이전 시도
-    if (Object.keys(db).length === 0) {
-      await migrateOldData();
-      // 이전 후 다시 로드
-      const snap2 = await col.get();
-      db = {};
-      snap2.forEach(d => {
-        const data = d.data();
-        db[d.id] = { revenue:data.revenue||0, fuel:data.fuel||0, gas:data.gas||0, logs:data.logs||[] };
-      });
-      localStorage.setItem(lsKey, JSON.stringify(db));
-    }
+    // (예전 공용 데이터 자동 이전 기능은 제거됨: 다른 사람의 기록이
+    //  새 회원 계정으로 복사되는 문제가 있었음)
     hideLoading();
     return true;
   } catch(e) {
@@ -2705,7 +3208,13 @@ function switchTab(id, btnEl) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
+  if (!btnEl) btnEl = document.querySelector(`.tab-btn[onclick*="'${id}'"]`);
   if (btnEl) btnEl.classList.add('active');
+  syncNav(id);
+  if (document.body.classList.contains('user-mode')) window.scrollTo(0, 0);
+  document.body.classList.toggle('on-more', id === 'more');
+  if (id === 'more') renderMore();
+  if (id === 'home') renderHome();
   if (id === 'input') renderMemoList();
   if (id === 'weekly') renderWeekly();
   if (id === 'monthly') { renderMonthly(); renderTrend(); renderCompare(); calcFuelEff(); renderWeekdayPattern(); applyProLocksMonthly(); }
@@ -2716,12 +3225,13 @@ function switchTab(id, btnEl) {
     const ani = document.getElementById('adminNameInput');
     if (ani && !ani.value) ani.value = currentUser.displayName || '';
   }
-  if (id === 'settings') { recalcSalary(); loadSalaryHistory(); renderPlanStatus(); }
+  if (id === 'settings') { recalcSalary(); loadSalaryHistory(); renderPlanStatus(); renderWorkDaySettings(); renderDisplaySettings(); renderCompanyPresetUI(); renderLayoutPick(); }
   if (id === 'message' && currentUser && !isAdmin(currentUser)) { loadChatMessages('chatMessages', currentUser.uid); markMessagesRead(); refreshMsgAlertUI(); }
   if (id === 'message') renderBackupStat();
 }
 
 function refreshActiveStats() {
+  if (_activeTab === 'home') renderHome();
   if (_activeTab === 'weekly') renderWeekly();
   if (_activeTab === 'monthly') { renderMonthly(); renderTrend(); renderCompare(); calcFuelEff(); renderWeekdayPattern(); }
   if (_activeTab === 'calendar') renderCalendar();
@@ -2740,6 +3250,7 @@ function renderAllStats() {
   safe(renderCalendar);
   safe(renderProfit);
   safe(renderRecentLog);
+  safe(renderHome);
 }
 window.renderAllStats = renderAllStats;
 
@@ -2766,6 +3277,7 @@ window.onload = async function() {
       // 관리자/사용자 탭 분리
       const adminBtn = document.getElementById('adminTabBtn');
       const revenueTabs = document.getElementById('revenueTabs');
+      document.body.classList.toggle('user-mode', !isAdmin(user));
       if (isAdmin(user)) {
         // 관리자: 매출 탭들 숨기고 관리자 탭 표시
         if (adminBtn) adminBtn.style.display = 'flex';
@@ -2775,7 +3287,7 @@ window.onload = async function() {
         // 일반사용자: 관리자 탭 숨기고 매출 탭 표시
         if (adminBtn) adminBtn.style.display = 'none';
         if (revenueTabs) revenueTabs.style.display = '';
-        switchTab('input', document.querySelector('.tab-btn'));
+        switchTab('home', document.querySelector('#revenueTabs .tab-btn'));
       }
       db = {};
       await initApp();
@@ -2788,6 +3300,9 @@ window.onload = async function() {
       populateApplyMonth();
       await loadSalaryRules();
       loadSalaryHistory();
+      loadWorkPatternFromDoc();
+      await loadCompanyPresets();
+      renderHome();
       // 계정 설정 초기값
       loadSettings();
       loadFontSize();
@@ -2871,8 +3386,8 @@ async function loadChatMessages(containerId, uid) {
       const t = new Date(m.time);
       const ts = `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
       h += `<div class="chat-msg ${isMine ? 'mine' : 'theirs'}">
-        <div class="chat-bubble">${m.text.replace(/</g,'&lt;')}</div>
-        <div class="chat-meta">${isMine ? '' : (m.senderName||'') + ' · '}${ts}</div>
+        <div class="chat-bubble">${esc(m.text)}</div>
+        <div class="chat-meta">${isMine ? '' : esc(m.senderName||'') + ' · '}${ts}</div>
       </div>`;
     });
     el.innerHTML = h;
@@ -2884,6 +3399,7 @@ async function sendMessage() {
   const input = document.getElementById('chatInput');
   const text = input?.value.trim();
   if (!text || !currentUser || !firestore) return;
+  if (text.length > 1000) return showToast('❌ 1,000자 이내로 나눠서 보내주세요');
   input.value = '';
   const uid = currentUser.uid;
   const msg = {
@@ -2933,6 +3449,12 @@ function updateMsgBadge(count) {
   if (!b) return;
   if (count > 0) { b.textContent = count > 99 ? '99+' : count; b.style.display = 'inline-flex'; }
   else b.style.display = 'none';
+  ['navMoreBadge', 'moreMsgBadge'].forEach(id => {
+    const e = document.getElementById(id);
+    if (!e) return;
+    e.textContent = count > 99 ? '99+' : count;
+    e.style.display = count > 0 ? 'inline-flex' : 'none';
+  });
 }
 
 function markMessagesRead() {
@@ -3141,32 +3663,37 @@ async function loadUserPlan() {
     const doc = await firestore.collection('users').doc(currentUser.uid).get();
     if (doc.exists) {
       const data = doc.data();
-      userPlan = data.plan || 'free';
+      userDoc = data;
+      // 쿠폰 만료일 = 사용 시각 + 쿠폰 기간 (서버 시각 기준)
+      let planUntil = toDate(data.planUntil);
+      const redeemedAt = toDate(data.couponRedeemedAt);
+      if (!planUntil && redeemedAt && data.couponDays > 0) {
+        planUntil = new Date(redeemedAt.getTime() + data.couponDays * 86400000);
+      }
+      const paidUntil = toDate(data.paidUntil);
       userPlanMeta = {
-        trialUntil: data.trialUntil || null,
+        trialUntil: toDate(data.trialUntil),
         couponCode: data.couponCode || null,
-        planUntil:  data.planUntil  || null,
+        planUntil, paidUntil,
       };
-      // 만료 체크
+      // 요금제는 화면에서만 계산하고, 데이터베이스는 건드리지 않음
+      // (요금제 필드는 보안 규칙상 본인이 수정할 수 없음)
       const now = new Date();
-      if (userPlanMeta.planUntil && new Date(userPlanMeta.planUntil) < now) {
-        userPlan = 'free';
-        await firestore.collection('users').doc(currentUser.uid)
-          .update({ plan: 'free', planUntil: null, couponCode: null }).catch(()=>{});
+      let plan = data.plan || 'free';
+      if (plan !== 'free') {
+        const m = userPlanMeta;
+        if (m.paidUntil && m.paidUntil >= now) { /* 결제 유효 */ }
+        else if (m.couponCode) { if (m.planUntil && m.planUntil < now) plan = 'free'; }
+        else if (m.trialUntil) { if (m.trialUntil < now) plan = 'free'; }
+        else if (m.planUntil && m.planUntil < now) plan = 'free';
       }
-      if (userPlanMeta.trialUntil && new Date(userPlanMeta.trialUntil) < now && userPlan !== 'free') {
-        // 체험 만료 & 쿠폰 없으면 free로
-        if (!userPlanMeta.couponCode) {
-          userPlan = 'free';
-          await firestore.collection('users').doc(currentUser.uid)
-            .update({ plan: 'free', trialUntil: null }).catch(()=>{});
-        }
-      }
+      userPlan = plan;
     }
   } catch(e) { console.warn('[plan]', e.message); }
   applyPlanUI();
   renderPlanStatus();
 }
+let userDoc = {};
 
 function applyPlanUI() {
   // 헤더 사용자명 + 플랜 배지
@@ -3497,23 +4024,725 @@ window.renderWeekdayPattern = renderWeekdayPattern;
 // ════════════════════════════════════════
 // ─── 표시 설정 (글자 크기) ───
 // ════════════════════════════════════════
+// ─── 글자 크기 (5단계) ───
+const FONT_LEVELS = { small: 14, normal: 16, large: 18, xlarge: 20, xxlarge: 22 };
 function setFontSize(size) {
+  if (!FONT_LEVELS[size]) size = 'normal';
+  document.documentElement.style.fontSize = FONT_LEVELS[size] + 'px';
   document.body.classList.remove('large-mode', 'xlarge-mode');
-  if (size === 'large')  document.body.classList.add('large-mode');
-  if (size === 'xlarge') document.body.classList.add('xlarge-mode');
-  ['normal','large','xlarge'].forEach(s => {
-    const btn = document.getElementById('fsBtn-'+s);
-    if (btn) btn.classList.toggle('active', s === size);
+  if (size === 'large') document.body.classList.add('large-mode');
+  if (size === 'xlarge' || size === 'xxlarge') document.body.classList.add('xlarge-mode');
+  Object.keys(FONT_LEVELS).forEach(s => {
+    const btn = document.getElementById('fsBtn-' + s);
+    if (btn) { btn.classList.toggle('on', s === size); btn.setAttribute('aria-pressed', s === size); }
   });
   try { localStorage.setItem('fontSize', size); } catch(e) {}
 }
 window.setFontSize = setFontSize;
 
 function loadFontSize() {
-  let size = 'normal';
+  let size = 'large';
   try { size = localStorage.getItem('fontSize') || 'normal'; } catch(e) {}
   setFontSize(size);
 }
+
+// ─── 화면 밝기 (자동 / 주간 / 야간) ───
+function getThemeMode() {
+  try { return localStorage.getItem('themeMode') || 'auto'; } catch(e) { return 'auto'; }
+}
+function resolveTheme(mode) {
+  if (mode === 'day' || mode === 'night') return mode;
+  const h = new Date().getHours();
+  return (h >= 6 && h < 19) ? 'day' : 'night';
+}
+function applyTheme() {
+  const mode = getThemeMode();
+  const t = resolveTheme(mode);
+  const changed = document.documentElement.getAttribute('data-theme') !== t;
+  document.documentElement.setAttribute('data-theme', t);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', t === 'day' ? '#f4f2ec' : '#0d0f14');
+  ['auto','day','night'].forEach(m => {
+    const b = document.getElementById('thBtn-' + m);
+    if (b) { b.classList.toggle('on', m === mode); b.setAttribute('aria-pressed', m === mode); }
+  });
+  if (changed && typeof refreshActiveStats === 'function') { try { refreshActiveStats(); } catch(e) {} }
+}
+function setThemeMode(mode) {
+  try { localStorage.setItem('themeMode', mode); } catch(e) {}
+  applyTheme();
+}
+window.setThemeMode = setThemeMode;
+setInterval(applyTheme, 5 * 60 * 1000);
+
+// ─── 부분별 글자 크기 ───
+const FS_DETAIL_STEPS = [{ k: 0.88, label: '작게' }, { k: 1, label: '보통' }, { k: 1.15, label: '크게' }];
+function getFsDetail() { try { return JSON.parse(localStorage.getItem('fsDetail') || '{}'); } catch(e) { return {}; } }
+function setFsDetail(part, k) {
+  const d = getFsDetail(); d[part] = k;
+  try { localStorage.setItem('fsDetail', JSON.stringify(d)); } catch(e) {}
+  document.documentElement.style.setProperty('--' + part + '-scale', k);
+  renderFsDetail();
+}
+window.setFsDetail = setFsDetail;
+function renderFsDetail() {
+  const d = getFsDetail();
+  document.querySelectorAll('[data-fsd]').forEach(box => {
+    const part = box.dataset.fsd, cur = d[part] || 1;
+    box.innerHTML = FS_DETAIL_STEPS.map(st =>
+      `<button class="seg-btn ${st.k === cur ? 'on' : ''}" aria-pressed="${st.k === cur}" onclick="setFsDetail('${part}', ${st.k})">${st.label}</button>`).join('');
+  });
+}
+// ─── 제목 글씨체 ───
+const BRAND_FONTS = ['classic', 'danjung', 'magic', 'surround'];
+function getBrandFont() { try { const v = localStorage.getItem('brandFont'); return BRAND_FONTS.includes(v) ? v : 'danjung'; } catch(e) { return 'danjung'; } }
+function setBrandFont(k) {
+  if (!BRAND_FONTS.includes(k)) return;
+  try { localStorage.setItem('brandFont', k); } catch(e) {}
+  document.documentElement.setAttribute('data-brand-font', k);
+  renderBrandFontPick();
+}
+window.setBrandFont = setBrandFont;
+function renderBrandFontPick() {
+  const cur = getBrandFont();
+  BRAND_FONTS.forEach(k => { const b = document.getElementById('bfBtn-' + k); if (b) { b.classList.toggle('on', k === cur); b.setAttribute('aria-pressed', k === cur); } });
+}
+
+function renderDisplaySettings() {
+  renderFsDetail();
+  renderBrandFontPick();
+  applyTheme();
+  let size = 'large';
+  try { size = localStorage.getItem('fontSize') || 'normal'; } catch(e) {}
+  Object.keys(FONT_LEVELS).forEach(s => {
+    const btn = document.getElementById('fsBtn-' + s);
+    if (btn) btn.classList.toggle('on', s === size);
+  });
+}
+
+// ════════════════════════════════════════
+// ─── 근무일 (남은 근무일 기준 계산) ───
+// ════════════════════════════════════════
+const DOW_LABEL = ['일','월','화','수','목','금','토'];
+let workPattern = { mode: 'weekly', offDays: [0], anchor: '', extraOff: [], extraWork: [] };
+let goalPay = 0; // 내 목표 월급
+
+function _dkey(y, m, d) { return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function _kdate(k) { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); }
+
+// 예외를 빼고 "기본 규칙"상 근무일인지
+function isRuleWorkDay(key) {
+  const wp = workPattern;
+  if (wp.mode === 'alternate' && wp.anchor) {
+    const diff = Math.round((_kdate(key) - _kdate(wp.anchor)) / 86400000);
+    return ((diff % 2) + 2) % 2 === 0;
+  }
+  return !(wp.offDays || []).includes(_kdate(key).getDay());
+}
+// 예외까지 반영한 근무 예정일인지
+function isPlannedWorkDay(key) {
+  const wp = workPattern;
+  if ((wp.extraOff || []).includes(key)) return false;
+  if ((wp.extraWork || []).includes(key)) return true;
+  return isRuleWorkDay(key);
+}
+
+// 한 달의 근무일·매출 집계
+function workDayStats(ym) {
+  const [y, m] = ym.split('-').map(Number);
+  const dim = new Date(y, m, 0).getDate();
+  const today = todayStr();
+  let worked = 0, remaining = 0, planned = 0, rev = 0, fuel = 0, todayOpen = false;
+  for (let d = 1; d <= dim; d++) {
+    const key = _dkey(y, m, d);
+    const r = db[key]?.revenue || 0, f = db[key]?.fuel || 0;
+    rev += r; fuel += f;
+    const pl = isPlannedWorkDay(key);
+    if (pl) planned++;
+    if (r > 0) worked++;
+    if (key > today && pl) remaining++;
+    else if (key === today && pl && r <= 0) { remaining++; todayOpen = true; }
+  }
+  return { y, m, dim, worked, remaining, planned, rev, fuel, net: rev - fuel, todayOpen,
+           isCurrent: today.startsWith(ym), isPast: ym < today.slice(0, 7) };
+}
+
+// 목표 월급 → 필요한 순매출 (급여 조건 역산)
+function netNeededForPay(ym, pay) {
+  const r = getSalaryRule(ym);
+  const base = r.monthlyBase || 0, bp = r.baseProfit || 0, rate = (r.overRate || 0) / 100;
+  if (pay <= bp) return base;
+  if (rate <= 0) return null;
+  return base + Math.ceil((pay - bp) / rate);
+}
+
+// 페이스 계산 (홈·월간·달력 공통)
+function calcPace(ym) {
+  const st = workDayStats(ym);
+  const rule = getSalaryRule(ym);
+  const base = rule.monthlyBase || 0;
+  const avg = st.worked > 0 ? Math.round(st.net / st.worked) : 0;
+  const left = Math.max(0, base - st.net);
+  const need = st.remaining > 0 ? Math.ceil(left / st.remaining / 100) * 100 : left;
+  let status;
+  if (base <= 0) status = 'nobase';
+  else if (st.net >= base) status = 'done';
+  else if (st.remaining === 0) status = st.isPast ? 'missed' : 'last';
+  else if (st.worked === 0) status = 'start';
+  else if (need <= avg * 1.05) status = 'green';
+  else if (need <= avg * 1.2) status = 'yellow';
+  else status = 'red';
+  const projectedNet = st.net + avg * st.remaining;
+  return { ...st, rule, base, avg, left, need, status, projectedNet,
+           pct: base > 0 ? Math.min(100, Math.round(st.net / base * 100)) : 0 };
+}
+
+function loadWorkPatternFromDoc() {
+  let local = null;
+  try { local = JSON.parse(localStorage.getItem('workPattern_' + (currentUser?.uid || 'local')) || 'null'); } catch(e) {}
+  const wp = (userDoc && userDoc.workPattern) || local;
+  if (wp) workPattern = Object.assign({ mode: 'weekly', offDays: [0], anchor: '', extraOff: [], extraWork: [] }, wp);
+  goalPay = (userDoc && +userDoc.goalPay) || 0;
+}
+
+async function saveWorkPattern() {
+  // 3개월 지난 예외 날짜는 정리
+  const cut = new Date(); cut.setMonth(cut.getMonth() - 3);
+  const cutKey = _dkey(cut.getFullYear(), cut.getMonth() + 1, cut.getDate());
+  workPattern.extraOff  = (workPattern.extraOff  || []).filter(k => k >= cutKey).sort();
+  workPattern.extraWork = (workPattern.extraWork || []).filter(k => k >= cutKey).sort();
+  try { localStorage.setItem('workPattern_' + (currentUser?.uid || 'local'), JSON.stringify(workPattern)); } catch(e) {}
+  renderWorkDaySettings();
+  renderAllStats();
+  if (firestore && currentUser) {
+    try { await firestore.collection('users').doc(currentUser.uid).set({ workPattern }, { merge: true }); }
+    catch(e) { showToast('❌ 근무일 저장 실패: ' + e.message); }
+  }
+}
+
+function setWorkMode(mode) {
+  workPattern.mode = mode;
+  if (mode === 'alternate' && !workPattern.anchor) workPattern.anchor = todayStr();
+  saveWorkPattern();
+}
+window.setWorkMode = setWorkMode;
+
+function toggleOffWeekday(dow) {
+  const set = new Set(workPattern.offDays || []);
+  set.has(dow) ? set.delete(dow) : set.add(dow);
+  if (set.size >= 7) return showToast('❌ 모든 요일을 휴무로 할 수는 없어요');
+  workPattern.offDays = [...set].sort();
+  saveWorkPattern();
+}
+window.toggleOffWeekday = toggleOffWeekday;
+
+function setAltAnchor(v) { if (v) { workPattern.anchor = v; saveWorkPattern(); } }
+window.setAltAnchor = setAltAnchor;
+
+function addWorkException(kind) {
+  const v = document.getElementById('wdExceptDate')?.value;
+  if (!v) return showToast('❌ 날짜를 먼저 고르세요');
+  workPattern.extraOff  = (workPattern.extraOff  || []).filter(k => k !== v);
+  workPattern.extraWork = (workPattern.extraWork || []).filter(k => k !== v);
+  if (kind === 'off'  && isRuleWorkDay(v))  workPattern.extraOff.push(v);
+  if (kind === 'work' && !isRuleWorkDay(v)) workPattern.extraWork.push(v);
+  saveWorkPattern();
+  showToast(kind === 'off' ? `🛌 ${v} 쉬는 날로 지정` : `🚕 ${v} 일하는 날로 지정`);
+}
+window.addWorkException = addWorkException;
+
+function removeWorkException(key) {
+  workPattern.extraOff  = (workPattern.extraOff  || []).filter(k => k !== key);
+  workPattern.extraWork = (workPattern.extraWork || []).filter(k => k !== key);
+  saveWorkPattern();
+}
+window.removeWorkException = removeWorkException;
+
+// 하루 단위로 쉬는 날 ↔ 일하는 날 바꾸기 (홈 버튼·달력)
+function toggleDayOff(key) {
+  const wp = workPattern;
+  wp.extraOff = wp.extraOff || []; wp.extraWork = wp.extraWork || [];
+  if (wp.extraOff.includes(key))       wp.extraOff = wp.extraOff.filter(k => k !== key);
+  else if (wp.extraWork.includes(key)) wp.extraWork = wp.extraWork.filter(k => k !== key);
+  else if (isRuleWorkDay(key))         wp.extraOff.push(key);
+  else                                 wp.extraWork.push(key);
+  saveWorkPattern();
+  showToast(isPlannedWorkDay(key) ? `🚕 ${key} 일하는 날` : `🛌 ${key} 쉬는 날`);
+}
+window.toggleDayOff = toggleDayOff;
+
+function renderWorkDaySettings() {
+  const wp = workPattern;
+  ['weekly', 'alternate'].forEach(m => {
+    const b = document.getElementById('wdMode-' + m);
+    if (b) b.classList.toggle('on', wp.mode === m);
+  });
+  const wb = document.getElementById('wdWeeklyBox'), ab = document.getElementById('wdAltBox');
+  if (wb) wb.style.display = wp.mode === 'weekly' ? '' : 'none';
+  if (ab) ab.style.display = wp.mode === 'alternate' ? '' : 'none';
+  const days = document.getElementById('wdDays');
+  if (days) {
+    days.innerHTML = [1,2,3,4,5,6,0].map(d =>
+      `<button class="wd-day ${(wp.offDays || []).includes(d) ? 'off' : ''}" aria-pressed="${(wp.offDays || []).includes(d)}" onclick="toggleOffWeekday(${d})">${DOW_LABEL[d]}</button>`
+    ).join('');
+  }
+  const an = document.getElementById('wdAnchor');
+  if (an && wp.anchor) an.value = wp.anchor;
+  const ex = document.getElementById('wdExceptDate');
+  if (ex && !ex.value) ex.value = todayStr();
+  const chips = document.getElementById('wdChips');
+  if (chips) {
+    const today = todayStr();
+    const items = [
+      ...(wp.extraOff  || []).map(k => ({ k, t: '쉬는 날' })),
+      ...(wp.extraWork || []).map(k => ({ k, t: '일하는 날' })),
+    ].filter(o => o.k >= today.slice(0, 7)).sort((a, b) => a.k.localeCompare(b.k));
+    chips.innerHTML = items.length ? items.map(o => {
+      const d = _kdate(o.k);
+      return `<span class="wd-chip">${d.getMonth()+1}/${d.getDate()}(${DOW_LABEL[d.getDay()]}) ${o.t}
+        <button aria-label="${o.k} 지우기" onclick="removeWorkException('${o.k}')">✕</button></span>`;
+    }).join('') : '<span class="wd-help" style="margin:0">따로 지정한 날이 없어요</span>';
+  }
+  const sum = document.getElementById('wdSummary');
+  if (sum) {
+    const st = workDayStats(todayStr().slice(0, 7));
+    sum.textContent = `이번 달 근무 예정 ${st.planned}일 · 남은 근무일 ${st.remaining}일`;
+  }
+}
+
+// ════════════════════════════════════════
+// ─── 홈 (신호등 + 계기판) ───
+// ════════════════════════════════════════
+const PACE_TEXT = {
+  green:  { tone: 'ok',   label: '순조로워요' },
+  yellow: { tone: 'warn', label: '조금 분발!' },
+  red:    { tone: 'bad',  label: '분발 필요' },
+  start:  { tone: 'warn', label: '이번 달 출발' },
+  done:   { tone: 'done', label: '기준금 달성!' },
+  last:   { tone: 'bad',  label: '남은 근무일 없음' },
+  missed: { tone: 'bad',  label: '기준금 미달' },
+  nobase: { tone: 'none', label: '조건을 정해주세요' },
+};
+const HOME_LAYOUTS = { one: 'hlOne', cluster: 'hlCluster', days: 'hlDays' };
+let _pace = null;
+
+function _setT(id, t) { const e = document.getElementById(id); if (e) e.textContent = t; }
+function manwon(n) {
+  n = Math.round(n || 0);
+  if (Math.abs(n) >= 10000) {
+    const man = Math.floor(n / 1000) / 10;
+    return (Number.isInteger(man) ? man : man.toFixed(1)) + '만 원';
+  }
+  return n.toLocaleString('ko-KR') + '원';
+}
+function won(n) { return Math.round(n || 0).toLocaleString('ko-KR'); }
+function getHomeLayout() {
+  try { const v = localStorage.getItem('homeLayout'); return HOME_LAYOUTS[v] ? v : 'one'; } catch(e) { return 'one'; }
+}
+function setHomeLayout(k) {
+  if (!HOME_LAYOUTS[k]) return;
+  try { localStorage.setItem('homeLayout', k); } catch(e) {}
+  renderLayoutPick();
+  renderHome();
+  showToast('홈 화면 모양을 바꿨어요');
+}
+window.setHomeLayout = setHomeLayout;
+function renderLayoutPick() {
+  const cur = getHomeLayout();
+  Object.keys(HOME_LAYOUTS).forEach(k => {
+    const b = document.getElementById('lpBtn-' + k);
+    if (b) { b.classList.toggle('on', k === cur); b.setAttribute('aria-pressed', k === cur); }
+  });
+}
+// 홈의 해/달 버튼: 주간 ↔ 야간 바로 전환
+function toggleThemeQuick() {
+  const now = document.documentElement.getAttribute('data-theme');
+  setThemeMode(now === 'day' ? 'night' : 'day');
+  showToast(now === 'day' ? '🌙 야간 화면' : '☀️ 주간 화면');
+}
+window.toggleThemeQuick = toggleThemeQuick;
+
+// ─── 아래 메뉴 ───
+const STATS_TABS = ['weekly', 'monthly', 'profit'];
+let _lastStats = 'monthly';
+function goNav(k) {
+  if (k === 'home') return switchTab('home');
+  if (k === 'calendar') return switchTab('calendar');
+  if (k === 'stats') return switchTab(_lastStats);
+  return switchTab('more');
+}
+window.goNav = goNav;
+function syncNav(id) {
+  if (STATS_TABS.includes(id)) _lastStats = id;
+  const k = id === 'home' ? 'home' : id === 'calendar' ? 'calendar' : STATS_TABS.includes(id) ? 'stats' : 'more';
+  document.querySelectorAll('#bottomNav [data-nav]').forEach(b => {
+    const on = b.dataset.nav === k;
+    b.classList.toggle('on', on);
+    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  const sub = document.getElementById('statsSubnav');
+  if (sub) {
+    sub.classList.toggle('on', STATS_TABS.includes(id));
+    sub.querySelectorAll('[data-sub]').forEach(b => b.classList.toggle('on', b.dataset.sub === id));
+  }
+}
+function openSettings(anchorId) {
+  switchTab('settings');
+  setTimeout(() => {
+    const el = document.getElementById(anchorId);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 12, behavior: 'smooth' });
+  }, 60);
+}
+window.openSettings = openSettings;
+function renderMore() {
+  const plan = userPlan === 'enterprise' ? 'Enterprise' : userPlan === 'pro' ? 'Pro' : 'Free';
+  _setT('morePlan', plan);
+  _setT('moreUser', currentUser?.email || '');
+  _setT('moreSync', document.getElementById('syncText')?.textContent || '');
+}
+
+// ─── 설명·입력 창 ───
+let _sheetEnter = null;
+function openSheet({ title, html, actions }) {
+  _setT('sheetTitle', title);
+  document.getElementById('sheetBody').innerHTML = html || '';
+  const act = document.getElementById('sheetActions');
+  act.innerHTML = '';
+  (actions || [{ label: '알겠어요', cls: 'dark', fn: closeSheet }]).forEach((a, i) => {
+    const b = document.createElement('button');
+    b.className = 'sheet-btn ' + (a.cls || 'main');
+    b.textContent = a.label;
+    b.onclick = a.fn;
+    act.appendChild(b);
+    if (i === 0) _sheetEnter = a.fn;
+  });
+  const sh = document.getElementById('sheet');
+  sh.classList.add('on'); sh.setAttribute('aria-hidden', 'false');
+  setTimeout(() => (document.querySelector('#sheet input') || act.querySelector('button'))?.focus(), 80);
+}
+function closeSheet() {
+  const sh = document.getElementById('sheet');
+  sh.classList.remove('on'); sh.setAttribute('aria-hidden', 'true');
+}
+window.closeSheet = closeSheet;
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('sheet')?.classList.contains('on')) return;
+  if (e.key === 'Escape') closeSheet();
+  if (e.key === 'Enter' && e.target.tagName === 'INPUT' && _sheetEnter) { e.preventDefault(); _sheetEnter(); }
+});
+
+function openHelp(key) {
+  const pc = _pace || calcPace(todayStr().slice(0, 7));
+  const base = manwon(pc.base), now = manwon(pc.net);
+  let title = '', html = '';
+  if (key === 'status') {
+    title = '신호등 보는 법';
+    html = `<p><b style="color:var(--ok)">●</b> <b>순조로워요</b> · 지금 페이스면 기준금을 채워요</p>
+      <p><b style="color:var(--warn)">●</b> <b>조금 분발</b> · 하루 조금만 더 벌면 돼요</p>
+      <p><b style="color:var(--bad)">●</b> <b>분발 필요</b> · 남은 날 평소보다 많이 벌어야 해요</p>
+      <p style="margin-top:10px">내 하루 평균과 앞으로 필요한 하루 금액을 비교해서 정해요.</p>`;
+  } else if (key === 'need') {
+    if (pc.status === 'nobase') {
+      title = '먼저 급여 조건을 정해주세요';
+      html = `<p>[더보기 › 급여 조건]에서 회사를 고르면 하루 목표가 계산돼요.</p>`;
+      return openSheet({ title, html, actions: [
+        { label: '급여 조건 열기', fn: () => { closeSheet(); openSettings('salary'); } },
+        { label: '닫기', cls: 'ghost', fn: closeSheet } ] });
+    }
+    title = pc.status === 'done' ? '기준금을 넘었어요' : '하루 목표는 이렇게 나와요';
+    html = pc.status === 'done'
+      ? `<p>이번 달 순매출이 기준금(${base})을 넘었어요. 이제부터 버는 금액의 <b>${pc.rule.overRate || 0}%</b>가 내 몫이에요.</p>`
+      : `<div class="sheet-calc">기준금 ${won(pc.base)}원<br>− 지금까지 ${won(pc.net)}원<br>= 남은 ${won(pc.left)}원<br>÷ 남은 근무 ${pc.remaining}일<br><b>= 하루 ${won(pc.need)}원</b></div>
+         <p style="margin-top:12px">순매출(매출 − 주유비) 기준이에요. 오늘 매출을 아직 안 넣었으면 오늘도 남은 날에 들어가요.</p>`;
+    return openSheet({ title, html, actions: [
+      { label: '알겠어요', cls: 'dark', fn: closeSheet },
+      { label: '근무일 바꾸기', cls: 'ghost', fn: () => { closeSheet(); openSettings('workDayCard'); } } ] });
+  } else if (key === 'avg') {
+    title = '내 하루 평균';
+    html = `<p>이번 달 일한 <b>${pc.worked}일</b>의 순매출 평균이에요.</p><p>평균이 필요한 하루 금액보다 높으면 여유, 낮으면 분발이 필요해요.</p>`;
+  } else if (key === 'pay') {
+    const exp = calcProfitFor(pc.y + '-' + String(pc.m).padStart(2, '0'), pc.projectedNet, 0);
+    title = '예상 월급';
+    html = pc.base > 0
+      ? `<p>지금 하루 평균(${won(pc.avg)}원)을 남은 근무 ${pc.remaining}일 동안 유지하면</p>
+         <div class="sheet-calc">예상 순매출 ${manwon(pc.projectedNet)}<br>예상 월급 <b>${manwon(exp)}</b></div>
+         <p style="margin-top:12px">입력한 급여 조건으로 계산한 참고용 추정치예요. 실제 급여는 회사 정산 기준을 따릅니다.</p>`
+      : `<p>급여 조건을 정하면 예상 월급을 보여드려요.</p>`;
+  }
+  openSheet({ title, html });
+}
+window.openHelp = openHelp;
+
+function openRevenueSheet() {
+  openSheet({
+    title: '오늘 매출 입력',
+    html: `<label for="sheetRevenue" style="font-size:1rem">오늘 번 금액 (원)</label>
+      <input class="sheet-input" id="sheetRevenue" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 240000">
+      <p style="margin-top:10px;font-size:.92rem">입력한 금액은 오늘 매출에 더해져요.</p>`,
+    actions: [
+      { label: '저장', fn: quickSaveRevenue },
+      { label: '다른 날짜 · 주유 입력', cls: 'ghost', fn: () => { closeSheet(); switchTab('input'); } },
+    ],
+  });
+}
+window.openRevenueSheet = openRevenueSheet;
+
+async function quickSaveRevenue() {
+  const q = document.getElementById('sheetRevenue');
+  const val = parseAmount((q?.value || '').trim());
+  if (val <= 0) return showToast('❌ 매출 금액을 입력하세요');
+  closeSheet();
+  document.getElementById('inputDate').value = todayStr();
+  document.getElementById('inputRevenue').value = String(val);
+  await saveRevenue();
+  renderHome();
+}
+window.quickSaveRevenue = quickSaveRevenue;
+
+function openGoalSheet() {
+  openSheet({
+    title: '내 목표 월급',
+    html: `<p>받고 싶은 월급을 정하면, 하루에 얼마 벌어야 하는지 알려드려요.</p>
+      <input class="sheet-input" id="sheetGoal" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 2500000" value="${goalPay || ''}">`,
+    actions: [
+      { label: '저장', fn: () => saveGoalPay(document.getElementById('sheetGoal')?.value) },
+      ...(goalPay ? [{ label: '목표 지우기', cls: 'ghost', fn: () => saveGoalPay('') }] : []),
+    ],
+  });
+}
+window.openGoalSheet = openGoalSheet;
+async function saveGoalPay(v) {
+  const n = parseAmount(String(v || '').trim());
+  goalPay = n > 0 ? n : 0;
+  closeSheet();
+  renderHome();
+  if (firestore && currentUser) {
+    try { await firestore.collection('users').doc(currentUser.uid).set({ goalPay }, { merge: true }); }
+    catch(e) { showToast('❌ 저장 실패: ' + e.message); }
+  }
+  showToast(goalPay ? `🎯 목표 월급 ${manwon(goalPay)}` : '목표를 지웠어요');
+}
+async function editGoalPay() { openGoalSheet(); }
+window.editGoalPay = editGoalPay;
+
+function openTodaySheet() {
+  const today = todayStr();
+  const isWork = isPlannedWorkDay(today);
+  openSheet({
+    title: isWork ? '오늘은 근무일이에요' : '오늘은 쉬는 날이에요',
+    html: `<p>근무일은 하루 목표 계산에 쓰여요. 오늘만 바꾸거나, 근무 방식 전체를 바꿀 수 있어요.</p>`,
+    actions: [
+      { label: isWork ? '오늘 쉬는 날로 바꾸기' : '오늘 일하는 날로 바꾸기', cls: 'dark', fn: () => { closeSheet(); toggleDayOff(today); } },
+      { label: '근무일 설정 열기', cls: 'ghost', fn: () => { closeSheet(); openSettings('workDayCard'); } },
+    ],
+  });
+}
+window.openTodaySheet = openTodaySheet;
+
+function renderHome() {
+  if (!document.getElementById('tab-home')) return;
+  const today = todayStr();
+  const ym = today.slice(0, 7);
+  const pc = calcPace(ym);
+  _pace = pc;
+  const now = new Date();
+  const isWork = isPlannedWorkDay(today);
+  const hd = document.getElementById('hDate');
+  if (hd) hd.innerHTML = `${now.getMonth()+1}월 ${now.getDate()}일 ${DOW_LABEL[now.getDay()]}요일 · <b>${isWork ? '근무' : '휴무'}</b>`;
+
+  // 어떤 모양을 보여줄지
+  const layout = getHomeLayout();
+  Object.entries(HOME_LAYOUTS).forEach(([k, id]) => document.getElementById(id)?.classList.toggle('on', k === layout));
+
+  const tx = PACE_TEXT[pc.status] || PACE_TEXT.nobase;
+  const gap = pc.avg - pc.need;
+  const hasNeed = !['done', 'nobase'].includes(pc.status);
+  const ym2 = ym;
+  const exp = calcProfitFor(ym2, pc.projectedNet, 0);
+
+  // 공통 값 채우기
+  const q = sel => document.querySelectorAll('#tab-home ' + sel);
+  q('[data-status]').forEach(e => e.textContent = tx.label);
+  q('[data-dot]').forEach(e => e.className = 'h-dot ' + (tx.tone === 'ok' ? '' : tx.tone));
+  q('[data-pct]').forEach(e => e.textContent = pc.pct + '%');
+  q('[data-bar]').forEach(e => e.style.width = pc.pct + '%');
+  q('[data-remain]').forEach(e => e.textContent = pc.remaining + '일');
+  q('[data-pay]').forEach(e => e.textContent = pc.base > 0 ? manwon(exp) : '-');
+
+  // D · 큰 숫자
+  q('[data-need-lbl]').forEach(e => e.textContent = pc.status === 'done' ? '기준금을 넘긴 금액' : pc.remaining > 0 ? '오늘 하루 목표' : '기준금까지 부족한 금액');
+  const bigVal = pc.status === 'done' ? '+' + won(pc.net - pc.base) : pc.status === 'nobase' ? '-' : won(pc.remaining > 0 ? pc.need : pc.left);
+  q('[data-need-big]').forEach(e => e.innerHTML = `${bigVal}<small>원</small>`);
+  let gapHtml = '';
+  if (pc.status === 'nobase') gapHtml = '더보기 › 급여 조건에서 회사를 골라주세요';
+  else if (pc.status === 'done') gapHtml = `이제부터 매출의 <b class="t-ok">${pc.rule.overRate || 0}%</b>가 내 몫`;
+  else if (pc.worked === 0) gapHtml = `이번 달 근무 예정 <b>${pc.planned}일</b>`;
+  else if (gap >= 0) gapHtml = `내 평균보다 <b class="t-ok">${won(gap)}원 여유</b>`;
+  else gapHtml = `내 평균보다 <b class="${pc.status === 'red' ? 't-bad' : 't-warn'}">${won(-gap)}원 더</b>`;
+  q('[data-gap]').forEach(e => e.innerHTML = gapHtml);
+
+  // E · 계기판
+  q('[data-arc]').forEach(e => {
+    e.setAttribute('stroke-dasharray', `${pc.pct} 100`);
+    e.setAttribute('stroke', tx.tone === 'bad' ? 'var(--bad)' : tx.tone === 'done' ? 'var(--purple)' : 'var(--accent)');
+  });
+  q('[data-pct-big]').forEach(e => e.innerHTML = `${pc.pct}<small>%</small>`);
+  q('[data-cap]').forEach(e => e.textContent = pc.base > 0 ? `기준금 ${manwon(pc.base).replace(' 원','')} 중 ${manwon(pc.net).replace(' 원','')}` : '급여 조건을 정해주세요');
+  q('[data-lights]').forEach(e => {
+    const is = e.querySelectorAll('i');
+    is.forEach(i => i.className = '');
+    if (tx.tone === 'bad') is[0].className = 'on-bad';
+    else if (tx.tone === 'warn') is[1].className = 'on-warn';
+    else if (tx.tone === 'ok' || tx.tone === 'done') is[2].className = 'on-ok';
+  });
+  q('[data-need]').forEach(e => e.textContent = hasNeed ? won(pc.remaining > 0 ? pc.need : pc.left) : (pc.status === 'done' ? '달성' : '-'));
+  q('[data-remain-cap]').forEach(e => e.textContent = pc.remaining > 0 ? `남은 근무 ${pc.remaining}일` : '남은 근무일 없음');
+  q('[data-avg]').forEach(e => e.textContent = pc.avg > 0 ? won(pc.avg) : '-');
+  q('[data-gap-short]').forEach(e => {
+    if (!hasNeed || pc.worked === 0) { e.textContent = `일한 날 ${pc.worked}일`; e.className = 'c'; return; }
+    e.textContent = gap >= 0 ? `+${won(gap)} 여유` : `${won(gap)} 부족`;
+    e.className = 'c ' + (gap >= 0 ? 't-ok' : pc.status === 'red' ? 't-bad' : 't-warn');
+  });
+
+  // F · 문장 + 근무일 도트
+  let sent = '';
+  if (pc.status === 'nobase') sent = '급여 조건을 정하면<br>하루 목표를 알려드려요.';
+  else if (pc.status === 'done') sent = `기준금을 채웠어요!<br>지금 예상 월급은 <b>${manwon(calcProfitFor(ym, pc.net, 0))}</b>이에요.`;
+  else if (pc.remaining === 0) sent = `기준금까지 <b>${won(pc.left)}원</b> 남았어요.`;
+  else sent = `하루 <b>${won(pc.need)}원</b>이면<br>기준금을 채워요.`;
+  q('[data-sentence]').forEach(e => e.innerHTML = sent + ` <button class="h-info" onclick="openHelp('need')" aria-label="계산 방법 보기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>`);
+  q('[data-month-lbl]').forEach(e => e.textContent = `${pc.m}월 근무`);
+  q('[data-days-cap]').forEach(e => e.textContent = `한 날 ${pc.worked} · 남은 날 ${pc.remaining}`);
+  q('[data-dots]').forEach(e => {
+    const n = Math.min(31, pc.worked + pc.remaining);
+    let h = '';
+    for (let i = 0; i < n; i++) h += `<i class="${i < pc.worked ? 'w' : (i === pc.worked && pc.todayOpen ? 't' : '')}"></i>`;
+    e.innerHTML = h;
+    e.setAttribute('aria-label', `일한 날 ${pc.worked}일, 남은 근무 ${pc.remaining}일`);
+    e.setAttribute('role', 'img');
+  });
+  q('[data-net]').forEach(e => e.textContent = manwon(pc.net));
+  q('[data-base]').forEach(e => e.textContent = pc.base > 0 ? `기준금 ${manwon(pc.base)}` : '');
+
+  // 목표 월급 줄
+  let goalLbl = '목표 월급', goalVal = '정하기';
+  if (goalPay) {
+    goalLbl = `목표 ${manwon(goalPay)}`;
+    const needNet = netNeededForPay(ym, goalPay);
+    if (needNet == null) goalVal = '계산 불가';
+    else {
+      const leftG = Math.max(0, needNet - pc.net);
+      goalVal = leftG <= 0 ? '🎉 달성' : pc.remaining > 0 ? `하루 ${won(Math.ceil(leftG / pc.remaining / 100) * 100)}원` : `${manwon(leftG)} 부족`;
+    }
+  }
+  q('[data-goal-lbl]').forEach(e => e.textContent = goalLbl);
+  q('[data-goal]').forEach(e => e.textContent = goalVal);
+
+  // 무료 플랜: 핵심 숫자 가리기
+  const free = userPlan === 'free';
+  q('[data-core]').forEach(e => e.classList.toggle('veiled', free));
+}
+
+// ════════════════════════════════════════
+// ─── 회사별 급여 조건 프리셋 ───
+// ════════════════════════════════════════
+let companyPresets = {};
+async function loadCompanyPresets() {
+  if (!firestore || !currentUser) return;
+  try {
+    const snap = await firestore.collection('companyPresets').get();
+    companyPresets = {};
+    snap.forEach(d => { companyPresets[d.id] = d.data(); });
+  } catch(e) { console.warn('[presets]', e.message); }
+  renderCompanyPresetUI();
+}
+function renderCompanyPresetUI() {
+  const sel = document.getElementById('companyPresetSelect');
+  if (sel) {
+    const prev = sel.value;
+    const names = Object.entries(companyPresets).sort((a, b) => (a[1].name || '').localeCompare(b[1].name || '', 'ko'));
+    sel.innerHTML = '<option value="">회사를 선택하세요 (없으면 직접 입력)</option>' +
+      names.map(([id, p]) => `<option value="${esc(id)}">${esc(p.name || id)}</option>`).join('');
+    if (prev && companyPresets[prev]) sel.value = prev;
+  }
+  const box = document.getElementById('adminPresetBox');
+  if (box) box.style.display = isAdmin(currentUser) ? '' : 'none';
+}
+function applyCompanyPreset(id) {
+  const p = companyPresets[id];
+  if (!p) return;
+  if (p.salaryType) selectSalaryType(p.salaryType);
+  const map = { sfMonthlyBase: p.monthlyBase, sfBaseProfit: p.baseProfit, sfOverRate: p.overRate,
+                sfWorkDays: p.workDays, sfGasLimit: p.gasLimit, sfGasDaily: p.gasDaily };
+  Object.entries(map).forEach(([fid, v]) => { const el = document.getElementById(fid); if (el && v != null) el.value = v; });
+  currentCompanyName = p.name || '';
+  recalcSalary();
+  showToast(`🏢 ${p.name} 조건을 채웠어요. 확인 후 [이 설정으로 저장]을 눌러주세요`);
+}
+window.applyCompanyPreset = applyCompanyPreset;
+let currentCompanyName = '';
+
+async function saveCompanyPreset() {
+  if (!isAdmin(currentUser)) return;
+  const name = (document.getElementById('adminPresetName')?.value || '').trim();
+  if (!name) return showToast('❌ 회사 이름을 입력하세요');
+  const id = name.replace(/[\/\s]+/g, '_').slice(0, 60);
+  const data = {
+    name, salaryType: currentSalaryType,
+    monthlyBase: +document.getElementById('sfMonthlyBase')?.value || 0,
+    baseProfit:  +document.getElementById('sfBaseProfit')?.value  || 0,
+    overRate:    +document.getElementById('sfOverRate')?.value    || 0,
+    workDays:    +document.getElementById('sfWorkDays')?.value    || 0,
+    gasLimit:    +document.getElementById('sfGasLimit')?.value    || 0,
+    gasDaily:    +document.getElementById('sfGasDaily')?.value    || 0,
+    updatedAt: new Date().toISOString(),
+  };
+  try {
+    await firestore.collection('companyPresets').doc(id).set(data);
+    companyPresets[id] = data;
+    renderCompanyPresetUI();
+    showToast(`✅ ${name} 프리셋 저장`);
+  } catch(e) { showToast('❌ 저장 실패: ' + e.message); }
+}
+window.saveCompanyPreset = saveCompanyPreset;
+
+async function deleteCompanyPreset() {
+  if (!isAdmin(currentUser)) return;
+  const id = document.getElementById('companyPresetSelect')?.value;
+  if (!id) return showToast('❌ 지울 회사를 목록에서 고르세요');
+  if (!confirm(`${companyPresets[id]?.name || id} 프리셋을 지울까요?`)) return;
+  try {
+    await firestore.collection('companyPresets').doc(id).delete();
+    delete companyPresets[id];
+    renderCompanyPresetUI();
+    showToast('🗑️ 삭제했어요');
+  } catch(e) { showToast('❌ 삭제 실패: ' + e.message); }
+}
+window.deleteCompanyPreset = deleteCompanyPreset;
+
+// 관리자: 회원의 최신 급여 조건을 입력칸으로 가져오기 → 회사 프리셋으로 저장
+async function adminPullMemberRule(uid) {
+  if (!isAdmin(currentUser) || !firestore) return;
+  try {
+    const snap = await firestore.collection('users').doc(uid).collection('salaryRules').get();
+    let latest = null, latestKey = '';
+    snap.forEach(d => { if (d.id > latestKey) { latestKey = d.id; latest = d.data(); } });
+    if (!latest) {
+      const u = await firestore.collection('users').doc(uid).get();
+      latest = u.exists ? u.data().settings : null;
+    }
+    if (!latest) return showToast('❌ 이 회원은 저장된 급여 조건이 없어요');
+    switchTab('settings', document.querySelector('.tab-btn[onclick*=settings]'));
+    if (latest.salaryType) selectSalaryType(latest.salaryType);
+    const map = { sfMonthlyBase: latest.monthlyBase, sfBaseProfit: latest.baseProfit, sfOverRate: latest.overRate,
+                  sfWorkDays: latest.workDays, sfGasLimit: latest.gasLimit, sfGasDaily: latest.gasDaily };
+    Object.entries(map).forEach(([fid, v]) => { const el = document.getElementById(fid); if (el && v != null) el.value = v; });
+    recalcSalary();
+    document.getElementById('adminPresetBox')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast(`📥 ${latestKey || '최근'} 조건을 가져왔어요. 회사 이름을 넣고 저장하세요`);
+  } catch(e) { showToast('❌ 불러오기 실패: ' + e.message); }
+}
+window.adminPullMemberRule = adminPullMemberRule;
 
 // ════════════════════════════════════════
 // ─── 전월 비교 ───
@@ -3622,7 +4851,7 @@ window.calcFuelEff = calcFuelEff;
 // ════════════════════════════════════════
 // ─── 전체 백업 / 복원 ───
 // ════════════════════════════════════════
-const BACKUP_VER = 1;
+const BACKUP_VER = 2;
 
 function renderBackupStat() {
   const el = document.getElementById('backupStat');
@@ -3652,16 +4881,21 @@ async function backupAll() {
       };
     });
 
-    // 급여 이력도 함께 백업 (있으면)
+    // 급여 이력·급여 조건도 함께 백업 (새 앱으로 옮길 때 그대로 복원)
     let salaryHistory = [];
+    let salaryRulesOut = {};
     try {
       const uid = currentUser?.uid;
       if (uid && firestore) {
         const s = await firestore.collection('users').doc(uid)
           .collection('salaryHistory').get();
         s.forEach(d => salaryHistory.push({ month: d.id, ...d.data() }));
+        const r = await firestore.collection('users').doc(uid)
+          .collection('salaryRules').get();
+        r.forEach(d => { salaryRulesOut[d.id] = d.data(); });
       }
     } catch(e) {}
+    if (!Object.keys(salaryRulesOut).length && salaryRules) salaryRulesOut = { ...salaryRules };
 
     const payload = {
       app: 'taxi-revenue',
@@ -3670,7 +4904,10 @@ async function backupAll() {
       user: currentUser?.email || '',
       dayCount: Object.keys(days).length,
       days,
-      salaryHistory
+      salaryHistory,
+      salaryRules: salaryRulesOut,
+      workPattern: workPattern || null,
+      goalPay: goalPay || 0,
     };
 
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -3679,7 +4916,7 @@ async function backupAll() {
     const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
     const a = document.createElement('a');
     a.href = url;
-    a.download = `택시매출_백업_${stamp}.json`;
+    a.download = `황금기사_백업_${stamp}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -3717,6 +4954,7 @@ function handleRestoreFile(input) {
       if (!confirm(msg)) { input.value = ''; return; }
 
       await restoreFromBackup(data.days, keys);
+      await restoreExtras(data);
     } catch(e) {
       showToast('❌ 파일을 읽을 수 없어요');
     }
@@ -3726,6 +4964,40 @@ function handleRestoreFile(input) {
   reader.readAsText(file);
 }
 window.handleRestoreFile = handleRestoreFile;
+
+// 급여 조건·급여 이력·근무일·목표 월급 복원 (백업 v2, 예전 백업은 급여 이력만)
+async function restoreExtras(data) {
+  if (!firestore || !currentUser) return;
+  const uref = firestore.collection('users').doc(currentUser.uid);
+  const msgs = [];
+  try {
+    const rules = data.salaryRules && typeof data.salaryRules === 'object' ? data.salaryRules : {};
+    const hist = Array.isArray(data.salaryHistory) ? data.salaryHistory : [];
+    if (Object.keys(rules).length || hist.length) {
+      if (userPlan === 'free') {
+        msgs.push('급여 조건은 Pro에서만 저장돼요 (관리자에게 요청)');
+      } else {
+        for (const [ym, r] of Object.entries(rules)) {
+          if (!/^\d{4}-\d{2}$/.test(ym)) continue;
+          await uref.collection('salaryRules').doc(ym).set(r);
+          salaryRules[ym] = r;
+        }
+        for (const h of hist) {
+          if (!h || !/^\d{4}-\d{2}$/.test(h.month || '')) continue;
+          const { month, ...rest } = h;
+          await uref.collection('salaryHistory').doc(month).set(rest);
+        }
+        if (Object.keys(rules).length) msgs.push(`급여 조건 ${Object.keys(rules).length}개`);
+      }
+    }
+    const extra = {};
+    if (data.workPattern && typeof data.workPattern === 'object') { workPattern = Object.assign(workPattern, data.workPattern); extra.workPattern = workPattern; }
+    if (+data.goalPay > 0) { goalPay = +data.goalPay; extra.goalPay = goalPay; }
+    if (Object.keys(extra).length) { await uref.set(extra, { merge: true }); msgs.push('근무일·목표'); }
+  } catch(e) { msgs.push('일부 설정 복원 실패: ' + e.message); }
+  if (msgs.length) setTimeout(() => showToast('📦 함께 복원: ' + msgs.join(', ')), 1800);
+  try { renderSalaryPresets(); loadSalaryHistory(); renderAllStats(); } catch(e) {}
+}
 
 async function restoreFromBackup(days, keys) {
   showLoading('💾 복원하는 중...');
@@ -3784,7 +5056,7 @@ function exportMonthCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `택시매출_${y}년${m}월.csv`;
+  a.download = `황금기사_${y}년${m}월.csv`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -3816,7 +5088,7 @@ function exportMonthSummary() {
 가스 사용: ${tGas.toFixed(1)}L
 일 평균: ${days>0?fmt(Math.round(tRev/days)):'0원'}
 ━━━━━━━━━━━━━━
-택시 매출 관리`;
+황금기사 · Gold Knight`;
 
   if (navigator.clipboard) {
     navigator.clipboard.writeText(summary).then(() => {
@@ -3859,7 +5131,7 @@ function renderPlanStatus() {
     planEl.textContent = plan === 'enterprise' ? 'Enterprise' : 'Pro';
     // 체험 여부 확인
     if (userPlanMeta.trialUntil) {
-      const daysLeft = Math.ceil((new Date(userPlanMeta.trialUntil) - new Date()) / 86400000);
+      const daysLeft = Math.ceil((userPlanMeta.trialUntil - new Date()) / 86400000);
       if (daysLeft > 0) {
         badgeEl.textContent = '무료 체험'; badgeEl.className = 'psc-badge trial';
         descEl.innerHTML = `무료 체험 <span class="psc-days">${daysLeft}일</span> 남았습니다`;
@@ -3868,9 +5140,9 @@ function renderPlanStatus() {
     }
     if (userPlanMeta.couponCode) {
       badgeEl.textContent = '쿠폰 적용'; badgeEl.className = 'psc-badge active';
-      descEl.innerHTML = `쿠폰 <strong style="color:var(--accent)">${userPlanMeta.couponCode}</strong> 적용 중`;
+      descEl.innerHTML = `쿠폰 <strong style="color:var(--accent-ink)">${esc(userPlanMeta.couponCode)}</strong> 적용 중`;
       if (userPlanMeta.planUntil) {
-        const d = Math.ceil((new Date(userPlanMeta.planUntil) - new Date()) / 86400000);
+        const d = Math.ceil((userPlanMeta.planUntil - new Date()) / 86400000);
         if (d > 0) descEl.innerHTML += ` · ${d}일 남음`;
       }
       return;
@@ -3889,38 +5161,53 @@ let userPlanMeta = {}; // trialUntil, couponCode, planUntil 등
 // 쿠폰 사용 (사용자)
 async function redeemCoupon() {
   const input = document.getElementById('couponInput');
-  const code = input?.value.trim().toUpperCase();
+  const code = (input?.value || '').trim().toUpperCase().replace(/\s+/g,'');
   if (!code) return showToast('❌ 쿠폰 코드를 입력하세요');
+  if (!/^[A-Z0-9-]{4,40}$/.test(code)) return showToast('❌ 쿠폰 코드 형식이 올바르지 않습니다');
   if (!firestore || !currentUser) return showToast('❌ 로그인 상태를 확인하세요');
   showLoading('🎫 쿠폰 확인 중...');
   try {
-    const doc = await firestore.collection('coupons').doc(code).get();
-    if (!doc.exists) { hideLoading(); return showToast('❌ 존재하지 않는 쿠폰입니다'); }
-    const c = doc.data();
-    if (c.disabled) { hideLoading(); return showToast('❌ 사용할 수 없는 쿠폰입니다'); }
-    // 플랜 적용
-    const update = { plan: c.plan, couponCode: code };
-    if (c.duration && c.duration > 0) {
-      const until = new Date();
-      until.setDate(until.getDate() + c.duration);
-      update.planUntil = until.toISOString();
-    } else {
-      update.planUntil = null; // 무제한
+    const cRef = firestore.collection('coupons').doc(code);
+    const uRef = firestore.collection('users').doc(currentUser.uid);
+    const rRef = cRef.collection('redemptions').doc(currentUser.uid);
+    // 내 회원 문서가 없는 예전 계정이면 먼저 만들어 둠 (요금제 없이)
+    const uSnap = await uRef.get();
+    if (!uSnap.exists) {
+      await uRef.set({ name: currentUser.displayName || '', email: currentUser.email || '',
+                       createdAt: new Date().toISOString(), plan: 'free' });
     }
-    update.trialUntil = null; // 체험 종료
-    await firestore.collection('users').doc(currentUser.uid).set(update, { merge: true });
-    // 쿠폰 사용 카운트
-    await firestore.collection('coupons').doc(code).update({
-      usedCount: (c.usedCount || 0) + 1,
-      lastUsedBy: currentUser.email,
-      lastUsedAt: new Date().toISOString(),
-    }).catch(()=>{});
+    const already = await rRef.get().catch(() => null);
+    if (already && already.exists) { hideLoading(); return showToast('❌ 이미 사용한 쿠폰입니다'); }
+    let c = null;
+    // 동시에 여러 명이 쓰면 사용 횟수가 어긋날 수 있어 한 번 더 시도
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const doc = await cRef.get();
+      if (!doc.exists) { hideLoading(); return showToast('❌ 존재하지 않는 쿠폰입니다'); }
+      c = doc.data();
+      if (c.disabled) { hideLoading(); return showToast('❌ 사용할 수 없는 쿠폰입니다'); }
+      if (c.maxUses > 0 && (c.usedCount || 0) >= c.maxUses) { hideLoading(); return showToast('❌ 사용 가능 인원이 모두 찬 쿠폰입니다'); }
+      const ts = firebase.firestore.FieldValue.serverTimestamp();
+      // 사용 기록 + 사용 횟수 + 내 요금제를 한 번에 저장 (보안 규칙이 세 가지를 함께 검사)
+      const batch = firestore.batch();
+      batch.set(rRef, { at: ts, email: currentUser.email || '' });
+      batch.update(cRef, { usedCount: (c.usedCount || 0) + 1, lastUsedAt: ts });
+      batch.set(uRef, {
+        plan: c.plan, couponCode: code, couponRedeemedAt: ts,
+        couponDays: c.duration || 0, trialUntil: null, planUntil: null,
+      }, { merge: true });
+      try { await batch.commit(); break; }
+      catch (err) { if (attempt === 1) throw err; }
+    }
     hideLoading();
     input.value = '';
     showToast('🎉 ' + (c.plan === 'enterprise' ? 'Enterprise' : 'Pro') + ' 플랜이 적용되었습니다!');
     await loadUserPlan();
     renderPlanStatus();
-  } catch(e) { hideLoading(); showToast('❌ 쿠폰 적용 실패: ' + e.message); }
+  } catch(e) {
+    hideLoading();
+    const denied = /permission|insufficient/i.test(e.message || '');
+    showToast(denied ? '❌ 이미 사용했거나 사용할 수 없는 쿠폰입니다' : '❌ 쿠폰 적용 실패: ' + e.message);
+  }
 }
 window.redeemCoupon = redeemCoupon;
 
@@ -3929,7 +5216,9 @@ function genCouponCode(plan) {
   // 헷갈리는 문자(0,O,1,I,L) 제외
   const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
   let rand = '';
-  for (let i = 0; i < 5; i++) rand += chars[Math.floor(Math.random() * chars.length)];
+  const buf = new Uint32Array(8);
+  (window.crypto || window.msCrypto).getRandomValues(buf);
+  for (let i = 0; i < 8; i++) rand += chars[buf[i] % chars.length];
   return (plan === 'enterprise' ? 'ENT-' : 'PRO-') + rand;
 }
 
@@ -3938,7 +5227,9 @@ async function createCoupon() {
   let code = document.getElementById('newCouponCode')?.value.trim().toUpperCase();
   const plan = document.getElementById('newCouponPlan')?.value || 'pro';
   const duration = +document.getElementById('newCouponDuration')?.value || 0;
+  const maxUses  = +document.getElementById('newCouponMaxUses')?.value || 0;
   const autoGen = !code;
+  if (code && !/^[A-Z0-9-]{4,40}$/.test(code)) return showToast('❌ 코드는 영문 대문자·숫자·- 4~40자');
   if (autoGen) code = genCouponCode(plan); // 비워두면 자동 생성
   try {
     let existing = await firestore.collection('coupons').doc(code).get();
@@ -3951,7 +5242,7 @@ async function createCoupon() {
     }
     if (existing.exists) return showToast('❌ 이미 존재하는 코드입니다');
     await firestore.collection('coupons').doc(code).set({
-      code, plan, duration,
+      code, plan, duration, maxUses,
       createdAt: new Date().toISOString(),
       usedCount: 0, disabled: false,
     });
@@ -3973,12 +5264,13 @@ async function renderAdminCouponList() {
       const c = d.data();
       const planLabel = c.plan === 'enterprise' ? 'ENT' : 'Pro';
       const durLabel  = c.duration > 0 ? c.duration + '일' : '무제한';
+      const maxLabel  = c.maxUses > 0 ? ` / 최대 ${c.maxUses}명` : '';
       h += `<div class="coupon-item">
         <div>
-          <span class="coupon-code">${c.code}</span>
-          <div class="coupon-meta">${planLabel} · ${durLabel} · ${c.usedCount || 0}회 사용</div>
+          <span class="coupon-code">${esc(c.code)}</span>
+          <div class="coupon-meta">${planLabel} · ${durLabel} · ${c.usedCount || 0}회 사용${maxLabel}</div>
         </div>
-        <button class="coupon-del-btn" onclick="deleteCoupon('${c.code}')">✕</button>
+        <button class="coupon-del-btn" onclick="deleteCoupon('${esc(d.id)}')">✕</button>
       </div>`;
     });
     el.innerHTML = h;
@@ -4179,6 +5471,7 @@ async function saveSalarySettings() {
     workDays:     +document.getElementById('sfWorkDays')?.value    || 0,
     gasLimit:     +document.getElementById('sfGasLimit')?.value    || 0,
     gasDaily:     +document.getElementById('sfGasDaily')?.value    || 0,
+    companyName:  currentCompanyName || (getSalaryRule(applyMonth).companyName || ''),
     applyFrom:    applyMonth,
     updatedAt:    new Date().toISOString(),
   };
@@ -4300,16 +5593,17 @@ async function renderAdminMemberList() {
     let h = '';
     snap.forEach(d => {
       const u = d.data();
-      const initial = (u.name||u.email||'?')[0].toUpperCase();
+      const initial = esc((u.name||u.email||'?')[0].toUpperCase());
       const planVal = u.plan || 'free';
       const planLabel = {free:'Free',pro:'Pro',enterprise:'Enterprise'}[planVal] || planVal;
       h += `<div class="member-item">
         <div class="member-avatar">${initial}</div>
         <div class="member-info">
-          <div class="member-name">${u.name || '이름 없음'} <span class="plan-badge ${planVal}" style="font-size:0.9rem">${planLabel}</span></div>
-          <div class="member-email">${u.email || d.id}</div>
+          <div class="member-name">${esc(u.name || '이름 없음')} <span class="plan-badge ${esc(planVal)}" style="font-size:0.9rem">${esc(planLabel)}</span></div>
+          <div class="member-email">${esc(u.email || d.id)}</div>
         </div>
-        <select class="member-plan-select" onchange="updateMemberPlan('${d.id}',this.value)">
+        <button class="preset-btn" onclick="adminPullMemberRule('${esc(d.id)}')" title="이 회원의 급여 조건을 회사 프리셋 초안으로 가져오기">조건</button>
+        <select class="member-plan-select" onchange="updateMemberPlan('${esc(d.id)}',this.value)">
           <option value="free"  ${planVal==='free'       ?'selected':''}>Free</option>
           <option value="pro"   ${planVal==='pro'        ?'selected':''}>Pro</option>
           <option value="enterprise" ${planVal==='enterprise'?'selected':''}>Enterprise</option>
@@ -4323,7 +5617,11 @@ async function renderAdminMemberList() {
 async function updateMemberPlan(uid, plan) {
   if (!firestore) return;
   try {
-    await firestore.collection('users').doc(uid).update({ plan });
+    // 관리자가 지정한 요금제는 체험·쿠폰 기간과 상관없이 유지
+    await firestore.collection('users').doc(uid).update({
+      plan, trialUntil: null, planUntil: null, couponCode: null,
+      couponRedeemedAt: null, couponDays: null,
+    });
     showToast('✅ 플랜 변경 완료');
   } catch(e) { showToast('❌ 변경 실패: ' + e.message); }
 }
@@ -4382,39 +5680,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (signupPw) signupPw.addEventListener('keydown', e => { if(e.key==='Enter') doSignup(); });
 });
 
-// ─── 기존 데이터 이전 (taxiData → users/{uid}/records) ───
-async function migrateOldData() {
-  if (!firestore || !currentUser) return;
-  try {
-    // 이미 이전했는지 확인
-    const flag = localStorage.getItem(`migrated_${currentUser.uid}`);
-    if (flag) return;
-
-    const oldSnapshot = await firestore.collection('taxiData').get();
-    if (oldSnapshot.empty) {
-      localStorage.setItem(`migrated_${currentUser.uid}`, '1');
-      return;
-    }
-
-    showLoading('📦 기존 데이터 이전 중...');
-    const col = getUserCol();
-    const batch = firestore.batch();
-    let count = 0;
-    oldSnapshot.forEach(docSnap => {
-      batch.set(col.doc(docSnap.id), docSnap.data());
-      count++;
-    });
-    await batch.commit();
-    localStorage.setItem(`migrated_${currentUser.uid}`, '1');
-    hideLoading();
-    if (count > 0) showToast(`✅ 기존 데이터 ${count}일치 이전 완료!`);
-  } catch(e) {
-    hideLoading();
-    console.warn('[Migration] 이전 실패:', e.message);
-  }
-}
-
-// ─── 접속 로그 기록 ───
 async function logAccess(user) {
   if (!firestore || !user) return;
   try {
@@ -4477,8 +5742,8 @@ async function renderAdminDashboard() {
           return `<div class="admin-log-item">
             <div class="admin-log-icon">${icon}</div>
             <div class="admin-log-info">
-              <div class="admin-log-name">${l.name}</div>
-              <div class="admin-log-detail">${ts} · ${l.deviceType} · ${l.browser}</div>
+              <div class="admin-log-name">${esc(l.name)}</div>
+              <div class="admin-log-detail">${ts} · ${esc(l.deviceType)} · ${esc(l.browser)}</div>
             </div>
           </div>`;
         }).join('');
@@ -4517,12 +5782,12 @@ async function renderAdminChatRooms() {
     let rooms = [];
     snap.forEach(d => rooms.push({ uid: d.id, ...d.data() }));
     el.innerHTML = rooms.map(r => `
-      <div class="chat-room-item" onclick="openAdminChat('${r.uid}','${(r.userName||'').replace(/'/g,"\'")}')">
+      <div class="chat-room-item" data-uid="${esc(r.uid)}" onclick="openAdminChat(this.dataset.uid)">
         <div>
-          <div class="chat-room-name">${r.userName || r.uid}</div>
-          <div class="chat-room-preview">${r.lastMsg || '메시지 없음'}</div>
+          <div class="chat-room-name">${esc(r.userName || r.uid)}</div>
+          <div class="chat-room-preview">${esc(r.lastMsg || '메시지 없음')}</div>
         </div>
-        ${r.unread ? `<span class="chat-room-badge">${r.unread}</span>` : ''}
+        ${r.unread ? `<span class="chat-room-badge">${+r.unread || 0}</span>` : ''}
       </div>`).join('');
   } catch(e) { el.innerHTML = '<div class="chat-empty">로드 실패</div>'; }
 }
@@ -4917,39 +6182,34 @@ function renderMonthly() {
   const M_GOAL = getMonthGoal(month);
   const goalTargetEl = document.querySelector('#goalBanner .goal-target span');
   if (goalTargetEl) goalTargetEl.textContent = fmt(M_GOAL);
-  const remaining = Math.max(0, M_GOAL - totalRev);
-  const pct = M_GOAL > 0 ? Math.min(100, Math.round(totalRev / M_GOAL * 100)) : 0;
+  // 기준금 비교는 급여 계산과 같은 "순매출(매출−주유비)" 기준
+  const _pc = calcPace(month);
+  const netRevM = totalRev - totalFuel;
+  const remaining = Math.max(0, M_GOAL - netRevM);
+  const pct = M_GOAL > 0 ? Math.min(100, Math.round(netRevM / M_GOAL * 100)) : 0;
   const bar = document.getElementById('goalBar');
   const pctEl = document.getElementById('goalPct');
   const chip = document.getElementById('goalChip');
 
-  document.getElementById('goalCurrent').textContent = fmt(totalRev);
+  document.getElementById('goalCurrent').textContent = fmt(netRevM);
   document.getElementById('goalRemain').textContent = remaining > 0 ? fmt(remaining) : '🎉 달성!';
   pctEl.textContent = pct + '%';
   bar.style.width = pct + '%';
 
-  // 남은 일수 계산 (이달인지 여부)
-  let remainingDays = 0;
-  if (isCurrentMonth) {
-    for (let d = 1; d <= daysInMonth; d++) {
-      const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      if (key > todayKey) remainingDays++;
-    }
-  } else {
-    remainingDays = 0;
-  }
+  // 남은 근무일 (근무일 설정 반영, 오늘 매출 미입력 시 오늘 포함)
+  const remainingDays = isCurrentMonth ? _pc.remaining : 0;
 
   const neededEl = document.getElementById('goalNeededAvg');
   const neededLbl = document.getElementById('goalNeededLabel');
 
-  if (totalRev >= M_GOAL) {
+  if (netRevM >= M_GOAL) {
     // 목표 달성!
     bar.className = 'goal-progress-fill complete';
     chip.textContent = '🎉 목표 달성!';
     chip.className = 'status-chip chip-purple';
     neededEl.textContent = '달성 완료!';
     neededEl.style.color = '#a78bfa';
-    neededLbl.textContent = `목표 초과: +${fmt(totalRev - M_GOAL)}`;
+    neededLbl.textContent = `목표 초과: +${fmt(netRevM - M_GOAL)}`;
   } else if (!isCurrentMonth) {
     // 지난달
     bar.className = 'goal-progress-fill danger';
@@ -4967,13 +6227,14 @@ function renderMonthly() {
     neededLbl.textContent = '오늘 달성 필요 금액';
   } else {
     const neededPerDay = Math.ceil(remaining / remainingDays);
+    const avgNetM = _pc.avg;
 
-    // 현재 일 평균 대비 상태 판단
-    if (avgRev > 0 && neededPerDay <= avgRev * 1.05) {
+    // 현재 일 평균(순매출) 대비 상태 판단
+    if (avgNetM > 0 && neededPerDay <= avgNetM * 1.05) {
       bar.className = 'goal-progress-fill on-track';
       chip.textContent = '순조로워요 👍';
       chip.className = 'status-chip chip-green';
-    } else if (avgRev > 0 && neededPerDay <= avgRev * 1.2) {
+    } else if (avgNetM > 0 && neededPerDay <= avgNetM * 1.2) {
       bar.className = 'goal-progress-fill warning';
       chip.textContent = '조금 분발 필요';
       chip.className = 'status-chip chip-orange';
@@ -4984,8 +6245,8 @@ function renderMonthly() {
     }
 
     neededEl.textContent = fmt(neededPerDay);
-    neededEl.style.color = neededPerDay <= (avgRev || neededPerDay) ? '#2ecc71' : '#e8445a';
-    neededLbl.innerHTML = `남은 ${remainingDays}일 동안<br>하루 평균 필요 매출`;
+    neededEl.style.color = neededPerDay <= (avgNetM || neededPerDay) ? 'var(--green)' : 'var(--accent2)';
+    neededLbl.innerHTML = `남은 근무 ${remainingDays}일 동안<br>하루 평균 필요 순매출`;
   }
 
   const ctx = document.getElementById('monthChart').getContext('2d');
@@ -5181,16 +6442,19 @@ function renderCalendar() {
     const gas  = rec?.gas     || 0;
 
     let cls = 'cal-cell';
-    if (key === today)      { cls += ' cal-today'; }
+    const planned = isPlannedWorkDay(key);
+    if (key === today)      { cls += ' cal-today'; if (planned && rev <= 0) remainingDays++; }
     else if (key < today)   { cls += ' cal-past';  passedDays++; }
-    else                    { cls += ' cal-future'; remainingDays++; }
+    else                    { cls += ' cal-future'; if (planned) remainingDays++; }
     if (rev > 0 || fuel > 0 || gas > 0) cls += ' cal-has-data';
+    if (!planned && rev <= 0) cls += ' cal-off';
+    if (key >= today) cls += ' cal-clickable';
 
     const revLine  = rev  > 0 ? `<div class="cal-rev">${fmtShort(rev)}</div>`  : '';
     const fuelLine = fuel > 0 ? `<div class="cal-fuel">⛽${fmtShort(fuel)}</div>` : '';
     const gasLine  = gas  > 0 ? `<div class="cal-gas">🔵${gas.toFixed(1)}L</div>`  : '';
 
-    h += `<div class="${cls}">
+    h += `<div class="${cls}"${key >= today ? ` role="button" tabindex="0" title="눌러서 쉬는 날/일하는 날 바꾸기" onclick="toggleDayOff('${key}')"` : ''}>
       <div class="cal-day-num">${d}</div>
       ${revLine}${fuelLine}${gasLine}
     </div>`;
@@ -5211,7 +6475,7 @@ function renderCalendar() {
       ${isCurrentMonth ? `
       <div class="remaining-badge">
         <div class="badge-num">${remainingDays}</div>
-        <div class="badge-label">남은 일수</div>
+        <div class="badge-label">남은 근무일</div>
       </div>
       <div class="remaining-badge">
         <div class="badge-num">${passedDays + 1}</div>
@@ -5225,9 +6489,10 @@ function renderCalendar() {
   }
 
   // ─ 목표 달성 요약 ─
+  // 기준금 비교는 순매출(매출−주유비) 기준
   const monthTotalRev = Object.entries(db)
     .filter(([k]) => k.startsWith(month))
-    .reduce((sum, [,v]) => sum + (v.revenue || 0), 0);
+    .reduce((sum, [,v]) => sum + (v.revenue || 0) - (v.fuel || 0), 0);
   const C_GOAL          = getMonthGoal(month);
   const calRemaining    = Math.max(0, C_GOAL - monthTotalRev);
   const calNeededPerDay = (isCurrentMonth && remainingDays > 0)
@@ -5251,7 +6516,7 @@ function renderCalendar() {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div class="goal-stat">
           <div class="goal-stat-val gold">${fmt(monthTotalRev)}</div>
-          <div class="goal-stat-lbl">현재 누적 매출</div>
+          <div class="goal-stat-lbl">현재 누적 순매출</div>
         </div>
         <div class="goal-stat">
           <div class="goal-stat-val red">${calRemaining > 0 ? fmt(calRemaining) : '🎉 달성!'}</div>
@@ -5260,7 +6525,7 @@ function renderCalendar() {
         ${calNeededPerDay !== null ? `
         <div class="goal-stat" style="grid-column:1/-1">
           <div class="goal-stat-val" style="color:#a78bfa">${fmt(calNeededPerDay)}</div>
-          <div class="goal-stat-lbl">남은 ${remainingDays}일 동안 하루 평균 필요 매출</div>
+          <div class="goal-stat-lbl">남은 근무 ${remainingDays}일 동안 하루 평균 필요 순매출</div>
         </div>` : ''}
       </div>
     `;
@@ -5269,6 +6534,7 @@ function renderCalendar() {
 
 // ─── 순이익 계산 ───
 // 기본값 (저장된 급여 조건이 없을 때 사용)
+const LEGACY_CUTOFF = '2026-10-02'; // 이 날짜 이전 가입자는 예전 기본 조건 사용
 const BASE_GOAL = 5500000;
 const BASE_PROFIT = 1600000;
 const OVER_RATE = 0.9;
@@ -5279,7 +6545,11 @@ let salaryRules = {};
 // 해당 월(YYYY-MM)에 적용될 조건 반환.
 // 그 달에 설정이 없으면 그 이전 가장 가까운 설정을 이어서 사용 (조건 변경 전까지 유지)
 function getSalaryRule(ym) {
-  const fallback = { monthlyBase: BASE_GOAL, baseProfit: BASE_PROFIT, overRate: OVER_RATE * 100, salaryType: 'A' };
+  // 기존 가입자(공개 전)는 예전 기본값 유지, 새 가입자는 회사 조건을 직접 고르도록 0으로 시작
+  const legacy = !userDoc || !userDoc.createdAt || String(userDoc.createdAt) < LEGACY_CUTOFF;
+  const fallback = legacy
+    ? { monthlyBase: BASE_GOAL, baseProfit: BASE_PROFIT, overRate: OVER_RATE * 100, salaryType: 'A' }
+    : { monthlyBase: 0, baseProfit: 0, overRate: 0, salaryType: 'A' };
   if (!ym || !salaryRules || !Object.keys(salaryRules).length) return fallback;
   if (salaryRules[ym]) return salaryRules[ym];
   const prior = Object.keys(salaryRules).filter(k => k <= ym).sort();
