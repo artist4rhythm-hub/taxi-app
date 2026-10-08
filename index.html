@@ -997,7 +997,7 @@
 
 
   /* ─── 인증 화면 ─── */
-  #authOverlay { position:fixed; inset:0; background:var(--bg); z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; overflow-y:auto; }
+  #authOverlay { position:fixed; inset:0; background:var(--bg); z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:safe center; padding:32px 24px; overflow-y:auto; }
   .auth-icon { font-size:5rem; margin-bottom:12px; animation:lkbob 2.5s ease-in-out infinite; }
   @keyframes lkbob { 0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-9px) rotate(4deg);} }
   .auth-title { font-size:2.2rem; font-weight:900; color:#f5a623; margin-bottom:4px; }
@@ -1712,6 +1712,48 @@
   .layout-pick button.on { border-color: var(--accent); background: var(--warn-soft); }
   .lp-ic { height: 26px; display:flex; align-items:center; justify-content:center; color: var(--accent-ink); font-family: var(--num); font-weight: 600; font-size: 1.1rem; }
 
+  /* ═══════════ 로고 ═══════════ */
+  :root { --gk-cut: var(--bg); }
+  .gk-mark { display:block; width: 100%; height: 100%; overflow: visible; }
+  .sp-icon { width: 92px; height: 148px; color: var(--accent); margin: 0 auto; }
+  .auth-icon { width: 76px; height: 122px; flex-shrink: 0; color: var(--accent); margin: 0 auto 16px; font-size: 0; }
+  html[data-theme="day"] .auth-icon, html[data-theme="day"] .h-brand { color: var(--accent-ink); }
+  .h-brand { display:flex; align-items:center; gap: 12px; color: var(--accent); min-width: 0; }
+  .h-brand .gk-mark { width: 44px; height: 70px; flex-shrink: 0; }
+  .h-brand b { display:block; font-size: 1.6rem; line-height: 1.1; color: var(--accent); }
+  html[data-theme="day"] .h-brand b { color: var(--accent-ink); }
+  .h-brand span { display:block; font-family: var(--num); font-size: .72rem; letter-spacing: 4px; color: var(--text-dim); margin-top: 3px; }
+  #tab-home .h-date { margin: 6px 2px 0; }
+
+  .auth-or { display:flex; align-items:center; gap: 10px; margin: 16px 0 12px; color: var(--text-dim); font-size: .9rem; }
+  .auth-or::before, .auth-or::after { content:''; flex:1; height:1px; background: var(--line); }
+  .auth-google { width: 100%; min-height: 54px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface2); color: var(--text); font-family: inherit; font-size: 1.05rem; font-weight: 700; display:flex; align-items:center; justify-content:center; gap: 10px; cursor: pointer; }
+  .auth-google b { width: 28px; height: 28px; border-radius: 50%; background: #fff; color: #1a1a1a; font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:center; font-size: 1rem; }
+
+  /* ═══════════ 도움말 ═══════════ */
+  .hp-search { width: 100%; height: 3.4rem; box-sizing: border-box; padding: 0 16px; border-radius: 14px; border: 2px solid var(--line); background: var(--surface2); color: var(--text); font-family: inherit; font-size: 1.1rem; }
+  .hp-search:focus { outline: none; border-color: var(--accent); }
+  .hp-chips { display:flex; flex-wrap:wrap; gap: 6px; margin: 10px 0 4px; }
+  .hp-chips button { min-height: 38px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--line); background: transparent; color: var(--text); font-family: inherit; font-size: .92rem; cursor: pointer; }
+  .hp-cap { font-size: .88rem; color: var(--text-dim); margin: 14px 0 6px; }
+  .hp-list { display:flex; flex-direction:column; gap: 8px; }
+  .hp-item { border: 1px solid var(--line); border-radius: 14px; background: var(--surface2); }
+  .hp-item[open] { border-color: var(--accent); }
+  .hp-item summary { list-style: none; min-height: 52px; padding: 12px 40px 12px 14px; position: relative; cursor: pointer; color: var(--text); font-weight: 600; font-size: 1.02rem; line-height: 1.45; }
+  .hp-item summary::-webkit-details-marker { display: none; }
+  .hp-item summary::after { content: '+'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: 1.3rem; font-weight: 400; }
+  .hp-item[open] summary::after { content: '−'; }
+  .hp-ans { padding: 0 14px 14px; color: var(--text-dim); line-height: 1.7; white-space: pre-line; }
+  .hp-ans button { margin-top: 10px; min-height: 44px; padding: 0 16px; border-radius: 12px; border: none; background: var(--accent); color: #17130a; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .hp-none { padding: 14px; border-radius: 14px; background: var(--surface2); color: var(--text-dim); }
+  .hp-entry { width: 100%; min-height: 60px; display:flex; align-items:center; gap: 12px; padding: 10px 16px; margin-bottom: 14px; border-radius: 16px; border: 1px solid var(--accent); background: var(--warn-soft); color: var(--text); font-family: inherit; font-size: 1.05rem; font-weight: 700; text-align: left; cursor: pointer; }
+  .hp-entry svg { color: var(--accent-ink); flex-shrink: 0; }
+  .hp-entry small { display:block; font-size: .85rem; font-weight: 400; color: var(--text-dim); margin-top: 2px; }
+  .chat-suggest { display:flex; flex-direction:column; gap: 6px; margin-top: 8px; }
+  .chat-suggest:empty { display: none; }
+  .chat-suggest .cap { font-size: .9rem; color: var(--text-dim); }
+  .chat-suggest button { min-height: 46px; padding: 8px 14px; border-radius: 12px; border: 1px solid var(--accent); background: var(--warn-soft); color: var(--text); font-family: inherit; font-size: 1rem; text-align: left; cursor: pointer; }
+
   /* ═══════════ 공지 ═══════════ */
   .h-notice { width: 100%; min-height: 52px; margin-top: 12px; padding: 0 14px; border-radius: 16px; border: 1px solid var(--accent); background: var(--warn-soft); color: var(--text); font-family: inherit; display:flex; align-items:center; gap: 10px; text-align: left; cursor: pointer; }
   .h-notice[hidden] { display: none; }
@@ -1839,6 +1881,23 @@
 </style>
 </head>
 <body>
+<!-- 황금기사 로고 (투구 + TAXI 깃대) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gkMark" viewBox="34 8 132 212">
+    <rect x="66" y="12" width="68" height="30" rx="7" fill="currentColor"/>
+    <text x="100" y="34.5" text-anchor="middle" font-family="Outfit, 'Noto Sans KR', sans-serif" font-weight="700" font-size="17" letter-spacing="1.5" style="fill:var(--gk-cut)">TAXI</text>
+    <rect x="93" y="40" width="14" height="14" fill="currentColor"/>
+    <path d="M44 206 V118 Q44 52 100 52 Q156 52 156 118 V206 Q100 218 44 206 Z" fill="currentColor"/>
+    <rect x="97" y="56" width="6" height="150" style="fill:#000;opacity:.16"/>
+    <rect x="58" y="110" width="84" height="11" rx="5.5" style="fill:var(--gk-cut)"/>
+    <rect x="66" y="130" width="68" height="8" rx="4" style="fill:var(--gk-cut)"/>
+    <circle cx="72" cy="172" r="11" style="fill:var(--gk-cut)"/>
+    <circle cx="128" cy="172" r="11" style="fill:var(--gk-cut)"/>
+    <rect x="89" y="164" width="22" height="4.5" rx="2.25" style="fill:var(--gk-cut)"/>
+    <rect x="89" y="172" width="22" height="4.5" rx="2.25" style="fill:var(--gk-cut)"/>
+    <rect x="89" y="180" width="22" height="4.5" rx="2.25" style="fill:var(--gk-cut)"/>
+  </symbol>
+</svg>
 <!-- ═══ 스플래시 화면 ═══ -->
 <div id="splashOverlay">
   <div class="sp-grid"></div>
@@ -1847,7 +1906,7 @@
   <div class="sp-icon-wrap">
     <div class="sp-ring sp-ring-1"></div>
     <div class="sp-ring sp-ring-2"></div>
-    <span class="sp-icon"><img src="icon-192.png" alt="" style="width:1em;height:1em;border-radius:22%;vertical-align:middle"></span>
+    <span class="sp-icon"><svg class="gk-mark" viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg></span>
   </div>
 
   <div class="sp-title">황금기사</div>
@@ -1872,7 +1931,7 @@
 
 <!-- ═══ 로그인/회원가입 ═══ -->
 <div id="authOverlay">
-  <div class="auth-icon"><img src="icon-192.png" alt="" style="width:1em;height:1em;border-radius:22%;vertical-align:middle"></div>
+  <div class="auth-icon"><svg class="gk-mark" viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg></div>
   <div class="auth-title">황금기사</div>
   <div class="brand-rule"></div>
   <div class="auth-sub">GOLD KNIGHT</div>
@@ -1893,6 +1952,8 @@
         <button onclick="forgotPassword()" style="background:none;border:none;color:var(--text-dim,#7a8099);font-size:1rem;cursor:pointer;font-family:'Noto Sans KR',sans-serif">비밀번호를 잊으셨나요?</button>
       </div>
       <div class="auth-err" id="loginErr"></div>
+      <div class="auth-or"><span>또는</span></div>
+      <button class="auth-google" onclick="doGoogleLogin()"><b>G</b> Google 계정으로 계속하기</button>
     </div>
     <!-- 회원가입 폼 -->
     <div id="signupForm" style="display:none">
@@ -1911,6 +1972,8 @@
       </div>
       <button class="auth-btn" id="signupBtn" onclick="doSignup()">가입하고 30일 무료 체험</button>
       <div style="text-align:center;font-size:.9rem;color:var(--text-dim);margin-top:8px">체험이 끝나도 자동 결제되지 않아요</div>
+      <div class="auth-or"><span>또는</span></div>
+      <button class="auth-google" onclick="doGoogleLogin()"><b>G</b> Google 계정으로 가입하기</button>
       <div class="auth-err" id="signupErr"></div>
     </div>
   </div>
@@ -1987,9 +2050,11 @@
   <!-- 홈: 원 넘버(D) · 계기판(E) · 근무일 도트(F) 중 설정에서 선택 -->
   <div id="tab-home" class="tab-panel active">
     <div class="h-top">
-      <button class="h-date" id="hDate" onclick="openTodaySheet()">-</button>
-      <button class="h-icon" id="hTheme" onclick="toggleThemeQuick()" aria-label="화면 밝기 바꾸기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <div class="h-brand"><svg class="gk-mark" viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg><div><b class="brand-ko">황금기사</b><span>GOLD KNIGHT</span></div></div>
+      <div style="display:flex;gap:8px"><button class="h-icon" onclick="openHelpCenter()" aria-label="도움말"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.3-2.5 3.8M12 17h.01"/></svg></button>
+      <button class="h-icon" id="hTheme" onclick="toggleThemeQuick()" aria-label="화면 밝기 바꾸기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></div>
     </div>
+    <button class="h-date" id="hDate" onclick="openTodaySheet()">-</button>
     <button class="h-notice" id="hNotice" hidden onclick="openNoticeList()"><span class="tag">공지</span><span class="txt" id="hNoticeText"></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
 
     <!-- D · 원 넘버 -->
@@ -2070,7 +2135,7 @@
   <!-- 더보기 -->
   <div id="tab-more" class="tab-panel">
     <div class="more-head"><b>더보기</b><span id="moreSync">-</span></div>
-    <div style="display:flex;align-items:center;gap:12px;margin:0 2px 16px"><img src="icon-192.png" alt="" style="width:44px;height:44px;border-radius:12px"><div><b class="brand-ko" style="font-size:1.2rem">황금기사</b> <span class="brand-en" style="color:var(--text-dim);font-size:.7rem">Gold Knight</span><div style="font-size:.9rem;color:var(--text-dim);word-break:keep-all">대한민국 황금기사단에 오신 것을 환영합니다.</div></div></div>
+    <div style="display:flex;align-items:center;gap:12px;margin:0 2px 16px"><span style="width:44px;height:52px;color:var(--accent);display:flex;flex-shrink:0"><svg class="gk-mark" viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg></span><div><b class="brand-ko" style="font-size:1.2rem">황금기사</b> <span class="brand-en" style="color:var(--text-dim);font-size:.7rem">Gold Knight</span><div style="font-size:.9rem;color:var(--text-dim);word-break:keep-all">대한민국 황금기사단에 오신 것을 환영합니다.</div></div></div>
     <div class="more-list">
       <button class="more-item" onclick="switchTab('input')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="mi-t">매출·주유 입력<small>다른 날짜, 주유비·가스, 메모</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
       <button class="more-item" onclick="openSettings('salary')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/></svg></span><span class="mi-t">급여 조건<small>회사 선택, 기준금·배분율</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -2079,6 +2144,7 @@
     </div>
     <div class="more-list">
       <button class="more-item" onclick="openSettings('planCard')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .8-5.2 4.7 1.5 7L12 17.5 5.7 21l1.5-7L2 9.3l7-.8z"/></svg></span><span class="mi-t">내 플랜 <b id="morePlan" style="color:var(--accent-ink)">-</b><small>쿠폰 입력</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="more-item" onclick="openHelpCenter()"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.3-2.5 3.8M12 17h.01"/></svg></span><span class="mi-t">도움말 · 사용법<small>궁금한 걸 검색하면 바로 알려드려요</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
       <button class="more-item" onclick="openNoticeList()"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></span><span class="mi-t">공지사항</span><span class="mi-b" id="moreNoticeBadge">0</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
       <button class="more-item" onclick="switchTab('message')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><span class="mi-t">문의하기 · 백업</span><span class="mi-b" id="moreMsgBadge">0</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
       <button class="more-item" onclick="openSettings('accountCard')"><span class="mi-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="mi-t">계정<small id="moreUser">-</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -2460,6 +2526,7 @@
     <div class="card">
       <div class="card-title">💬 관리자에게 문의</div>
       <div id="msgUserView">
+        <button class="hp-entry" onclick="openHelpCenter()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.3-2.5 3.8M12 17h.01"/></svg><span>궁금한 걸 먼저 검색해 보세요<small>사용법은 대부분 바로 답이 나와요</small></span></button>
         <div class="msg-alert-row">
           <button class="msg-alert-btn" id="msgAlertBtn" onclick="toggleMsgAlerts()">🔔 답장 알림 켜기</button>
           <span class="msg-alert-hint" id="msgAlertHint"></span>
@@ -2468,9 +2535,10 @@
           <div class="chat-empty">메시지를 보내보세요</div>
         </div>
         <div class="chat-input-row">
-          <input id="chatInput" type="text" placeholder="메시지를 입력하세요..." maxlength="500">
+          <input id="chatInput" type="text" placeholder="메시지를 입력하세요..." maxlength="500" oninput="suggestHelpForChat(this.value)">
           <button class="chat-send-btn" onclick="sendMessage()">전송</button>
         </div>
+        <div id="chatSuggest" class="chat-suggest"></div>
       </div>
     </div>
 
@@ -2988,6 +3056,7 @@ async function doSignup() {
   const marketing = !!document.getElementById('agMarketing')?.checked;
   const btn = document.getElementById('signupBtn');
   btn.disabled = true; btn.textContent = '가입 중...';
+  _signingUp = true;
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, pw);
     await cred.user.updateProfile({ displayName: name });
@@ -3013,7 +3082,94 @@ async function doSignup() {
     showAuthErr('signup', msgs[e.code] || '❌ 가입 실패: ' + e.message);
   } finally {
     btn.disabled = false; btn.textContent = '가입하고 30일 무료 체험';
+    _signingUp = false;
   }
+}
+
+// ════════════════════════════════════════
+// ─── Google 로그인 ───
+// ════════════════════════════════════════
+let _signingUp = false;
+const IN_KAKAO = /KAKAOTALK/i.test(navigator.userAgent);
+const IN_APP_BROWSER = IN_KAKAO || /NAVER\(inapp|; ?Line\/|FBAN|FBAV|Instagram|DaumApps|everytimeApp/i.test(navigator.userAgent);
+function isGoogleUser(u) { return !!u && (u.providerData || []).some(p => p.providerId === 'google.com'); }
+function hasPasswordLogin(u) { return !!u && (u.providerData || []).some(p => p.providerId === 'password'); }
+
+async function doGoogleLogin() {
+  if (!auth) return showAuthErr('login', '⚠️ 네트워크 연결을 확인하세요');
+  // 카카오톡 등 앱 안 브라우저는 Google이 로그인을 막아요 → 기본 브라우저로 열기
+  if (IN_KAKAO) { location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href); return; }
+  if (IN_APP_BROWSER) return showAuthErr('login', '⚠️ 이 화면에서는 Google 로그인이 안 돼요. 오른쪽 위 메뉴에서 [다른 브라우저로 열기]를 눌러주세요');
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  try {
+    await auth.signInWithPopup(provider);
+  } catch(e) {
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') {
+      try { await auth.signInWithRedirect(provider); return; } catch(e2) { e = e2; }
+    }
+    const msgs = {
+      'auth/popup-closed-by-user': '로그인 창을 닫았어요',
+      'auth/cancelled-popup-request': '로그인 창을 닫았어요',
+      'auth/account-exists-with-different-credential': '❌ 이 이메일은 비밀번호로 가입돼 있어요. 이메일·비밀번호로 로그인해 주세요',
+      'auth/unauthorized-domain': '❌ 이 주소는 아직 Google 로그인이 허용되지 않았어요',
+      'auth/operation-not-allowed': '❌ Google 로그인이 아직 켜져 있지 않아요 (관리자 설정 필요)',
+    };
+    const box = document.getElementById('signupForm')?.style.display === 'block' ? 'signup' : 'login';
+    showAuthErr(box, msgs[e.code] || '❌ Google 로그인 실패: ' + e.message);
+  }
+}
+window.doGoogleLogin = doGoogleLogin;
+
+// 처음 Google로 들어온 분: 약관 동의를 받고 회원 문서를 만들어요
+let _sheetLocked = false;
+async function ensureUserDoc(user) {
+  if (!firestore || !user || isAdmin(user) || _signingUp) return;
+  let exists = true;
+  try { exists = (await firestore.collection('users').doc(user.uid).get()).exists; } catch(e) { return; }
+  if (exists) return;
+  await new Promise(resolve => {
+    _sheetLocked = true;
+    const nm = esc(user.displayName || '');
+    openSheet({
+      title: '황금기사단에 오신 것을 환영합니다',
+      html: `처음 오셨네요. 아래에 동의하시면 <b>30일 무료 체험</b>이 바로 시작돼요.
+        <div style="margin-top:12px;color:var(--text)">이름</div>
+        <input class="sheet-input" id="gName" type="text" maxlength="20" style="font-family:inherit;font-size:1.3rem" value="${nm}">
+        <div class="agree-box" style="margin-top:12px">
+          <div class="agree-row all"><input type="checkbox" id="gAll" onchange="['gT','gP','gA','gM'].forEach(i=>document.getElementById(i).checked=this.checked)"><label for="gAll">전체 동의</label></div>
+          <div class="agree-row"><input type="checkbox" id="gT" class="g-req"><label for="gT">(필수) 이용약관</label><a href="terms.html" target="_blank">보기</a></div>
+          <div class="agree-row"><input type="checkbox" id="gP" class="g-req"><label for="gP">(필수) 개인정보 수집·이용</label><a href="privacy.html" target="_blank">보기</a></div>
+          <div class="agree-row"><input type="checkbox" id="gA" class="g-req"><label for="gA">(필수) 만 14세 이상이에요</label></div>
+          <div class="agree-row"><input type="checkbox" id="gM"><label for="gM">(선택) 새 기능·할인 소식 받기</label></div>
+        </div>
+        <div style="font-size:.9rem">체험이 끝나도 자동 결제되지 않아요</div>`,
+      actions: [
+        { label: '동의하고 시작하기', cls: 'main', fn: async () => {
+            if (![...document.querySelectorAll('.g-req')].every(c => c.checked)) return showToast('❌ 필수 항목 3개에 동의해 주세요');
+            const name = (document.getElementById('gName')?.value || '').trim() || (user.email || '').split('@')[0];
+            const now = new Date(), iso = now.toISOString();
+            const trialUntil = new Date(now.getTime() + 30 * 86400000);
+            try {
+              if (name !== user.displayName) await user.updateProfile({ displayName: name }).catch(() => {});
+              await firestore.collection('users').doc(user.uid).set({
+                name, email: user.email || '', createdAt: iso,
+                plan: 'pro', trialUntil: firebase.firestore.Timestamp.fromDate(trialUntil),
+                agreedTermsAt: iso, agreedPrivacyAt: iso, age14: true,
+                marketingOptIn: !!document.getElementById('gM')?.checked, marketingAt: iso,
+                lastSeenAt: iso, signUpWith: 'google',
+              });
+              _sheetLocked = false; closeSheet(); resolve();
+            } catch(e) { showToast('❌ 가입 실패: ' + e.message); }
+          } },
+        { label: '동의하지 않고 나가기', cls: 'ghost', fn: async () => {
+            _sheetLocked = false; closeSheet();
+            try { await user.delete(); } catch(e) { await auth.signOut(); }
+            resolve();
+          } },
+      ],
+    });
+  });
 }
 
 // ─── 가입 동의 체크 ───
@@ -3227,12 +3383,27 @@ async function loadFromFirestore() {
   }
   showLoading('☁️ 데이터 불러오는 중...');
   try {
-    const snapshot = await col.get();
-    db = {};
-    snapshot.forEach(docSnap => {
-      const data = docSnap.data();
-      db[docSnap.id] = { revenue: data.revenue||0, fuel: data.fuel||0, gas: data.gas||0, logs: data.logs||[], memo: data.memo||'' };
-    });
+    // 읽기 비용 절약: 휴대폰에 저장된 기록이 있고 최근 7일 안에 전체를 받은 적이 있으면
+    // 지난달 1일부터의 기록만 새로 받아요 (7일마다 한 번은 전체를 다시 받아요)
+    const syncKey = `taxiSync_${uid}`;
+    let cached = null;
+    try { cached = JSON.parse(localStorage.getItem(lsKey) || 'null'); } catch(e) {}
+    const lastFull = +(localStorage.getItem(syncKey) || 0);
+    const quick = cached && typeof cached === 'object' && Date.now() - lastFull < 7 * 86400000;
+    const toRec = data => ({ revenue: data.revenue||0, fuel: data.fuel||0, gas: data.gas||0, logs: data.logs||[], memo: data.memo||'' });
+    if (quick) {
+      const t = new Date(); t.setDate(1); t.setMonth(t.getMonth() - 1);
+      const start = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-01`;
+      const snapshot = await col.where(firebase.firestore.FieldPath.documentId(), '>=', start).get();
+      db = cached;
+      Object.keys(db).forEach(k => { if (k >= start) delete db[k]; });
+      snapshot.forEach(docSnap => { db[docSnap.id] = toRec(docSnap.data()); });
+    } else {
+      const snapshot = await col.get();
+      db = {};
+      snapshot.forEach(docSnap => { db[docSnap.id] = toRec(docSnap.data()); });
+      localStorage.setItem(syncKey, String(Date.now()));
+    }
     localStorage.setItem(lsKey, JSON.stringify(db));
     console.log('[Firestore] 로드 성공:', Object.keys(db).length, '항목');
     // (예전 공용 데이터 자동 이전 기능은 제거됨: 다른 사람의 기록이
@@ -3390,6 +3561,8 @@ window.onload = async function() {
     if (user) {
       currentUser = user;
       overlay.style.display = 'none';
+      await ensureUserDoc(user);
+      if (!auth.currentUser) return;   // 동의하지 않고 나간 경우
       // 헤더 이름은 applyPlanUI()에서 처리
       // 관리자/사용자 탭 분리
       const adminBtn = document.getElementById('adminTabBtn');
@@ -3520,6 +3693,7 @@ async function sendMessage() {
   if (!text || !currentUser || !firestore) return;
   if (text.length > 1000) return showToast('❌ 1,000자 이내로 나눠서 보내주세요');
   input.value = '';
+  suggestHelpForChat('');
   const uid = currentUser.uid;
   const msg = {
     sender: uid,
@@ -4540,6 +4714,7 @@ function openSheet({ title, html, actions }) {
   setTimeout(() => (document.querySelector('#sheet input') || act.querySelector('button'))?.focus(), 80);
 }
 function closeSheet() {
+  if (typeof _sheetLocked !== 'undefined' && _sheetLocked) return;
   const sh = document.getElementById('sheet');
   sh.classList.remove('on'); sh.setAttribute('aria-hidden', 'true');
 }
@@ -5947,6 +6122,178 @@ window.closeAdminChat = closeAdminChat;
 window.adminReply = adminReply;
 
 // ════════════════════════════════════════
+// ─── 도움말 (자동 답변) ───
+// 키워드로 찾아서 사용법을 바로 보여줘요. 서버를 쓰지 않아 비용이 들지 않아요.
+// ════════════════════════════════════════
+const HELP_ACTS = {
+  revenue:  ['오늘 매출 넣기', () => openRevenueSheet()],
+  input:    ['입력 화면 열기', () => switchTab('input')],
+  need:     ['계산식 보기', () => openHelp('need')],
+  status:   ['신호등 설명 보기', () => openHelp('status')],
+  pay:      ['예상 월급 보기', () => openHelp('pay')],
+  goal:     ['목표 월급 정하기', () => openGoalSheet()],
+  salary:   ['급여 조건 열기', () => openSettings('salary')],
+  workday:  ['근무일 설정 열기', () => openSettings('workDayCard')],
+  today:    ['오늘 근무 바꾸기', () => openTodaySheet()],
+  display:  ['화면 설정 열기', () => openSettings('displayCard')],
+  calendar: ['달력 열기', () => switchTab('calendar')],
+  stats:    ['통계 열기', () => switchTab('weekly')],
+  plan:     ['내 플랜 열기', () => openSettings('planCard')],
+  message:  ['문의·백업 화면 열기', () => switchTab('message')],
+  account:  ['계정 설정 열기', () => openSettings('accountCard')],
+  notice:   ['공지 보기', () => openNoticeList()],
+};
+const HELP_FAQ = [
+  { q: '오늘 매출은 어떻게 넣나요?', k: ['매출', '입력', '오늘', '수입', '금액', '넣기', '추가', '등록'], act: 'revenue',
+    a: '홈 화면의 [+ 오늘 매출 입력]을 누르고 금액을 넣으면 돼요.\n같은 날 여러 번 넣으면 금액이 더해져요.' },
+  { q: '어제나 지난 날짜 매출은 어떻게 넣나요?', k: ['어제', '날짜', '지난', '다른날', '전날', '그저께', '빠뜨림', '깜빡'], act: 'input',
+    a: '[더보기 › 매출·주유 입력]에서 맨 위 날짜를 바꾼 뒤 금액을 넣으면 돼요.' },
+  { q: '잘못 넣은 금액은 어떻게 고치나요?', k: ['수정', '고치기', '잘못', '틀림', '지우기', '삭제', '취소', '오타'], act: 'input',
+    a: '[더보기 › 매출·주유 입력] 아래쪽 \'최근 기록\'에서 잘못 넣은 줄의 ✕를 눌러 지운 뒤, 맞는 금액으로 다시 넣어주세요.' },
+  { q: '주유비·가스는 어디서 넣나요?', k: ['주유', '주유비', '가스', '충전', 'lpg', '연료', '리터', '기름'], act: 'input',
+    a: '[더보기 › 매출·주유 입력]에서 주유비(원)와 가스(L)를 넣을 수 있어요.\n하루 목표와 월급은 순매출(매출 − 주유비)로 계산해요.' },
+  { q: '운행 메모는 어디에 남기나요?', k: ['메모', '노트', '기록남기기', '적기'], act: 'input',
+    a: '[더보기 › 매출·주유 입력] 아래쪽 메모 칸에 적고 저장하면 돼요.' },
+  { q: '하루 목표 금액은 어떻게 계산되나요?', k: ['하루목표', '목표금액', '필요금액', '계산', '어떻게', '하루', '목표'], act: 'need',
+    a: '(기준금 − 이번 달 지금까지 순매출) ÷ 남은 근무일 이에요.\n홈의 ⓘ 버튼을 누르면 내 숫자로 계산한 식이 보여요.' },
+  { q: '신호등 색깔은 무슨 뜻인가요?', k: ['신호등', '색', '초록', '노랑', '빨강', '순조', '분발', '상태'], act: 'status',
+    a: '초록: 지금 페이스면 기준금을 채워요.\n노랑: 하루 조금만 더 벌면 돼요.\n빨강: 남은 날 평소보다 많이 벌어야 해요.' },
+  { q: '예상 월급은 어떻게 나오나요?', k: ['월급', '예상', '급여', '실수령', '받는돈', '얼마'], act: 'pay',
+    a: '지금 하루 평균을 남은 근무일 동안 유지한다고 보고, 입력한 급여 조건으로 계산한 참고용 금액이에요.' },
+  { q: '목표 월급은 어떻게 정하나요?', k: ['목표월급', '원하는', '목표', '희망'], act: 'goal',
+    a: '홈의 \'목표 월급\' 줄을 누르고 받고 싶은 월급을 넣으면, 그걸 위해 하루에 얼마를 벌어야 하는지 알려드려요.' },
+  { q: '급여 조건(기준금·배분율)은 어디서 바꾸나요?', k: ['급여조건', '기준금', '배분', '배분율', '사납금', '조건', '퍼센트', '회사'], act: 'salary',
+    a: '[더보기 › 급여 조건]에서 회사를 고르면 조건이 자동으로 채워져요.\n직접 고친 뒤 [이 설정으로 저장]을 누르면 돼요.' },
+  { q: '우리 회사가 목록에 없어요', k: ['회사없음', '목록', '없어요', '우리회사', '등록요청', '추가'], act: 'salary',
+    a: '[더보기 › 급여 조건]에서 조건을 직접 채운 뒤 [우리 회사 조건 등록 요청]을 눌러주세요.\n확인 후 목록에 추가해 드려요.' },
+  { q: '쉬는 요일·격일 근무는 어떻게 정하나요?', k: ['근무일', '쉬는날', '휴무', '요일', '격일', '근무', '출근', '휴가', '비번'], act: 'workday',
+    a: '[더보기 › 근무일]에서 쉬는 요일을 누르거나 격일 근무를 고르면 돼요.\n하루 목표는 남은 근무일로 나눠서 계산해요.' },
+  { q: '오늘만 쉬는 날로 바꾸고 싶어요', k: ['오늘쉼', '오늘휴무', '오늘', '쉬는', '쉼', '일하는날'], act: 'today',
+    a: '홈 맨 위의 날짜를 누르면 오늘만 쉬는 날(또는 일하는 날)로 바꿀 수 있어요.' },
+  { q: '홈 화면 모양을 바꾸고 싶어요', k: ['홈화면', '모양', '레이아웃', '계기판', '디자인', '화면'], act: 'display',
+    a: '[더보기 › 화면 설정]에서 \'숫자 하나\', \'계기판\', \'근무일 점\' 중에 고를 수 있어요. 계산은 모두 같아요.' },
+  { q: '화면을 밝게/어둡게 하고 싶어요', k: ['밝기', '어둡게', '밝게', '야간', '주간', '다크', '눈부심', '밤'], act: 'display',
+    a: '홈 오른쪽 위 해 모양 버튼을 누르면 바로 바뀌어요.\n[화면 설정]에서 \'자동\'을 고르면 낮에는 밝게, 밤에는 어둡게 바뀌어요.' },
+  { q: '글자가 작아서 잘 안 보여요', k: ['글자', '글씨', '크기', '크게', '작게', '안보임', '안보여', '눈'], act: 'display',
+    a: '[더보기 › 화면 설정 › 글자 크기]에서 키울 수 있어요.\n\'부분별 글자 크기\'로 큰 숫자만 더 키울 수도 있어요.' },
+  { q: '달력으로 한 달 기록을 보고 싶어요', k: ['달력', '캘린더', '한달', '날짜별'], act: 'calendar',
+    a: '아래 메뉴의 [달력]을 누르면 날짜별 매출과 근무일을 한눈에 볼 수 있어요.' },
+  { q: '주간·월간 통계는 어디서 보나요?', k: ['통계', '주간', '월간', '그래프', '평균', '비교', '지난달', '분석'], act: 'stats',
+    a: '아래 메뉴의 [통계]에서 주간·월간·월급을 볼 수 있어요.' },
+  { q: '무료와 Pro는 뭐가 달라요?', k: ['프로', 'pro', '무료', '유료', '차이', '잠김', '자물쇠', '흐림', '안보임'], act: 'plan',
+    a: 'Pro에서는 하루 목표 금액, 급여 조건 저장, 월간 분석, 내보내기를 쓸 수 있어요.\n무료에서는 매출 기록과 기본 통계를 쓸 수 있어요.' },
+  { q: '무료 체험과 요금은 어떻게 되나요?', k: ['체험', '30일', '결제', '요금', '가격', '구독', '자동결제', '돈'], act: 'plan',
+    a: '가입하면 30일 동안 Pro를 무료로 써요.\n체험이 끝나도 자동 결제는 되지 않고 무료로 바뀌어요.\n요금은 월 3,000원(연 30,000원)이에요.' },
+  { q: '쿠폰은 어디에 넣나요?', k: ['쿠폰', '코드', '할인', '이벤트'], act: 'plan',
+    a: '[더보기 › 내 플랜]의 쿠폰 칸에 코드를 넣고 [적용]을 누르면 돼요.' },
+  { q: '환불은 어떻게 하나요?', k: ['환불', '해지', '취소', '돌려받기'], act: 'message',
+    a: '결제 후 7일 안에 Pro 기능을 쓰지 않았다면 전액, 쓴 뒤에는 남은 기간만큼 돌려드려요.\n[문의]로 요청해 주세요.' },
+  { q: '휴대폰을 바꾸면 기록이 사라지나요?', k: ['폰바꿈', '기기', '휴대폰', '새폰', '옮기기', '사라짐', '이전', '기기변경', '데이터'], act: null,
+    a: '사라지지 않아요. 기록은 계정에 저장돼요.\n새 휴대폰에서 같은 계정(이메일 또는 Google)으로 로그인하면 그대로 보여요.' },
+  { q: '백업 파일은 어떻게 받나요?', k: ['백업', '복원', '파일', '보관', '되돌리기'], act: 'message',
+    a: '[더보기 › 문의하기·백업] 아래 \'전체 백업 저장\'을 누르면 파일로 받아요.\n\'백업 파일 복원\'으로 다시 넣을 수 있어요.' },
+  { q: '엑셀(CSV)로 내보낼 수 있나요?', k: ['엑셀', 'csv', '내보내기', '출력', '요약', '복사'], act: 'message',
+    a: '[더보기 › 문의하기·백업]의 \'CSV 내보내기\'로 엑셀에서 여는 파일을 받을 수 있어요. (Pro)' },
+  { q: '인터넷이 안 될 때는요?', k: ['오프라인', '인터넷', '연결', '와이파이', '안됨', '느림', '저장안됨'], act: null,
+    a: '화면 위에 \'오프라인\'이 보이면 인터넷 연결을 확인해 주세요.\n앱을 켜 둔 채로 연결되면 자동으로 저장돼요. 되도록 연결된 상태에서 입력해 주세요.' },
+  { q: '비밀번호를 잊어버렸어요', k: ['비밀번호', '비번', '잊어버림', '분실', '재설정', '로그인안됨', '까먹'], act: null,
+    a: '로그인 화면에서 이메일을 넣고 \'비밀번호를 잊으셨나요?\'를 누르면 메일로 재설정 링크가 와요.\nGoogle로 가입했다면 [Google 계정으로 계속하기]를 눌러주세요.' },
+  { q: 'Google 계정으로 로그인할 수 있나요?', k: ['구글', 'google', 'gmail', '지메일', '로그인', '카톡'], act: null,
+    a: '로그인 화면의 [Google 계정으로 계속하기]를 누르면 돼요.\n카카오톡에서 열었다면 휴대폰 기본 브라우저로 넘어간 뒤 로그인해요.' },
+  { q: '이름이나 이메일을 바꾸고 싶어요', k: ['이름', '이메일', '변경', '바꾸기', '계정', '프로필'], act: 'account',
+    a: '[더보기 › 계정]에서 이름, 이메일, 비밀번호를 바꿀 수 있어요.' },
+  { q: '휴대폰 홈 화면에 앱처럼 설치하고 싶어요', k: ['설치', '아이콘', '바탕화면', '홈화면추가', '앱', '다운', '깔기'], act: null,
+    a: '크롬에서 황금기사를 열고 오른쪽 위 ⋮ 메뉴 → [홈 화면에 추가] 또는 [앱 설치]를 누르면 돼요.' },
+  { q: '공지사항은 어디서 보나요?', k: ['공지', '소식', '업데이트', '점검', '새기능'], act: 'notice',
+    a: '홈 위쪽의 공지 띠를 누르거나 [더보기 › 공지사항]에서 볼 수 있어요.' },
+  { q: '회원 탈퇴는 어떻게 하나요?', k: ['탈퇴', '계정삭제', '그만', '해지', '삭제'], act: 'account',
+    a: '[더보기 › 계정] 맨 아래 \'회원 탈퇴\'에서 할 수 있어요.\n탈퇴 전에 백업 파일을 받아두세요. 탈퇴하면 기록이 모두 지워져요.' },
+  { q: '새 기능·할인 소식을 끄고 싶어요', k: ['광고', '마케팅', '소식끄기', '수신거부', '알림끄기'], act: 'account',
+    a: '[더보기 › 계정]의 \'소식 받기\' 체크를 끄면 돼요.' },
+  { q: '관리자에게 직접 물어보고 싶어요', k: ['문의', '질문', '상담', '관리자', '답장', '연락'], act: 'message',
+    a: '[더보기 › 문의하기·백업]에서 메시지를 보내면 관리자가 답해 드려요.\n\'답장 알림 켜기\'를 누르면 답이 왔을 때 알려드려요.' },
+  { q: '계산이 실제 월급과 달라요', k: ['틀림', '다름', '안맞', '오차', '정확', '이상해'], act: 'salary',
+    a: '급여 조건(기준금·배분율·가스)이 회사와 같은지, 근무일과 주유비가 맞게 들어갔는지 확인해 주세요.\n황금기사의 숫자는 참고용이고, 실제 급여는 회사 정산을 따라요.' },
+];
+const HELP_POPULAR = ['매출 입력', '하루 목표', '근무일', '급여 조건', '글자 크기', '휴대폰 바꿈'];
+
+function helpSearch(query) {
+  const raw = String(query || '').toLowerCase().trim();
+  if (!raw) return [];
+  const toks = raw.split(/[\s,.?!·]+/).filter(Boolean);
+  const whole = raw.replace(/\s+/g, '');
+  return HELP_FAQ.map((f, i) => {
+    let score = 0;
+    const q = f.q.toLowerCase().replace(/\s+/g, ''), a = f.a.toLowerCase();
+    f.k.forEach(kw => {
+      // 한 글자 키워드(색·눈·밤·돈)는 정확히 같은 단어일 때만 맞춰요 ('환불'이 '불'에 걸리지 않게)
+      if (kw.length >= 2 && whole.includes(kw)) score += 4;
+      toks.forEach(t => {
+        if (kw === t) score += kw.length >= 2 ? 1 : 3;
+        else if (t.length >= 2 && (kw.includes(t) || (kw.length >= 2 && t.includes(kw)))) score += 2;
+      });
+    });
+    toks.forEach(t => { if (t.length >= 2 && q.includes(t)) score += 2; if (t.length >= 2 && a.includes(t)) score += 1; });
+    return { i, score };
+  }).filter(x => x.score >= 2).sort((x, y) => y.score - x.score).map(x => x.i);
+}
+
+function helpItemHtml(i, open) {
+  const f = HELP_FAQ[i];
+  const act = f.act && HELP_ACTS[f.act];
+  return `<details class="hp-item"${open ? ' open' : ''}><summary>${esc(f.q)}</summary>
+    <div class="hp-ans">${esc(f.a)}${act ? `<br><button onclick="runHelpAction(${i})">${esc(act[0])}</button>` : ''}</div></details>`;
+}
+function renderHelpResults(query, openIdx) {
+  const box = document.getElementById('hpResults');
+  if (!box) return;
+  const q = String(query || '').trim();
+  if (!q) {
+    box.innerHTML = '<div class="hp-cap">자주 찾는 질문</div><div class="hp-list">'
+      + [0, 5, 11, 9, 15, 22].map(i => helpItemHtml(i, i === openIdx)).join('') + '</div>';
+    return;
+  }
+  const hits = helpSearch(q).slice(0, 8);
+  box.innerHTML = hits.length
+    ? `<div class="hp-cap">'${esc(q)}' 찾은 결과 ${hits.length}개</div><div class="hp-list">` + hits.map((i, n) => helpItemHtml(i, i === openIdx || (openIdx == null && n === 0))).join('') + '</div>'
+    : `<div class="hp-none">'${esc(q)}'에 맞는 답을 못 찾았어요.<br>다른 말로 찾아보시거나, 아래 [관리자에게 문의하기]를 눌러주세요.</div>`;
+}
+function openHelpCenter(query, openIdx) {
+  openSheet({
+    title: '도움말',
+    html: `<input class="hp-search" id="hpQ" type="search" enterkeyhint="search" placeholder="예: 근무일, 주유비, 글자 크기" value="${esc(query || '')}" oninput="renderHelpResults(this.value)" aria-label="도움말 검색">
+      <div class="hp-chips">${HELP_POPULAR.map(t => `<button type="button" onclick="document.getElementById('hpQ').value='${t}';renderHelpResults('${t}')">${t}</button>`).join('')}</div>
+      <div id="hpResults"></div>`,
+    actions: [
+      { label: '닫기', cls: 'dark', fn: closeSheet },
+      { label: '관리자에게 문의하기', cls: 'ghost', fn: () => { closeSheet(); switchTab('message'); } },
+    ],
+  });
+  _sheetEnter = null;
+  renderHelpResults(query || '', openIdx);
+}
+function runHelpAction(i) {
+  const f = HELP_FAQ[i], act = f && f.act && HELP_ACTS[f.act];
+  if (!act) return;
+  closeSheet();
+  setTimeout(act[1], 60);
+}
+// 문의 입력 중: 맞는 도움말이 있으면 먼저 보여줘요
+function suggestHelpForChat(text) {
+  const box = document.getElementById('chatSuggest');
+  if (!box) return;
+  const hits = String(text || '').trim().length >= 2 ? helpSearch(text).slice(0, 2) : [];
+  box.innerHTML = hits.length
+    ? '<div class="cap">💡 혹시 이 내용인가요? 누르면 바로 답을 볼 수 있어요</div>'
+      + hits.map(i => `<button onclick="openHelpCenter(document.getElementById('chatInput').value, ${i})">${esc(HELP_FAQ[i].q)}</button>`).join('')
+    : '';
+}
+window.openHelpCenter = openHelpCenter;
+window.renderHelpResults = renderHelpResults;
+window.runHelpAction = runHelpAction;
+window.suggestHelpForChat = suggestHelpForChat;
+
+// ════════════════════════════════════════
 // ─── 공지사항 ───
 // ════════════════════════════════════════
 let notices = [];
@@ -6307,6 +6654,10 @@ function renderAccountExtras() {
   _setT('wdDayCount', days);
   const ws = document.getElementById('withdrawSection');
   if (ws) ws.style.display = isAdmin(currentUser) ? 'none' : '';
+  // Google로만 로그인하는 분: 비밀번호 칸 대신 Google로 확인
+  const g = isGoogleUser(auth?.currentUser) && !hasPasswordLogin(auth?.currentUser);
+  const pwEl = document.getElementById('withdrawPw');
+  if (pwEl) { pwEl.style.display = g ? 'none' : ''; if (pwEl.previousElementSibling) pwEl.previousElementSibling.textContent = g ? '탈퇴하기를 누르면 Google 계정으로 한 번 더 확인해요' : '확인을 위해 비밀번호를 넣어주세요'; }
 }
 async function updateMarketing(on) {
   if (!firestore || !currentUser) return;
@@ -6332,16 +6683,18 @@ async function deleteQueryAll(q) {
 async function doWithdraw() {
   if (!currentUser || !firestore || !auth) return;
   if (isAdmin(currentUser)) return showToast('❌ 관리자 계정은 탈퇴할 수 없어요');
+  const viaGoogle = isGoogleUser(auth.currentUser) && !hasPasswordLogin(auth.currentUser);
   const pw = document.getElementById('withdrawPw')?.value || '';
-  if (!pw) return showToast('❌ 비밀번호를 넣어주세요');
+  if (!viaGoogle && !pw) return showToast('❌ 비밀번호를 넣어주세요');
   if (!confirm('정말 탈퇴할까요?\n모든 기록이 지워지고 되돌릴 수 없어요.')) return;
   const user = auth.currentUser;
   if (!user) return;
   const uid = user.uid;
   showLoading('탈퇴 처리 중...');
   try {
-    await user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, pw));
-  } catch(e) { hideLoading(); return showToast('❌ 비밀번호가 맞지 않아요'); }
+    if (viaGoogle) await user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
+    else await user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, pw));
+  } catch(e) { hideLoading(); return showToast(viaGoogle ? '❌ Google 확인이 끝나지 않았어요' : '❌ 비밀번호가 맞지 않아요'); }
   try {
     stopMsgWatch();
     const uref = firestore.collection('users').doc(uid);
@@ -6353,7 +6706,7 @@ async function doWithdraw() {
     await deleteQueryAll(firestore.collection('accessLogs').where('uid', '==', uid)).catch(() => {});
     await uref.delete();
     await user.delete();
-    try { localStorage.removeItem('workPattern_' + uid); } catch(e) {}
+    try { ['workPattern_', 'taxiDB_', 'taxiSync_'].forEach(k => localStorage.removeItem(k + uid)); } catch(e) {}
     hideLoading();
     alert('탈퇴가 끝났어요. 그동안 황금기사와 함께해 주셔서 감사합니다.');
     location.reload();

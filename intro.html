@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>황금기사 · 택시 기사님의 하루 목표와 월급</title>
+<meta name="description" content="오늘 얼마를 벌어야 기준금을 채우는지, 이대로면 월급이 얼마인지 한눈에. 택시 기사님을 위한 매출 관리 앱 황금기사.">
+<meta property="og:title" content="황금기사 · 대한민국 황금기사단에 오신 것을 환영합니다">
+<meta property="og:description" content="오늘 하루 목표와 예상 월급을 한눈에. 30일 무료 체험.">
+<meta property="og:image" content="icon-512.png">
+<meta name="theme-color" content="#0e0f12">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Outfit:wght@300;500;600&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Cafe24Danjeonghae'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Danjunghae.woff') format('woff'); font-display: swap; }
+  :root { --bg:#0e0f12; --surface:#17191e; --surface2:#1f2228; --line:#2a2d34; --text:#f2f0ea; --dim:#a3a5ab; --gold:#f2b33d; --gold-soft:#1d1910; --ok:#3dd68c; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 17px; line-height: 1.6; word-break: keep-all; }
+  a { color: var(--gold); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  .brand { font-family: 'Cafe24Danjeonghae', 'Noto Sans KR', serif; }
+  .num { font-family: 'Outfit', sans-serif; font-variant-numeric: tabular-nums; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 58px; padding: 0 28px; border-radius: 18px; background: var(--gold); color: #17130a; font-size: 1.12rem; font-weight: 700; text-decoration: none; }
+  .btn.ghost { background: transparent; color: var(--text); border: 1.5px solid var(--line); }
+  .gk { color: var(--gold); --cut: var(--bg); }
+
+  /* 맨 위 */
+  header.top { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--gold); }
+  .logo svg { width: 30px; height: 48px; }
+  .logo b { font-size: 1.4rem; font-weight: normal; }
+  header.top .btn { min-height: 44px; padding: 0 18px; font-size: 1rem; border-radius: 14px; }
+
+  /* 첫 화면 */
+  .hero { display: flex; flex-wrap: wrap; align-items: center; gap: 40px; padding: 40px 0 70px; }
+  .hero-text { flex: 1 1 400px; min-width: 0; }
+  .hero h1 { margin: 0; font-size: clamp(2.1rem, 6vw, 3.4rem); line-height: 1.25; font-weight: 700; letter-spacing: -1px; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero p.lead { margin: 18px 0 28px; font-size: 1.15rem; color: var(--dim); }
+  .hero .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .hero .small { margin-top: 12px; font-size: .92rem; color: var(--dim); }
+  .phone { flex: 0 1 330px; margin: 0 auto; border-radius: 40px; border: 1px solid var(--line); background: var(--surface); padding: 22px 20px 26px; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+  .ph-top { display: flex; align-items: center; gap: 10px; color: var(--gold); }
+  .ph-top svg { width: 24px; height: 38px; }
+  .ph-top b { font-weight: normal; font-size: 1.15rem; }
+  .ph-date { margin: 10px 0 0; font-size: .9rem; color: var(--dim); }
+  .ph-pill { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; padding: 7px 14px; border-radius: 99px; border: 1px solid var(--line); font-size: .92rem; font-weight: 600; }
+  .ph-pill i { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px rgba(61,214,140,.18); }
+  .ph-center { text-align: center; }
+  .ph-lbl { margin-top: 22px; font-size: .9rem; color: var(--dim); }
+  .ph-big { font-size: 3rem; font-weight: 500; letter-spacing: -1.5px; line-height: 1.1; }
+  .ph-big small { font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; font-weight: 700; margin-left: 2px; }
+  .ph-sub { font-size: .86rem; color: var(--dim); margin-top: 6px; }
+  .ph-sub b { color: var(--ok); font-weight: 500; }
+  .ph-bar { height: 6px; border-radius: 3px; background: var(--line); margin-top: 22px; overflow: hidden; }
+  .ph-bar div { width: 58%; height: 100%; background: var(--gold); }
+  .ph-row { display: flex; justify-content: space-between; padding: 13px 2px; border-bottom: 1px solid var(--line); font-size: .92rem; color: var(--dim); }
+  .ph-row b { color: var(--text); font-weight: 700; }
+  .ph-cta { margin-top: 16px; min-height: 48px; border-radius: 14px; background: var(--gold); color: #17130a; font-weight: 700; font-size: .95rem; display: flex; align-items: center; justify-content: center; }
+  .ph-note { text-align: center; font-size: .75rem; color: var(--dim); margin-top: 10px; }
+
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  h2 { margin: 0 0 8px; font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.3; }
+  .sec-lead { margin: 0 0 32px; color: var(--dim); font-size: 1.05rem; }
+
+  /* 기능 */
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .feat { border: 1px solid var(--line); border-radius: 22px; background: var(--surface); padding: 22px; }
+  .feat .ic { width: 46px; height: 46px; border-radius: 14px; background: var(--gold-soft); border: 1px solid #4a3a17; color: var(--gold); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .feat h3 { margin: 0 0 6px; font-size: 1.15rem; }
+  .feat p { margin: 0; color: var(--dim); font-size: .98rem; }
+
+  /* 시작 순서 */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; counter-reset: st; }
+  .step { position: relative; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); padding: 22px 22px 22px 74px; min-height: 96px; }
+  .step::before { counter-increment: st; content: counter(st); position: absolute; left: 22px; top: 22px; width: 36px; height: 36px; border-radius: 50%; background: var(--gold); color: #17130a; font-family: 'Outfit', sans-serif; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .step b { display: block; font-size: 1.08rem; }
+  .step span { color: var(--dim); font-size: .95rem; }
+
+  /* 요금 */
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .plan { border: 1px solid var(--line); border-radius: 24px; background: var(--surface); padding: 26px; display: flex; flex-direction: column; gap: 10px; }
+  .plan.pro { border-color: var(--gold); background: var(--gold-soft); }
+  .plan .name { font-size: 1rem; color: var(--dim); font-weight: 700; }
+  .plan .price { font-size: 2.2rem; font-weight: 500; }
+  .plan .price small { font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; color: var(--dim); font-weight: 400; }
+  .plan ul { margin: 6px 0 0; padding-left: 20px; color: var(--dim); }
+  .plan li { margin: 4px 0; }
+  .tag { align-self: flex-start; font-size: .8rem; font-weight: 700; color: #17130a; background: var(--gold); border-radius: 8px; padding: 3px 9px; }
+
+  /* 설치 */
+  .install { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 22px; background: var(--surface); padding: 22px; }
+  .box h3 { margin: 0 0 8px; font-size: 1.1rem; }
+  .box ol { margin: 0; padding-left: 20px; color: var(--dim); }
+  .box li { margin: 6px 0; }
+  .box li b { color: var(--text); }
+
+  /* 자주 묻는 질문 */
+  details { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); margin-bottom: 10px; }
+  summary { list-style: none; cursor: pointer; padding: 18px 50px 18px 20px; position: relative; font-weight: 700; font-size: 1.05rem; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; position: absolute; right: 22px; top: 50%; transform: translateY(-50%); color: var(--dim); font-size: 1.4rem; font-weight: 400; }
+  details[open] summary::after { content: '−'; }
+  details p { margin: 0; padding: 0 20px 18px; color: var(--dim); }
+
+  .final { text-align: center; padding: 80px 0; }
+  .final .gk svg { width: 64px; height: 102px; }
+  .final h2 { margin-top: 16px; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; font-size: .85rem; color: var(--dim); line-height: 1.8; }
+  footer a { color: var(--dim); }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .hero { padding-top: 16px; gap: 32px; }
+    .hero .cta .btn { flex: 1 1 100%; }
+    section { padding: 48px 0; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gkMark" viewBox="34 8 132 212">
+    <rect x="66" y="12" width="68" height="30" rx="7" fill="currentColor"/>
+    <text x="100" y="34.5" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="700" font-size="17" letter-spacing="1.5" style="fill:var(--cut)">TAXI</text>
+    <rect x="93" y="40" width="14" height="14" fill="currentColor"/>
+    <path d="M44 206 V118 Q44 52 100 52 Q156 52 156 118 V206 Q100 218 44 206 Z" fill="currentColor"/>
+    <rect x="97" y="56" width="6" height="150" style="fill:#000;opacity:.16"/>
+    <rect x="58" y="110" width="84" height="11" rx="5.5" style="fill:var(--cut)"/>
+    <rect x="66" y="130" width="68" height="8" rx="4" style="fill:var(--cut)"/>
+    <circle cx="72" cy="172" r="11" style="fill:var(--cut)"/>
+    <circle cx="128" cy="172" r="11" style="fill:var(--cut)"/>
+    <rect x="89" y="164" width="22" height="4.5" rx="2.25" style="fill:var(--cut)"/>
+    <rect x="89" y="172" width="22" height="4.5" rx="2.25" style="fill:var(--cut)"/>
+    <rect x="89" y="180" width="22" height="4.5" rx="2.25" style="fill:var(--cut)"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <a class="logo gk" href="#"><svg viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg><b class="brand">황금기사</b></a>
+    <a class="btn" href="./">앱 열기</a>
+  </header>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>오늘 얼마 벌면<br>기준금 <em>채울까?</em></h1>
+      <p class="lead">매출만 넣으면 오늘 하루 목표와 이번 달 예상 월급을 바로 알려드려요. 택시 기사님을 위해 택시 기사 가족이 만들었어요.</p>
+      <div class="cta">
+        <a class="btn" href="./">30일 무료로 시작하기</a>
+        <a class="btn ghost" href="#how">어떻게 쓰나요?</a>
+      </div>
+      <div class="small">체험이 끝나도 자동 결제되지 않아요 · Google 계정으로 10초 가입</div>
+    </div>
+
+    <div class="phone" role="img" aria-label="황금기사 홈 화면 예시: 오늘 하루 목표 191,700원, 순조로워요">
+      <div class="ph-top gk"><svg viewBox="34 8 132 212" aria-hidden="true" style="--cut:var(--surface)"><use href="#gkMark"/></svg><b class="brand">황금기사</b></div>
+      <div class="ph-date">10월 8일 목요일 · 근무 <span style="opacity:.6">(예시 화면)</span></div>
+      <div class="ph-center">
+        <div class="ph-pill"><i></i>순조로워요</div>
+        <div class="ph-lbl">오늘 하루 목표</div>
+        <div class="ph-big num">191,700<small>원</small></div>
+        <div class="ph-sub">내 평균보다 <b class="num">17,000원</b> 여유</div>
+      </div>
+      <div class="ph-bar"><div></div></div>
+      <div class="ph-row" style="border-bottom:none;padding-top:8px"><span>기준금 <b>58%</b></span><span>남은 근무 <b>12일</b></span></div>
+      <div class="ph-row" style="border-top:1px solid var(--line)"><span>예상 월급</span><b class="num">494만 원</b></div>
+      <div class="ph-cta">+ 오늘 매출 입력</div>
+      <div class="ph-note">참고용 계산이에요 · 실제 급여는 회사 정산 기준</div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2>복잡한 계산은 황금기사가</h2>
+    <p class="sec-lead">기사님은 매출만 넣으세요. 나머지는 알아서 계산해요.</p>
+    <div class="features">
+      <div class="feat">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></div>
+        <h3>오늘 하루 목표</h3>
+        <p>기준금까지 남은 금액을 남은 근무일로 나눠서, 오늘 얼마를 벌면 되는지 큰 숫자로 보여줘요.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/></svg></div>
+        <h3>이번 달 예상 월급</h3>
+        <p>우리 회사 급여 조건(기준금·배분율·가스)으로 지금 페이스면 월급이 얼마인지 미리 알려줘요.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+        <h3>내 근무일 기준</h3>
+        <p>쉬는 요일, 격일 근무, 갑자기 쉬는 날까지 반영해요. 오늘 쉬면 내일 목표가 바로 바뀌어요.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>신호등으로 한눈에</h3>
+        <p>초록·노랑·빨강 신호로 지금 페이스가 괜찮은지 운전 중에도 바로 알 수 있어요.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg></div>
+        <h3>큰 글씨 · 밤 화면</h3>
+        <p>글자 크기를 원하는 만큼 키우고, 밤에는 눈부시지 않은 어두운 화면으로 자동 전환돼요.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></div>
+        <h3>휴대폰 바꿔도 그대로</h3>
+        <p>기록은 내 계정에 안전하게 저장돼요. 소속 회사를 포함해 누구에게도 공유하지 않아요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>시작은 1분이면 끝나요</h2>
+    <p class="sec-lead">어려운 설정 없이 바로 쓸 수 있어요.</p>
+    <div class="steps">
+      <div class="step"><b>Google 계정으로 가입</b><span>안드로이드 휴대폰이면 Gmail로 바로 가입돼요.</span></div>
+      <div class="step"><b>우리 회사 고르기</b><span>회사를 고르면 급여 조건이 자동으로 채워져요.</span></div>
+      <div class="step"><b>매일 매출 넣기</b><span>퇴근할 때 금액만 넣으면 끝. 내일 목표가 바로 나와요.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="price">
+  <div class="wrap">
+    <h2>커피 한 잔보다 저렴하게</h2>
+    <p class="sec-lead">먼저 30일 동안 모든 기능을 무료로 써보세요.</p>
+    <div class="plans">
+      <div class="plan">
+        <span class="name">무료</span>
+        <span class="price num">0<small>원</small></span>
+        <ul><li>매출·주유 기록</li><li>달력, 주간 통계</li><li>공지·문의</li></ul>
+      </div>
+      <div class="plan pro">
+        <span class="tag">30일 무료 체험</span>
+        <span class="name">Pro</span>
+        <span class="price num">3,000<small>원 / 월</small></span>
+        <ul><li>오늘 하루 목표 · 신호등</li><li>예상 월급 · 목표 월급</li><li>급여 조건 저장 · 월간 분석</li><li>엑셀(CSV) 내보내기</li></ul>
+        <span style="font-size:.92rem;color:var(--dim)">1년 결제 시 30,000원 (두 달 무료)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <h2>휴대폰에 앱처럼 설치하기</h2>
+    <p class="sec-lead">앱 스토어 없이 바로 설치돼요. 한 번만 하면 홈 화면 아이콘으로 열려요.</p>
+    <div class="install">
+      <div class="box">
+        <h3>안드로이드 (삼성·LG 등)</h3>
+        <ol><li><b>크롬</b>으로 이 페이지를 열어요</li><li>[앱 열기]를 눌러 로그인해요</li><li>오른쪽 위 <b>⋮</b> → <b>홈 화면에 추가</b> (또는 앱 설치)</li></ol>
+      </div>
+      <div class="box">
+        <h3>카카오톡에서 열었다면</h3>
+        <ol><li>오른쪽 아래(또는 위) <b>⋮</b> 메뉴를 눌러요</li><li><b>다른 브라우저로 열기</b>를 골라요</li><li>크롬에서 위 순서대로 설치해요</li></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>자주 묻는 질문</h2>
+    <p class="sec-lead">더 궁금한 건 앱 안의 [도움말]에서 검색해 보세요.</p>
+    <details><summary>체험이 끝나면 돈이 나가나요?</summary><p>아니요. 체험이 끝나도 자동 결제되지 않고 무료로 바뀌어요. 계속 쓰고 싶을 때만 직접 결제하시면 돼요.</p></details>
+    <details><summary>우리 회사 조건이 없으면요?</summary><p>급여 조건을 직접 넣을 수 있어요. [우리 회사 조건 등록 요청]을 누르면 확인 후 목록에 추가해서 같은 회사 기사님들이 고르기만 하면 되게 해드려요.</p></details>
+    <details><summary>회사에서 제 매출을 볼 수 있나요?</summary><p>볼 수 없어요. 기록은 본인만 볼 수 있고, 소속 회사를 포함해 누구에게도 제공하지 않아요.</p></details>
+    <details><summary>계산한 월급이 정확한가요?</summary><p>입력한 급여 조건과 기록으로 계산한 참고용 금액이에요. 조건을 회사와 똑같이 맞추면 거의 비슷하게 나오지만, 실제 급여는 회사 정산을 따라요.</p></details>
+    <details><summary>휴대폰을 바꾸면요?</summary><p>새 휴대폰에서 같은 계정으로 로그인하면 기록이 그대로 있어요.</p></details>
+  </div>
+</section>
+
+<div class="wrap final">
+  <span class="gk"><svg viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg></span>
+  <h2 class="brand" style="color:var(--gold);font-weight:normal">대한민국 황금기사단에 오신 것을 환영합니다</h2>
+  <p class="sec-lead" style="margin-bottom:24px">오늘도 안전 운행하세요.</p>
+  <a class="btn" href="./">30일 무료로 시작하기</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <a href="terms.html">이용약관</a> · <a href="privacy.html"><b>개인정보 처리방침</b></a><br>
+    <span id="bizInfo"></span><br>
+    © <span id="bizYear"></span> 황금기사 Gold Knight
+  </div>
+</footer>
+
+<script src="app-config.js"></script>
+<script>
+  (function () {
+    var b = Object.assign({ name: '[상호]', owner: '[대표자]', regNo: '[사업자등록번호]', mailNo: '[통신판매업 신고번호]',
+      addr: '[사업장 주소]', tel: '[고객센터 전화]', email: '[고객센터 이메일]' }, (window.APP_CONFIG || {}).biz || {});
+    document.getElementById('bizInfo').textContent = '상호 ' + b.name + ' · 대표 ' + b.owner + ' · 사업자등록번호 ' + b.regNo +
+      ' · 통신판매업 ' + b.mailNo + ' · ' + b.addr + ' · ' + b.tel + ' · ' + b.email;
+    document.getElementById('bizYear').textContent = new Date().getFullYear();
+  })();
+</script>
+</body>
+</html>

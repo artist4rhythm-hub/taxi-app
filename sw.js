@@ -1,5 +1,5 @@
 /* 황금기사 (Gold Knight) - Service Worker */
-const CACHE = 'gold-knight-v7';
+const CACHE = 'gold-knight-v9';
 
 /* 앱 셸 (상대경로 + 외부 CDN 스크립트) */
 const APP_SHELL = [
