@@ -412,25 +412,25 @@
   /* Stats */
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
     margin-bottom: 20px;
   }
 
   @media (min-width: 600px) {
-    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    .stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 
   .stat-box {
-    background: linear-gradient(180deg, #232838 0%, var(--surface2) 100%);
-    border-radius: 12px;
+    background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
+    border-radius: 12px; min-width: 0;
     padding: 16px 12px;
     text-align: center;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
     transition: transform .16s ease, border-color .16s ease;
   }
-  .stat-box:hover { transform: translateY(-1px); border-color: #38405c; }
+  .stat-box:hover { transform: translateY(-1px); border-color: var(--accent); }
 
   .stat-label {
     font-size: 1.02rem; color: var(--text-dim); margin-bottom: 7px;
@@ -438,7 +438,7 @@
   }
   .stat-value {
     font-family: 'Oswald', sans-serif;
-    font-size: clamp(1.35rem, 4.6vw, 2rem);
+    font-size: clamp(1.2rem, 5.2vw, 2rem);
     font-weight: 700;
     line-height: 1.15;
     white-space: nowrap;
@@ -448,6 +448,9 @@
   .stat-value.gold { color: var(--accent-ink); }
   .stat-value.red { color: var(--accent2); }
   .stat-value.green { color: var(--green); }
+  .stat-value.blue { color: var(--blue); }
+  .stat-value.purple { color: var(--purple); }
+  #gasRemainPerDay { white-space: normal; font-size: clamp(1.05rem, 4.4vw, 1.6rem); }
 
   /* Chart */
   .chart-wrap { position: relative; margin-top: 8px; }
@@ -738,7 +741,8 @@
 
   .goal-stat-val {
     font-family: 'Oswald', sans-serif;
-    font-size: 1.8rem;
+    font-size: clamp(1.15rem, 4.8vw, 1.8rem);
+    white-space: nowrap;
     font-weight: 700;
     margin-bottom: 3px;
   }
@@ -889,7 +893,7 @@
     border: 1px solid var(--border);
   }
 
-  .pbi-val { font-family: 'Oswald', sans-serif; font-size: 1.66rem; font-weight: 700; }
+  .pbi-val { font-family: 'Oswald', sans-serif; font-size: clamp(1.1rem, 4.6vw, 1.66rem); font-weight: 700; white-space: nowrap; }
   .pbi-lbl { font-size: 1.02rem; color: var(--text-dim); margin-top: 2px; }
 
   .over-bonus-banner {
@@ -1247,9 +1251,9 @@
   .chat-msg.theirs .chat-bubble { background:var(--surface2); color:var(--text); border-bottom-left-radius:4px; }
   .chat-meta { font-size:1rem; color:var(--text-dim); }
   .chat-input-row { display:flex; gap:8px; margin-top:8px; }
-  .chat-input-row input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; }
+  .chat-input-row input { flex:1; min-width:0; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; }
   .chat-input-row input:focus { border-color:var(--accent); }
-  .chat-send-btn { background:var(--accent); border:none; border-radius:10px; padding:10px 18px; font-size:1.3rem; font-weight:700; color:#000; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+  .chat-send-btn { flex-shrink:0; white-space:nowrap; background:var(--accent); border:none; border-radius:10px; padding:10px 18px; font-size:1.3rem; font-weight:700; color:#000; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
   .chat-send-btn:hover { background:#f7b84b; }
   .chat-empty { text-align:center; color:var(--text-dim); font-size:1.2rem; padding:32px 0; }
   .chat-room-item { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; background:var(--surface2); border-radius:10px; margin-bottom:8px; cursor:pointer; border:1px solid var(--border); transition:border-color 0.15s; }
@@ -1502,9 +1506,9 @@
 
   /* ─── 쿠폰 입력 ─── */
   .coupon-box { display:flex; gap:8px; margin-bottom:10px; }
-  .coupon-box input { flex:1; background:var(--surface2); border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; text-transform:uppercase; letter-spacing:1px; }
+  .coupon-box input { flex:1; min-width:0; background:var(--surface2); border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; font-size:1.3rem; color:var(--text); font-family:'Noto Sans KR',sans-serif; outline:none; text-transform:uppercase; letter-spacing:1px; }
   .coupon-box input:focus { border-color:var(--accent); }
-  .coupon-box button { background:var(--accent); border:none; border-radius:8px; padding:10px 18px; font-size:1.2rem; font-weight:700; color:#000; cursor:pointer; white-space:nowrap; font-family:'Noto Sans KR',sans-serif; }
+  .coupon-box button { flex-shrink:0; background:var(--accent); border:none; border-radius:8px; padding:10px 18px; font-size:1.2rem; font-weight:700; color:#000; cursor:pointer; white-space:nowrap; font-family:'Noto Sans KR',sans-serif; }
 
   /* ─── 체험/구독 상태 카드 ─── */
   .plan-status-card { background:linear-gradient(135deg, rgba(245,166,35,.12), rgba(245,166,35,.04)); border:1.5px solid rgba(245,166,35,.25); border-radius:12px; padding:16px; margin-bottom:14px; }
@@ -1550,7 +1554,7 @@
   .compare-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
   .compare-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; }
   .compare-label { font-size:1.05rem; color:var(--text-dim); margin-bottom:4px; }
-  .compare-value { font-size:1.7rem; font-weight:700; }
+  .compare-value { font-size:clamp(1.15rem, 4.8vw, 1.7rem); font-weight:700; white-space:nowrap; }
   .compare-change { font-size:1.1rem; font-weight:700; margin-top:2px; }
   .compare-change.up   { color:var(--green); }
   .compare-change.down { color:var(--accent2); }
@@ -2202,11 +2206,11 @@
         </div>
         <div class="stat-box">
           <div class="stat-label">주간 순매출</div>
-          <div class="stat-value" id="weekNet" style="color:#a78bfa">-</div>
+          <div class="stat-value" id="weekNet" style="color:var(--purple)">-</div>
         </div>
         <div class="stat-box">
           <div class="stat-label" id="weekGoalLabel">월 목표 기여</div>
-          <div class="stat-value" id="weekGoalShare" style="color:#4db8ff">-</div>
+          <div class="stat-value" id="weekGoalShare" style="color:var(--blue)">-</div>
         </div>
       </div>
       <div class="chart-wrap">
@@ -2273,7 +2277,7 @@
           <div class="goal-stat-lbl">목표까지 잔여금액</div>
         </div>
         <div class="goal-stat">
-          <div class="goal-stat-val" id="goalNeededAvg" style="color:#a78bfa">-</div>
+          <div class="goal-stat-val" id="goalNeededAvg" style="color:var(--purple)">-</div>
           <div class="goal-stat-lbl" id="goalNeededLabel">남은 근무일 기준<br>필요 일 평균 순매출</div>
         </div>
       </div>
@@ -2299,7 +2303,7 @@
         </div>
         <div class="stat-box">
           <div class="stat-label">예상 소득</div>
-          <div class="stat-value" id="monthNet" style="color:#a78bfa">-</div>
+          <div class="stat-value" id="monthNet" style="color:var(--purple)">-</div>
         </div>
       </div>
       <div class="chart-wrap">
@@ -3205,7 +3209,7 @@ async function forgotPassword() {
   try {
     await auth.sendPasswordResetEmail(email);
     showAuthErr('login', '✅ ' + email + '로 재설정 링크를 보냈습니다');
-    document.getElementById('loginErr').style.color = '#2ecc71';
+    document.getElementById('loginErr').style.color = 'var(--green)';
   } catch(e) {
     showAuthErr('login', '❌ 발송 실패: 이메일을 확인하세요');
   }
@@ -4221,12 +4225,12 @@ function renderTrend() {
       options: {
         responsive: true,
         plugins: {
-          legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+          legend: { labels: { color: chartC().text, font: { family: 'Noto Sans KR' } } },
           tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw.toLocaleString()}원` } }
         },
         scales: {
-          x: { ticks: { color: '#7a8099' }, grid: { color: '#2a3045' } },
-          y: { ticks: { color: '#7a8099', callback: v => fmtShort(v) }, grid: { color: '#2a3045' } }
+          x: { ticks: { color: chartC().tick }, grid: { color: chartC().grid } },
+          y: { ticks: { color: chartC().tick, callback: v => fmtShort(v) }, grid: { color: chartC().grid } }
         }
       }
     });
@@ -4260,7 +4264,7 @@ function renderTrend() {
   let maxIdx = 0;
   nets.forEach((v,i) => { if (v > nets[maxIdx]) maxIdx = i; });
   if (nets[maxIdx] > 0) {
-    rows += `<div class="ti-row"><span class="ti-key">기간 내 최고 순익</span> <span class="ti-val" style="color:#a78bfa">${labels[maxIdx]} · ${fmt(nets[maxIdx])}</span></div>`;
+    rows += `<div class="ti-row"><span class="ti-key">기간 내 최고 순익</span> <span class="ti-val" style="color:var(--purple)">${labels[maxIdx]} · ${fmt(nets[maxIdx])}</span></div>`;
   }
   ins.innerHTML = rows || '<div class="ti-row"><span class="ti-key">분석할 데이터가 부족해요</span></div>';
 }
@@ -4323,7 +4327,7 @@ function renderWeekdayPattern() {
       options: {
         responsive: true,
         plugins: {
-          legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+          legend: { labels: { color: chartC().text, font: { family: 'Noto Sans KR' } } },
           tooltip: {
             callbacks: {
               label: c => ` ${c.dataset.label}: ${c.raw.toLocaleString()}원`,
@@ -4335,8 +4339,8 @@ function renderWeekdayPattern() {
           }
         },
         scales: {
-          x: { ticks: { color: '#7a8099' }, grid: { color: '#2a3045' } },
-          y: { ticks: { color: '#7a8099', callback: v => fmtShort(v) }, grid: { color: '#2a3045' } }
+          x: { ticks: { color: chartC().tick }, grid: { color: chartC().grid } },
+          y: { ticks: { color: chartC().tick, callback: v => fmtShort(v) }, grid: { color: chartC().grid } }
         }
       }
     });
@@ -4356,7 +4360,7 @@ function renderWeekdayPattern() {
     if (revAvg[i] > revAvg[bestRev]) bestRev = i;
   });
 
-  let rows = `<div class="ti-row"><span>👑</span><span class="ti-key">순익 최고 요일</span> <span class="ti-val" style="color:#a78bfa">${fullNames[bestNet]}</span> <span class="ti-val">${fmt(netAvg[bestNet])}</span> <span class="ti-key">(근무 ${counts[bestNet]}일)</span></div>`;
+  let rows = `<div class="ti-row"><span>👑</span><span class="ti-key">순익 최고 요일</span> <span class="ti-val" style="color:var(--purple)">${fullNames[bestNet]}</span> <span class="ti-val">${fmt(netAvg[bestNet])}</span> <span class="ti-key">(근무 ${counts[bestNet]}일)</span></div>`;
   if (bestRev !== bestNet) {
     rows += `<div class="ti-row"><span>💰</span><span class="ti-key">매출 최고 요일</span> <span class="ti-val gold">${fullNames[bestRev]}</span> <span class="ti-val">${fmt(revAvg[bestRev])}</span></div>`;
   }
@@ -4410,6 +4414,12 @@ function applyTheme() {
     if (b) { b.classList.toggle('on', m === mode); b.setAttribute('aria-pressed', m === mode); }
   });
   if (changed && typeof refreshActiveStats === 'function') { try { refreshActiveStats(); } catch(e) {} }
+}
+// 차트 색: 밝은 화면/어두운 화면에 맞춰 글자와 격자 색을 바꿔요
+function chartC() {
+  const day = document.documentElement.getAttribute('data-theme') === 'day';
+  return day ? { text: '#2b2f37', tick: '#5b616c', grid: 'rgba(0,0,0,.08)' }
+             : { text: '#e8eaf0', tick: '#8a90a6', grid: 'rgba(255,255,255,.07)' };
 }
 function setThemeMode(mode) {
   try { localStorage.setItem('themeMode', mode); } catch(e) {}
@@ -5688,7 +5698,7 @@ function recalcSalary() {
   set('sprFuel',    '- ' + fmt(totalFuel), 'var(--accent2)');
   set('sprNet',     fmt(netRev), netRev >= 0 ? 'var(--green)' : 'var(--accent2)');
   set('sprBase',    '- ' + fmt(base), 'var(--text-dim)');
-  set('sprShare',   '+' + fmt(share), '#a78bfa');
+  set('sprShare',   '+' + fmt(share), 'var(--purple)');
   set('sprTotal',   fmt(total), 'var(--accent)');
 }
 
@@ -7071,19 +7081,19 @@ function renderWeekly() {
     options: {
       responsive: true,
       plugins: {
-        legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+        legend: { labels: { color: chartC().text, font: { family: 'Noto Sans KR' } } },
         tooltip: {
           callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}원` }
         }
       },
       scales: {
-        x: { ticks: { color: '#7a8099' }, grid: { color: '#2a3045' } },
+        x: { ticks: { color: chartC().tick }, grid: { color: chartC().grid } },
         y: {
           ticks: {
-            color: '#7a8099',
+            color: chartC().tick,
             callback: v => fmtShort(v)
           },
-          grid: { color: '#2a3045' }
+          grid: { color: chartC().grid }
         }
       }
     }
@@ -7163,7 +7173,7 @@ function renderMonthly() {
     chip.textContent = '🎉 목표 달성!';
     chip.className = 'status-chip chip-purple';
     neededEl.textContent = '달성 완료!';
-    neededEl.style.color = '#a78bfa';
+    neededEl.style.color = 'var(--purple)';
     neededLbl.textContent = `목표 초과: +${fmt(netRevM - M_GOAL)}`;
   } else if (!isCurrentMonth) {
     // 지난달
@@ -7178,7 +7188,7 @@ function renderMonthly() {
     chip.textContent = '오늘이 마지막';
     chip.className = 'status-chip chip-red';
     neededEl.textContent = fmt(remaining);
-    neededEl.style.color = '#e8445a';
+    neededEl.style.color = 'var(--accent2)';
     neededLbl.textContent = '오늘 달성 필요 금액';
   } else {
     const neededPerDay = Math.ceil(remaining / remainingDays);
@@ -7236,19 +7246,19 @@ function renderMonthly() {
     options: {
       responsive: true,
       plugins: {
-        legend: { labels: { color: '#e8eaf0', font: { family: 'Noto Sans KR' } } },
+        legend: { labels: { color: chartC().text, font: { family: 'Noto Sans KR' } } },
         tooltip: {
           callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}원` }
         }
       },
       scales: {
         x: {
-          ticks: { color: '#7a8099', maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
-          grid: { color: '#2a3045' }
+          ticks: { color: chartC().tick, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+          grid: { color: chartC().grid }
         },
         y: {
-          ticks: { color: '#7a8099', callback: v => fmtShort(v) },
-          grid: { color: '#2a3045' }
+          ticks: { color: chartC().tick, callback: v => fmtShort(v) },
+          grid: { color: chartC().grid }
         }
       }
     }
@@ -7294,7 +7304,7 @@ function renderMonthly() {
   if (gRpd) {
     if (daysLeft > 0) {
       gRpd.textContent = gasPerDayLeft + 'L/일 (' + daysLeft + '일 남음)';
-      gRpd.style.color = parseFloat(gasPerDayLeft) > 33.3 ? '#e8445a' : '#4db8ff';
+      gRpd.style.color = parseFloat(gasPerDayLeft) > 33.3 ? 'var(--accent2)' : 'var(--blue)';
     } else {
       gRpd.textContent = isCurrentMonth ? '오늘이 마지막날' : '-';
     }
@@ -7456,7 +7466,7 @@ function renderCalendar() {
 
   const goalSummaryEl = document.getElementById('calGoalSummary');
   if (goalSummaryEl) {
-    const pctColor = calPct >= 100 ? '#a78bfa' : calPct >= 70 ? '#2ecc71' : calPct >= 40 ? '#f5a623' : '#e8445a';
+    const pctColor = calPct >= 100 ? 'var(--purple)' : calPct >= 70 ? 'var(--green)' : calPct >= 40 ? 'var(--accent-ink)' : 'var(--accent2)';
     goalSummaryEl.innerHTML = `
       <div style="margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -7479,7 +7489,7 @@ function renderCalendar() {
         </div>
         ${calNeededPerDay !== null ? `
         <div class="goal-stat" style="grid-column:1/-1">
-          <div class="goal-stat-val" style="color:#a78bfa">${fmt(calNeededPerDay)}</div>
+          <div class="goal-stat-val" style="color:var(--purple)">${fmt(calNeededPerDay)}</div>
           <div class="goal-stat-lbl">남은 근무 ${remainingDays}일 동안 하루 평균 필요 순매출</div>
         </div>` : ''}
       </div>
@@ -7561,7 +7571,7 @@ function renderProfit() {
   const overAmt    = Math.max(0, netRev - RULE_GOAL);
   const overProfit = isOver ? Math.round(overAmt * RULE_RATE) : 0;
   const pct        = RULE_GOAL > 0 ? Math.min(100, Math.round(netRev / RULE_GOAL * 100)) : 0;
-  const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
+  const profitColor = isOver ? 'var(--purple)' : isAtGoal ? 'var(--green)' : 'var(--text-dim)';
 
   // 계산 구조 안내를 이 달 조건으로 갱신
   const _setTxt = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
@@ -7590,7 +7600,7 @@ function renderProfit() {
         <div class="goal-stat-lbl">이달 총 가스</div>
       </div>
       <div class="goal-stat" style="border-color:${netRev>=0?'rgba(46,204,113,0.3)':'rgba(232,68,90,0.3)'}">
-        <div class="goal-stat-val" style="color:${netRev>=0?'#2ecc71':'#e8445a'}">${netRev>=0?'+':''}${fmt(netRev)}</div>
+        <div class="goal-stat-val" style="color:${netRev>=0?'var(--green)':'var(--accent2)'}">${netRev>=0?'+':''}${fmt(netRev)}</div>
         <div class="goal-stat-lbl">순매출 (매출−주유)</div>
       </div>
     </div>
@@ -7598,9 +7608,9 @@ function renderProfit() {
     <!-- 계산 구조 안내 -->
     <div style="background:rgba(245,166,35,0.06);border:1px dashed rgba(245,166,35,0.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:1.1rem;color:var(--text-dim);line-height:1.9">
       📌 <strong style="color:var(--text)">예상 소득 계산 기준</strong><br>
-      순매출 <strong style="color:#2ecc71">${fmt(totalRev)} − ${fmt(totalFuel)} = ${fmt(netRev)}</strong> 기준으로 계산<br>
+      순매출 <strong style="color:var(--green)">${fmt(totalRev)} − ${fmt(totalFuel)} = ${fmt(netRev)}</strong> 기준으로 계산<br>
       순매출 ${fmt(RULE_GOAL)} 달성 시 기본 <strong style="color:var(--accent)">${fmt(_rule.baseProfit||0)}</strong>
-      + 초과분 × <strong style="color:#a78bfa">90%</strong>
+      + 초과분 × <strong style="color:var(--purple)">90%</strong>
     </div>
 
     <!-- 예상 소득 메인 -->
@@ -7610,7 +7620,7 @@ function renderProfit() {
       </div>
       <div class="profit-big-num" style="color:${profitColor}">${fmt(profit)}</div>
       <div style="font-size:1.2rem;color:var(--text-dim);margin-bottom:14px">
-        순매출 <strong style="color:#2ecc71">${fmt(netRev)}</strong>
+        순매출 <strong style="color:var(--green)">${fmt(netRev)}</strong>
         &nbsp;·&nbsp; 목표 달성률 <strong style="color:${profitColor}">${pct}%</strong>
       </div>
       <div class="goal-progress-bar" style="height:8px;margin-bottom:16px">
@@ -7627,11 +7637,11 @@ function renderProfit() {
           <div class="pbi-lbl">총 주유비</div>
         </div>
         <div class="profit-breakdown-item">
-          <div class="pbi-val" style="color:#2ecc71">${fmt(netRev)}</div>
+          <div class="pbi-val" style="color:var(--green)">${fmt(netRev)}</div>
           <div class="pbi-lbl">순매출</div>
         </div>
         <div class="profit-breakdown-item" style="${!isOver?'opacity:0.35':''}">
-          <div class="pbi-val" style="color:#a78bfa">${isOver ? '+'+fmt(overProfit) : '-'}</div>
+          <div class="pbi-val" style="color:var(--purple)">${isOver ? '+'+fmt(overProfit) : '-'}</div>
           <div class="pbi-lbl">초과소득 (90%)</div>
         </div>
       </div>
@@ -7642,12 +7652,12 @@ function renderProfit() {
         + 추가 <strong>${fmt(overProfit)}</strong>
         = 총 <strong>${fmt(profit)}</strong>
       </div>` : isAtGoal ? `
-      <div style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:1.3rem;color:#2ecc71;text-align:center">
+      <div style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:1.3rem;color:var(--green);text-align:center">
         ✅ 목표 달성! 예상 소득 <strong>${fmt(_rule.baseProfit||0)}</strong> 확정
       </div>` : `
       <div style="background:rgba(245,166,35,0.07);border:1px dashed rgba(245,166,35,0.25);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:1.2rem;color:var(--text-dim);line-height:1.7;text-align:center">
         순매출 ${fmt(RULE_GOAL)} 달성 시 예상 소득 <strong style="color:var(--accent)">${fmt(_rule.baseProfit||0)}</strong> 확정<br>
-        잔여 순매출 <strong style="color:#e8445a">${fmt(Math.max(0, RULE_GOAL - netRev))}</strong> 더 필요
+        잔여 순매출 <strong style="color:var(--accent2)">${fmt(Math.max(0, RULE_GOAL - netRev))}</strong> 더 필요
       </div>`}
     </div>
   `;
@@ -7692,7 +7702,7 @@ function renderProfitTable(currentRev, currentFuel) {
         매출 ${(rev/10000).toFixed(0)}만${isGoal?' ⭐':''}
         ${fuel>0 ? `<span style="font-size:0.9em;color:var(--text-dim)"> (순 ${(netSample/10000).toFixed(1)}만)</span>` : ''}
       </span>
-      <span class="ptr-profit" style="color:${isOver?'#a78bfa':isGoal?'#2ecc71':'var(--text-dim)'}">
+      <span class="ptr-profit" style="color:${isOver?'var(--purple)':isGoal?'var(--green)':'var(--text-dim)'}">
         예상 소득 ${fmt(p)}
       </span>
     </div>`;
@@ -7732,24 +7742,24 @@ function calcSimulator() {
   const isOver   = netVal > S_GOAL;
   const isAtGoal = netVal >= S_GOAL;
   const overAmt  = Math.max(0, netVal - S_GOAL);
-  const profitColor = isOver ? '#a78bfa' : isAtGoal ? '#2ecc71' : 'var(--text-dim)';
+  const profitColor = isOver ? 'var(--purple)' : isAtGoal ? 'var(--green)' : 'var(--text-dim)';
 
   box.style.display = 'block';
   box.innerHTML = `
     ${simFuel > 0 ? `
     <div style="font-size:1.1rem;color:var(--text-dim);margin-bottom:8px;padding:6px 10px;background:rgba(232,68,90,0.07);border-radius:6px">
       입력 매출 <strong style="color:var(--accent)">${fmt(val)}</strong>
-      − 주유 <strong style="color:#e8445a">${fmt(simFuel)}</strong>
-      = 순매출 <strong style="color:#2ecc71">${fmt(netVal)}</strong>
+      − 주유 <strong style="color:var(--accent2)">${fmt(simFuel)}</strong>
+      = 순매출 <strong style="color:var(--green)">${fmt(netVal)}</strong>
     </div>` : ''}
     <div style="margin-bottom:4px;font-size:1.2rem;color:var(--text-dim);font-weight:700;letter-spacing:1px">예상 소득</div>
     <div class="sim-profit-num" style="color:${profitColor}">${fmt(profit)}</div>
     ${isOver ? `
     <div style="margin-top:10px;font-size:1.3rem;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:10px">
-      기본 예상 소득 &nbsp;<strong style="color:#2ecc71">${fmt(BASE_PROFIT)}</strong><br>
-      초과 ${fmt(overAmt)} × ${_sr.overRate||0}% = <strong style="color:#a78bfa">+${fmt(Math.round(overAmt * S_RATE))}</strong>
+      기본 예상 소득 &nbsp;<strong style="color:var(--green)">${fmt(BASE_PROFIT)}</strong><br>
+      초과 ${fmt(overAmt)} × ${_sr.overRate||0}% = <strong style="color:var(--purple)">+${fmt(Math.round(overAmt * S_RATE))}</strong>
     </div>` : isAtGoal ? `
-    <div style="margin-top:8px;font-size:1.3rem;color:#2ecc71">✅ 목표 달성 — 예상 소득 160만원 확정</div>
+    <div style="margin-top:8px;font-size:1.3rem;color:var(--green)">✅ 목표 달성 — 예상 소득 160만원 확정</div>
     ` : `
     <div style="margin-top:8px;font-size:1.3rem;color:var(--text-dim)">
       순매출 기준 목표 ${fmt(S_GOAL)}의 <strong style="color:var(--accent)">${S_GOAL>0?Math.round(Math.max(0,netVal) / S_GOAL * 100):0}%</strong> 달성<br>
