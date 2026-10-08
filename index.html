@@ -1724,6 +1724,12 @@
   html[data-theme="day"] .h-brand b { color: var(--accent-ink); }
   .h-brand span { display:block; font-family: var(--num); font-size: .72rem; letter-spacing: 4px; color: var(--text-dim); margin-top: 3px; }
   #tab-home .h-date { margin: 6px 2px 0; }
+  .h-brand-line { display:flex; align-items:baseline; gap: 8px; min-width: 0; flex-wrap: wrap; }
+  .h-uname { border: none; background: transparent; padding: 4px 0; min-height: 36px; font-family: var(--brand-font); font-weight: var(--brand-weight); font-size: 1.6rem; line-height: 1.1; color: var(--text); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 9em; }
+  .h-uname.empty { font-family: inherit; font-size: .95rem; color: var(--text-dim); text-decoration: underline; text-underline-offset: 3px; }
+  .auth-google.auth-google-main { min-height: 62px; font-size: 1.15rem; background: var(--accent); color: #17130a; border: none; }
+  .auth-note { margin-top: 14px; text-align: center; font-size: .95rem; line-height: 1.6; color: var(--text-dim); }
+  .auth-note b { color: var(--text); }
 
   .auth-or { display:flex; align-items:center; gap: 10px; margin: 16px 0 12px; color: var(--text-dim); font-size: .9rem; }
   .auth-or::before, .auth-or::after { content:''; flex:1; height:1px; background: var(--line); }
@@ -1937,45 +1943,10 @@
   <div class="auth-sub">GOLD KNIGHT</div>
   <p style="margin:-14px 0 22px;font-size:1.05rem;color:var(--text);text-align:center;word-break:keep-all">대한민국 황금기사단에 오신 것을 환영합니다.</p>
   <div class="auth-card">
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tabLogin"  onclick="switchAuthTab('login')">로그인</button>
-      <button class="auth-tab"        id="tabSignup" onclick="switchAuthTab('signup')">회원가입</button>
-    </div>
-    <!-- 로그인 폼 -->
-    <div id="loginForm">
-      <div class="auth-label">이메일</div>
-      <input class="auth-input" id="loginEmail" type="email" placeholder="example@email.com">
-      <div class="auth-label">비밀번호</div>
-      <input class="auth-input" id="loginPw" type="password" placeholder="비밀번호 입력">
-      <button class="auth-btn" id="loginBtn" onclick="doLogin()">로그인 →</button>
-      <div style="text-align:right;margin-top:8px">
-        <button onclick="forgotPassword()" style="background:none;border:none;color:var(--text-dim,#7a8099);font-size:1rem;cursor:pointer;font-family:'Noto Sans KR',sans-serif">비밀번호를 잊으셨나요?</button>
-      </div>
-      <div class="auth-err" id="loginErr"></div>
-      <div class="auth-or"><span>또는</span></div>
-      <button class="auth-google" onclick="doGoogleLogin()"><b>G</b> Google 계정으로 계속하기</button>
-    </div>
-    <!-- 회원가입 폼 -->
-    <div id="signupForm" style="display:none">
-      <div class="auth-label">이름</div>
-      <input class="auth-input" id="signupName" type="text" placeholder="홍길동">
-      <div class="auth-label">이메일</div>
-      <input class="auth-input" id="signupEmail" type="email" placeholder="example@email.com">
-      <div class="auth-label">비밀번호 (6자 이상)</div>
-      <input class="auth-input" id="signupPw" type="password" placeholder="비밀번호 입력">
-      <div class="agree-box">
-        <div class="agree-row all"><input type="checkbox" id="agAll" onchange="toggleAgreeAll(this.checked)"><label for="agAll">전체 동의</label></div>
-        <div class="agree-row"><input type="checkbox" id="agTerms" class="ag-req" onchange="syncAgreeAll()"><label for="agTerms">(필수) 이용약관</label><a href="terms.html" target="_blank">보기</a></div>
-        <div class="agree-row"><input type="checkbox" id="agPrivacy" class="ag-req" onchange="syncAgreeAll()"><label for="agPrivacy">(필수) 개인정보 수집·이용</label><a href="privacy.html" target="_blank">보기</a></div>
-        <div class="agree-row"><input type="checkbox" id="agAge" class="ag-req" onchange="syncAgreeAll()"><label for="agAge">(필수) 만 14세 이상이에요</label></div>
-        <div class="agree-row"><input type="checkbox" id="agMarketing" onchange="syncAgreeAll()"><label for="agMarketing">(선택) 새 기능·할인 소식 받기</label></div>
-      </div>
-      <button class="auth-btn" id="signupBtn" onclick="doSignup()">가입하고 30일 무료 체험</button>
-      <div style="text-align:center;font-size:.9rem;color:var(--text-dim);margin-top:8px">체험이 끝나도 자동 결제되지 않아요</div>
-      <div class="auth-or"><span>또는</span></div>
-      <button class="auth-google" onclick="doGoogleLogin()"><b>G</b> Google 계정으로 가입하기</button>
-      <div class="auth-err" id="signupErr"></div>
-    </div>
+    <button class="auth-google auth-google-main" onclick="doGoogleLogin()"><b>G</b> Google 계정으로 시작하기</button>
+    <div class="auth-note">처음이면 자동으로 가입되고 <b>30일 무료 체험</b>이 시작돼요.<br>체험이 끝나도 자동 결제되지 않아요.</div>
+    <div class="auth-err" id="loginErr"></div>
+    <div class="auth-note" id="inAppNote" style="display:none;margin-top:12px">카카오톡·네이버 앱 안에서는 Google 로그인이 막혀요.<br>버튼을 누르면 휴대폰 기본 브라우저로 열어 드려요.</div>
   </div>
   <div class="auth-footer">택시 기사님의 하루 목표와 월급을 한눈에<br>
     <a href="terms.html" target="_blank" style="color:var(--text-dim)">이용약관</a> ·
@@ -2050,7 +2021,7 @@
   <!-- 홈: 원 넘버(D) · 계기판(E) · 근무일 도트(F) 중 설정에서 선택 -->
   <div id="tab-home" class="tab-panel active">
     <div class="h-top">
-      <div class="h-brand"><svg class="gk-mark" viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg><div><b class="brand-ko">황금기사</b><span>GOLD KNIGHT</span></div></div>
+      <div class="h-brand"><svg class="gk-mark" viewBox="34 8 132 212" aria-hidden="true"><use href="#gkMark"/></svg><div><div class="h-brand-line"><b class="brand-ko">황금기사</b><button class="h-uname" id="hUserName" onclick="openNameSheet()" aria-label="이름 바꾸기">이름 정하기</button></div><span>GOLD KNIGHT</span></div></div>
       <div style="display:flex;gap:8px"><button class="h-icon" onclick="openHelpCenter()" aria-label="도움말"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.3-2.5 3.8M12 17h.01"/></svg></button>
       <button class="h-icon" id="hTheme" onclick="toggleThemeQuick()" aria-label="화면 밝기 바꾸기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></div>
     </div>
@@ -2812,26 +2783,10 @@
         <input class="settings-input" id="settingsName" type="text" placeholder="이름 입력">
         <button class="settings-btn primary" onclick="updateProfile()">이름 변경</button>
       </div>
-      <div class="settings-section">
-        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">📧 이메일 변경</div>
-        <div class="settings-label">새 이메일</div>
-        <input class="settings-input" id="settingsEmail" type="email" placeholder="새 이메일 주소">
-        <div class="settings-label">현재 비밀번호 (확인용)</div>
-        <input class="settings-input" id="settingsEmailPw" type="password" placeholder="현재 비밀번호">
-        <button class="settings-btn primary" onclick="updateEmail()">이메일 변경</button>
-      </div>
-      <div class="settings-section">
-        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">🔒 비밀번호 변경</div>
-        <div class="settings-label">현재 비밀번호</div>
-        <input class="settings-input" id="settingsOldPw" type="password" placeholder="현재 비밀번호">
-        <div class="settings-label">새 비밀번호 (6자 이상)</div>
-        <input class="settings-input" id="settingsNewPw" type="password" placeholder="새 비밀번호">
-        <button class="settings-btn primary" onclick="updatePassword()">비밀번호 변경</button>
-      </div>
-      <div class="settings-section">
-        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">🔑 비밀번호 찾기</div>
-        <p style="font-size:1.2rem;color:var(--text-dim);margin-bottom:12px">가입한 이메일로 재설정 링크를 보내드립니다</p>
-        <button class="settings-btn secondary" onclick="sendPasswordReset()">재설정 이메일 발송</button>
+      <div class="settings-section" id="googleLinkSection">
+        <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">🔑 로그인 계정</div>
+        <div id="googleLinkStatus" style="font-size:1.05rem;color:var(--text-dim);line-height:1.6;margin-bottom:10px"></div>
+        <button class="auth-google" id="googleLinkBtn" onclick="linkGoogleAccount()"><b>G</b> Google 계정 연결하기</button>
       </div>
       <div class="settings-section">
         <div class="section-title" style="font-size:1.3rem;margin-bottom:12px">📬 소식 받기</div>
@@ -3014,7 +2969,7 @@ function showAuthErr(formType, msg) {
   if (!el) return;
   el.textContent = msg;
   el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 4000);
+  setTimeout(() => { el.style.display = 'none'; el.style.color = ''; }, msg.length > 60 ? 12000 : 4000);
 }
 
 // ─── 로그인 ───
@@ -3092,6 +3047,7 @@ async function doSignup() {
 let _signingUp = false;
 const IN_KAKAO = /KAKAOTALK/i.test(navigator.userAgent);
 const IN_APP_BROWSER = IN_KAKAO || /NAVER\(inapp|; ?Line\/|FBAN|FBAV|Instagram|DaumApps|everytimeApp/i.test(navigator.userAgent);
+document.addEventListener('DOMContentLoaded', () => { const n = document.getElementById('inAppNote'); if (n && IN_APP_BROWSER) n.style.display = 'block'; });
 function isGoogleUser(u) { return !!u && (u.providerData || []).some(p => p.providerId === 'google.com'); }
 function hasPasswordLogin(u) { return !!u && (u.providerData || []).some(p => p.providerId === 'password'); }
 
@@ -3111,15 +3067,66 @@ async function doGoogleLogin() {
     const msgs = {
       'auth/popup-closed-by-user': '로그인 창을 닫았어요',
       'auth/cancelled-popup-request': '로그인 창을 닫았어요',
-      'auth/account-exists-with-different-credential': '❌ 이 이메일은 비밀번호로 가입돼 있어요. 이메일·비밀번호로 로그인해 주세요',
+      'auth/account-exists-with-different-credential': '❌ 이 이메일로 다른 방식의 계정이 있어요. [문의] 또는 관리자에게 알려주세요',
       'auth/unauthorized-domain': '❌ 이 주소는 아직 Google 로그인이 허용되지 않았어요',
       'auth/operation-not-allowed': '❌ Google 로그인이 아직 켜져 있지 않아요 (관리자 설정 필요)',
     };
-    const box = document.getElementById('signupForm')?.style.display === 'block' ? 'signup' : 'login';
-    showAuthErr(box, msgs[e.code] || '❌ Google 로그인 실패: ' + e.message);
+    showAuthErr('login', msgs[e.code] || '❌ Google 로그인 실패: ' + e.message);
   }
 }
 window.doGoogleLogin = doGoogleLogin;
+
+// 이메일로 가입한 계정에 Google을 연결: 다음부터 Google 버튼으로 로그인해도 같은 기록이 보여요
+function promptGoogleLink() {
+  const u = auth?.currentUser;
+  if (!u || isGoogleUser(u)) return;
+  let shown = ''; try { shown = sessionStorage.getItem('glPrompt') || ''; } catch(e) {}
+  if (shown) return;
+  try { sessionStorage.setItem('glPrompt', '1'); } catch(e) {}
+  const show = () => {
+    const sp = document.getElementById('splashOverlay');
+    if (sp && sp.style.display !== 'none') return setTimeout(show, 800);
+    if (document.getElementById('sheet')?.classList.contains('on')) return setTimeout(show, 1500);
+    openSheet({
+      title: 'Google 계정을 연결해 주세요',
+      html: `<p>황금기사는 앞으로 <b>Google 로그인만</b> 쓸 수 있어요.</p>
+        <p>지금 Google 계정을 연결하면 다음부터 Google 버튼으로 들어와도 <b>지금 기록이 그대로</b> 보여요.</p>`,
+      actions: [
+        { label: 'Google 계정 연결하기', cls: 'main', fn: () => { closeSheet(); linkGoogleAccount(); } },
+        { label: '나중에', cls: 'ghost', fn: closeSheet },
+      ],
+    });
+  };
+  setTimeout(show, 1200);
+}
+
+async function linkGoogleAccount() {
+  const user = auth?.currentUser;
+  if (!user) return;
+  if (isGoogleUser(user)) return showToast('이미 Google 계정이 연결돼 있어요');
+  if (IN_KAKAO) { location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href); return; }
+  if (IN_APP_BROWSER) return showToast('⚠️ 이 화면에서는 Google 연결이 안 돼요. [다른 브라우저로 열기]로 열어주세요');
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  try {
+    await user.linkWithPopup(provider);
+    await user.reload();
+    renderAccountExtras();
+    showToast('✅ Google 계정을 연결했어요. 다음부터 Google로 로그인해도 기록이 그대로예요');
+  } catch(e) {
+    const msgs = {
+      'auth/credential-already-in-use': '❌ 이 Google 계정은 이미 다른 황금기사 계정에 쓰이고 있어요. [문의]로 알려주시면 하나로 합쳐 드릴게요',
+      'auth/email-already-in-use': '❌ 이 Google 계정은 이미 다른 황금기사 계정에 쓰이고 있어요. [문의]로 알려주세요',
+      'auth/provider-already-linked': '이미 Google 계정이 연결돼 있어요',
+      'auth/popup-closed-by-user': '연결 창을 닫았어요',
+      'auth/cancelled-popup-request': '연결 창을 닫았어요',
+      'auth/popup-blocked': '❌ 팝업이 막혔어요. 브라우저에서 팝업을 허용해 주세요',
+      'auth/requires-recent-login': '❌ 보안을 위해 로그아웃 후 다시 로그인하고 연결해 주세요',
+    };
+    showToast(msgs[e.code] || '❌ 연결 실패: ' + e.message);
+  }
+}
+window.linkGoogleAccount = linkGoogleAccount;
 
 // 처음 Google로 들어온 분: 약관 동의를 받고 회원 문서를 만들어요
 let _sheetLocked = false;
@@ -3563,6 +3570,7 @@ window.onload = async function() {
       overlay.style.display = 'none';
       await ensureUserDoc(user);
       if (!auth.currentUser) return;   // 동의하지 않고 나간 경우
+      promptGoogleLink();
       // 헤더 이름은 applyPlanUI()에서 처리
       // 관리자/사용자 탭 분리
       const adminBtn = document.getElementById('adminTabBtn');
@@ -3864,12 +3872,53 @@ async function loadSettings() {
   if (emailEl) emailEl.placeholder = user.email;
 }
 
+function userDisplayName() {
+  return (userDoc && userDoc.name) || currentUser?.displayName || '';
+}
+function renderUserName() {
+  const el = document.getElementById('hUserName');
+  if (!el) return;
+  const n = userDisplayName();
+  el.textContent = n || '이름 정하기';
+  el.classList.toggle('empty', !n);
+}
+function openNameSheet() {
+  openSheet({
+    title: '기사님 이름',
+    html: `<p>홈 화면 '황금기사' 옆에 보이는 이름이에요.</p>
+      <input class="sheet-input" id="nameInput" type="text" maxlength="12" style="font-family:inherit;font-size:1.5rem" placeholder="예: 홍길동" value="${esc(userDisplayName())}">`,
+    actions: [
+      { label: '저장', cls: 'main', fn: saveNameSheet },
+      { label: '취소', cls: 'ghost', fn: closeSheet },
+    ],
+  });
+  setTimeout(() => document.getElementById('nameInput')?.focus(), 100);
+}
+async function saveNameSheet() {
+  const name = (document.getElementById('nameInput')?.value || '').trim().slice(0, 12);
+  if (!name) return showToast('❌ 이름을 입력하세요');
+  if (!currentUser) return;
+  try {
+    await currentUser.updateProfile({ displayName: name });
+    if (firestore) await firestore.collection('users').doc(currentUser.uid).set({ name }, { merge: true });
+    if (userDoc) userDoc.name = name;
+    const sn = document.getElementById('settingsName'); if (sn) sn.value = name;
+    renderUserName();
+    closeSheet();
+    showToast('✅ 이름을 바꿨어요');
+  } catch(e) { showToast('❌ 저장 실패: ' + e.message); }
+}
+window.openNameSheet = openNameSheet;
+window.saveNameSheet = saveNameSheet;
+
 async function updateProfile() {
   const name = document.getElementById('settingsName')?.value.trim();
   if (!name) return showToast('❌ 이름을 입력하세요');
   try {
     await currentUser.updateProfile({ displayName: name });
     if (firestore) await firestore.collection('users').doc(currentUser.uid).update({ name });
+    if (userDoc) userDoc.name = name;
+    renderUserName();
     const hud = document.getElementById('headerUserDisplay');
     if (hud) hud.textContent = name + ' 님';
     showToast('✅ 이름이 변경되었습니다');
@@ -3985,6 +4034,7 @@ async function loadUserPlan() {
   } catch(e) { console.warn('[plan]', e.message); }
   applyPlanUI();
   renderPlanStatus();
+  renderUserName();
 }
 let userDoc = {};
 
@@ -6142,6 +6192,7 @@ const HELP_ACTS = {
   message:  ['문의·백업 화면 열기', () => switchTab('message')],
   account:  ['계정 설정 열기', () => openSettings('accountCard')],
   notice:   ['공지 보기', () => openNoticeList()],
+  name:     ['이름 바꾸기', () => openNameSheet()],
 };
 const HELP_FAQ = [
   { q: '오늘 매출은 어떻게 넣나요?', k: ['매출', '입력', '오늘', '수입', '금액', '넣기', '추가', '등록'], act: 'revenue',
@@ -6189,19 +6240,17 @@ const HELP_FAQ = [
   { q: '환불은 어떻게 하나요?', k: ['환불', '해지', '취소', '돌려받기'], act: 'message',
     a: '결제 후 7일 안에 Pro 기능을 쓰지 않았다면 전액, 쓴 뒤에는 남은 기간만큼 돌려드려요.\n[문의]로 요청해 주세요.' },
   { q: '휴대폰을 바꾸면 기록이 사라지나요?', k: ['폰바꿈', '기기', '휴대폰', '새폰', '옮기기', '사라짐', '이전', '기기변경', '데이터'], act: null,
-    a: '사라지지 않아요. 기록은 계정에 저장돼요.\n새 휴대폰에서 같은 계정(이메일 또는 Google)으로 로그인하면 그대로 보여요.' },
+    a: '사라지지 않아요. 기록은 계정에 저장돼요.\n새 휴대폰에서 같은 Google 계정으로 로그인하면 그대로 보여요.' },
   { q: '백업 파일은 어떻게 받나요?', k: ['백업', '복원', '파일', '보관', '되돌리기'], act: 'message',
     a: '[더보기 › 문의하기·백업] 아래 \'전체 백업 저장\'을 누르면 파일로 받아요.\n\'백업 파일 복원\'으로 다시 넣을 수 있어요.' },
   { q: '엑셀(CSV)로 내보낼 수 있나요?', k: ['엑셀', 'csv', '내보내기', '출력', '요약', '복사'], act: 'message',
     a: '[더보기 › 문의하기·백업]의 \'CSV 내보내기\'로 엑셀에서 여는 파일을 받을 수 있어요. (Pro)' },
   { q: '인터넷이 안 될 때는요?', k: ['오프라인', '인터넷', '연결', '와이파이', '안됨', '느림', '저장안됨'], act: null,
     a: '화면 위에 \'오프라인\'이 보이면 인터넷 연결을 확인해 주세요.\n앱을 켜 둔 채로 연결되면 자동으로 저장돼요. 되도록 연결된 상태에서 입력해 주세요.' },
-  { q: '비밀번호를 잊어버렸어요', k: ['비밀번호', '비번', '잊어버림', '분실', '재설정', '로그인안됨', '까먹'], act: null,
-    a: '로그인 화면에서 이메일을 넣고 \'비밀번호를 잊으셨나요?\'를 누르면 메일로 재설정 링크가 와요.\nGoogle로 가입했다면 [Google 계정으로 계속하기]를 눌러주세요.' },
-  { q: 'Google 계정으로 로그인할 수 있나요?', k: ['구글', 'google', 'gmail', '지메일', '로그인', '카톡'], act: null,
-    a: '로그인 화면의 [Google 계정으로 계속하기]를 누르면 돼요.\n카카오톡에서 열었다면 휴대폰 기본 브라우저로 넘어간 뒤 로그인해요.' },
-  { q: '이름이나 이메일을 바꾸고 싶어요', k: ['이름', '이메일', '변경', '바꾸기', '계정', '프로필'], act: 'account',
-    a: '[더보기 › 계정]에서 이름, 이메일, 비밀번호를 바꿀 수 있어요.' },
+  { q: '로그인은 어떻게 하나요?', k: ['구글', 'google', 'gmail', '지메일', '로그인', '카톡', '비밀번호', '비번', '가입', '회원가입'], act: null,
+    a: '황금기사는 Google 계정으로만 로그인해요. 비밀번호를 따로 외울 필요가 없어요.\n로그인 화면의 [Google 계정으로 시작하기]를 누르면 돼요. 처음이면 자동으로 가입돼요.\n카카오톡에서 열었다면 휴대폰 기본 브라우저로 넘어간 뒤 로그인해요.' },
+  { q: '홈 화면에 보이는 내 이름을 바꾸고 싶어요', k: ['이름', '변경', '바꾸기', '계정', '프로필', '닉네임'], act: 'name',
+    a: '홈 맨 위 \'황금기사\' 옆의 이름을 누르면 바꿀 수 있어요. [더보기 › 계정]에서도 바꿀 수 있어요.' },
   { q: '휴대폰 홈 화면에 앱처럼 설치하고 싶어요', k: ['설치', '아이콘', '바탕화면', '홈화면추가', '앱', '다운', '깔기'], act: null,
     a: '크롬에서 황금기사를 열고 오른쪽 위 ⋮ 메뉴 → [홈 화면에 추가] 또는 [앱 설치]를 누르면 돼요.' },
   { q: '공지사항은 어디서 보나요?', k: ['공지', '소식', '업데이트', '점검', '새기능'], act: 'notice',
@@ -6654,8 +6703,19 @@ function renderAccountExtras() {
   _setT('wdDayCount', days);
   const ws = document.getElementById('withdrawSection');
   if (ws) ws.style.display = isAdmin(currentUser) ? 'none' : '';
+  // Google 연결 상태
+  const cu = auth?.currentUser;
+  const gl = document.getElementById('googleLinkSection');
+  if (gl) gl.style.display = !cu ? 'none' : '';
+  const gInfo = (cu?.providerData || []).find(p => p.providerId === 'google.com');
+  const gs = document.getElementById('googleLinkStatus');
+  const gb = document.getElementById('googleLinkBtn');
+  if (gs) gs.innerHTML = gInfo
+    ? `✅ <b>${esc(gInfo.email || 'Google 계정')}</b> Google 계정으로 로그인하고 있어요.`
+    : '⚠️ 아직 Google 계정이 연결되지 않았어요. 앞으로는 <b>Google 로그인만</b> 쓸 수 있으니, 지금 연결해 두세요. 연결해도 기록은 그대로예요.';
+  if (gb) gb.style.display = gInfo ? 'none' : '';
   // Google로만 로그인하는 분: 비밀번호 칸 대신 Google로 확인
-  const g = isGoogleUser(auth?.currentUser) && !hasPasswordLogin(auth?.currentUser);
+  const g = isGoogleUser(auth?.currentUser);
   const pwEl = document.getElementById('withdrawPw');
   if (pwEl) { pwEl.style.display = g ? 'none' : ''; if (pwEl.previousElementSibling) pwEl.previousElementSibling.textContent = g ? '탈퇴하기를 누르면 Google 계정으로 한 번 더 확인해요' : '확인을 위해 비밀번호를 넣어주세요'; }
 }
@@ -6683,7 +6743,7 @@ async function deleteQueryAll(q) {
 async function doWithdraw() {
   if (!currentUser || !firestore || !auth) return;
   if (isAdmin(currentUser)) return showToast('❌ 관리자 계정은 탈퇴할 수 없어요');
-  const viaGoogle = isGoogleUser(auth.currentUser) && !hasPasswordLogin(auth.currentUser);
+  const viaGoogle = isGoogleUser(auth.currentUser);
   const pw = document.getElementById('withdrawPw')?.value || '';
   if (!viaGoogle && !pw) return showToast('❌ 비밀번호를 넣어주세요');
   if (!confirm('정말 탈퇴할까요?\n모든 기록이 지워지고 되돌릴 수 없어요.')) return;
